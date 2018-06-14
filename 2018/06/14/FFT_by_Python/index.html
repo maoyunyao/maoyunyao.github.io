@@ -79,17 +79,19 @@
 
 
 
-<meta name="description" content="不如来一段紧张刺激的Hello,World代码如何： 12@maoyunyao&amp;gt;&amp;gt;&amp;gt; print(&quot;Hello,World!&quot;) THE END…">
+<meta name="description" content="来自信号与系统的一个小作业用python和其开源的科学计算库numpy实现快速傅里叶变换算法，并用数据可视化开源第三方库matplotlib作出频域图样。 代码实现如下12345678910111213141516171819202122232425262728293031323334#导入第三方库###############################from numpy import *">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第零次接触">
-<meta property="og:url" content="https://maoyunyao.github.io/2018/06/13/第零次接触/index.html">
+<meta property="og:title" content="FFT with python">
+<meta property="og:url" content="https://maoyunyao.github.io/2018/06/14/FFT_by_Python/index.html">
 <meta property="og:site_name" content="漫卷云舒">
-<meta property="og:description" content="不如来一段紧张刺激的Hello,World代码如何： 12@maoyunyao&amp;gt;&amp;gt;&amp;gt; print(&quot;Hello,World!&quot;) THE END…">
+<meta property="og:description" content="来自信号与系统的一个小作业用python和其开源的科学计算库numpy实现快速傅里叶变换算法，并用数据可视化开源第三方库matplotlib作出频域图样。 代码实现如下12345678910111213141516171819202122232425262728293031323334#导入第三方库###############################from numpy import *">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-06-14T04:14:33.638Z">
+<meta property="og:image" content="https://maoyunyao.github.io/img/fft_result.jpg">
+<meta property="og:updated_time" content="2018-06-14T04:42:23.924Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第零次接触">
-<meta name="twitter:description" content="不如来一段紧张刺激的Hello,World代码如何： 12@maoyunyao&amp;gt;&amp;gt;&amp;gt; print(&quot;Hello,World!&quot;) THE END…">
+<meta name="twitter:title" content="FFT with python">
+<meta name="twitter:description" content="来自信号与系统的一个小作业用python和其开源的科学计算库numpy实现快速傅里叶变换算法，并用数据可视化开源第三方库matplotlib作出频域图样。 代码实现如下12345678910111213141516171819202122232425262728293031323334#导入第三方库###############################from numpy import *">
+<meta name="twitter:image" content="https://maoyunyao.github.io/img/fft_result.jpg">
 
 
 
@@ -119,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://maoyunyao.github.io/2018/06/13/第零次接触/"/>
+  <link rel="canonical" href="https://maoyunyao.github.io/2018/06/14/FFT_by_Python/"/>
 
 
 
 
 
-  <title>第零次接触 | 漫卷云舒</title>
+  <title>FFT with python | 漫卷云舒</title>
   
 
 
@@ -244,7 +246,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2018/06/13/第零次接触/">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2018/06/14/FFT_by_Python/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="maoyunyao">
@@ -261,7 +263,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">第零次接触</h1>
+          <h1 class="post-title" itemprop="name headline">FFT with python</h1>
         
 
         <div class="post-meta">
@@ -273,8 +275,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-13T10:53:49+08:00">
-                2018-06-13
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-14T11:53:34+08:00">
+                2018-06-14
               </time>
             
 
@@ -311,9 +313,10 @@
       
 
       
-        <h2 id="不如"><a href="#不如" class="headerlink" title="不如"></a>不如</h2><p>来一段紧张刺激的Hello,World代码如何：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@maoyunyao</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(<span class="string">"Hello,World!"</span>)</span><br></pre></td></tr></table></figure>
-<p>THE END…</p>
+        <h2 id="来自信号与系统的一个小作业"><a href="#来自信号与系统的一个小作业" class="headerlink" title="来自信号与系统的一个小作业"></a>来自信号与系统的一个小作业</h2><p>用python和其开源的科学计算库numpy实现快速傅里叶变换算法，并用数据可视化开源第三方库matplotlib作出频域图样。</p>
+<h4 id="代码实现如下"><a href="#代码实现如下" class="headerlink" title="代码实现如下"></a>代码实现如下</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#导入第三方库</span></span><br><span class="line"><span class="comment">###############################</span></span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment">###############################</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># TO GET THE DATA（take gauss signal sampling for example）</span></span><br><span class="line">data_list = [ exp(-pi*x*x/<span class="number">1024</span>/<span class="number">1024</span>) <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">1024</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># FFT FUNCTION PART (递归蝶形算法，输入为数据点数目和数据点列)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_fft_fun</span><span class="params">(NUM, DATA)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> NUM == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> DATA</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        ODD_DATA=DATA[<span class="number">0</span>::<span class="number">2</span>]</span><br><span class="line">        EVEN_DATA=DATA[<span class="number">1</span>::<span class="number">2</span>]</span><br><span class="line">        ODD_LIST=my_fft_fun(NUM//<span class="number">2</span>, ODD_DATA)   <span class="comment">#奇偶分治</span></span><br><span class="line">        EVEN_LIST=my_fft_fun(NUM//<span class="number">2</span>, EVEN_DATA) <span class="comment">#奇偶分治</span></span><br><span class="line">        RES_DATA=[ EVEN_LIST[k%(NUM//<span class="number">2</span>)]+ODD_LIST[k%(NUM//<span class="number">2</span>)]*(cos(<span class="number">2</span>*pi*k/NUM)+sin(<span class="number">2</span>*pi*k/NUM)*<span class="number">1j</span>) <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">0</span>,NUM)]</span><br><span class="line">        <span class="keyword">return</span> RES_DATA</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#调用定义好的FFT递归求解函数</span></span><br><span class="line">FINAL_RES=my_fft_fun(<span class="number">1024</span>,data_list)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 作出X(k)的模值与k的关系图</span></span><br><span class="line">x_part=range(<span class="number">0</span>,<span class="number">1024</span>)</span><br><span class="line">y_part=[ abs(val) <span class="keyword">for</span> val <span class="keyword">in</span> FINAL_RES]</span><br><span class="line">plt.scatter(x_part,y_part,s=<span class="number">5</span>)</span><br><span class="line">plt.title(<span class="string">'DFT for Gauss Signal'</span>, fontsize=<span class="number">20</span>)</span><br><span class="line">plt.xlabel(<span class="string">'k'</span>, fontsize=<span class="number">14</span>)</span><br><span class="line">plt.ylabel(<span class="string">'X(k)'</span>, fontsize=<span class="number">14</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h4 id="效果作图如下"><a href="#效果作图如下" class="headerlink" title="效果作图如下"></a>效果作图如下</h4><p><img src="/img/fft_result.jpg" alt=""></p>
+<h4 id="有待改进之处"><a href="#有待改进之处" class="headerlink" title="有待改进之处"></a>有待改进之处</h4><p>算法仅涉及简单情形，即数据点的个数是2的指数倍，当需要计算非2的指数倍个数据点的FFT时，分治算法需要更加复杂。</p>
 
       
     </div>
@@ -338,8 +341,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/13/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2018/06/13/第零次接触/" rel="next" title="第零次接触">
+                <i class="fa fa-chevron-left"></i> 第零次接触
               </a>
             
           </div>
@@ -347,10 +350,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/14/FFT_by_Python/" rel="prev" title="FFT with python">
-                FFT with python <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -468,7 +467,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#不如"><span class="nav-number">1.</span> <span class="nav-text">不如</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#来自信号与系统的一个小作业"><span class="nav-number">1.</span> <span class="nav-text">来自信号与系统的一个小作业</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现如下"><span class="nav-number">1.0.1.</span> <span class="nav-text">代码实现如下</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#效果作图如下"><span class="nav-number">1.0.2.</span> <span class="nav-text">效果作图如下</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#有待改进之处"><span class="nav-number">1.0.3.</span> <span class="nav-text">有待改进之处</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
