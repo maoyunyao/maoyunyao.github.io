@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[FFT with python]]></title>
+    <url>%2F2018%2F06%2F14%2FFFT_by_Python%2F</url>
+    <content type="text"><![CDATA[来自信号与系统的一个小作业用python和其开源的科学计算库numpy实现快速傅里叶变换算法，并用数据可视化开源第三方库matplotlib作出频域图样。 代码实现如下12345678910111213141516171819202122232425262728293031323334#导入第三方库###############################from numpy import *from math import *import matplotlib.pyplot as plt################################ TO GET THE DATA（take gauss signal sampling for example）data_list = [ exp(-pi*x*x/1024/1024) for x in range(0,1024)]# FFT FUNCTION PART (递归蝶形算法，输入为数据点数目和数据点列)def my_fft_fun(NUM, DATA): if NUM == 1: return DATA else: ODD_DATA=DATA[0::2] EVEN_DATA=DATA[1::2] ODD_LIST=my_fft_fun(NUM//2, ODD_DATA) #奇偶分治 EVEN_LIST=my_fft_fun(NUM//2, EVEN_DATA) #奇偶分治 RES_DATA=[ EVEN_LIST[k%(NUM//2)]+ODD_LIST[k%(NUM//2)]*(cos(2*pi*k/NUM)+sin(2*pi*k/NUM)*1j) for k in range(0,NUM)] return RES_DATA#调用定义好的FFT递归求解函数FINAL_RES=my_fft_fun(1024,data_list)# 作出X(k)的模值与k的关系图x_part=range(0,1024)y_part=[ abs(val) for val in FINAL_RES]plt.scatter(x_part,y_part,s=5)plt.title('DFT for Gauss Signal', fontsize=20)plt.xlabel('k', fontsize=14)plt.ylabel('X(k)', fontsize=14)plt.show() 效果作图如下 有待改进之处算法仅涉及简单情形，即数据点的个数是2的指数倍，当需要计算非2的指数倍个数据点的FFT时，分治算法需要更加复杂。]]></content>
+  </entry>
+  <entry>
+    <title><![CDATA[第零次接触]]></title>
+    <url>%2F2018%2F06%2F13%2F%E7%AC%AC%E9%9B%B6%E6%AC%A1%E6%8E%A5%E8%A7%A6%2F</url>
+    <content type="text"><![CDATA[不如来一段紧张刺激的Hello,World代码如何： 12@maoyunyao&gt;&gt;&gt; print("Hello,World!") THE END…]]></content>
+  </entry>
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <url>%2F2018%2F06%2F13%2Fhello-world%2F</url>
+    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+  </entry>
+</search>
