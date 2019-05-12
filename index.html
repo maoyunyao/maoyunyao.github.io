@@ -275,6 +275,129 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/13/fft-by-python/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.M">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="漫卷云舒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/13/fft-by-python/" itemprop="url">FFT with python</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-13T00:12:39+08:00">
+                2019-05-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="来自信号与系统的一个小作业"><a href="#来自信号与系统的一个小作业" class="headerlink" title="来自信号与系统的一个小作业"></a>来自信号与系统的一个小作业</h2><p>用python和其开源的科学计算库numpy实现快速傅里叶变换算法，并用数据可视化开源第三方库matplotlib作出频域图样。</p>
+<h4 id="代码实现如下"><a href="#代码实现如下" class="headerlink" title="代码实现如下"></a>代码实现如下</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#导入第三方库</span></span><br><span class="line"><span class="comment">###############################</span></span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment">###############################</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># TO GET THE DATA（take gauss signal sampling for example）</span></span><br><span class="line">data_list = [ exp(-pi*x*x/<span class="number">1024</span>/<span class="number">1024</span>) <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">1024</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># FFT FUNCTION PART (递归蝶形算法，输入为数据点数目和数据点列)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_fft_fun</span><span class="params">(NUM, DATA)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> NUM == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> DATA</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        ODD_DATA=DATA[<span class="number">0</span>::<span class="number">2</span>]</span><br><span class="line">        EVEN_DATA=DATA[<span class="number">1</span>::<span class="number">2</span>]</span><br><span class="line">        ODD_LIST=my_fft_fun(NUM//<span class="number">2</span>, ODD_DATA)   <span class="comment">#奇偶分治</span></span><br><span class="line">        EVEN_LIST=my_fft_fun(NUM//<span class="number">2</span>, EVEN_DATA) <span class="comment">#奇偶分治</span></span><br><span class="line">        RES_DATA=[ EVEN_LIST[k%(NUM//<span class="number">2</span>)]+ODD_LIST[k%(NUM//<span class="number">2</span>)]*(cos(<span class="number">2</span>*pi*k/NUM)+sin(<span class="number">2</span>*pi*k/NUM)*<span class="number">1j</span>) <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">0</span>,NUM)]</span><br><span class="line">        <span class="keyword">return</span> RES_DATA</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#调用定义好的FFT递归求解函数</span></span><br><span class="line">FINAL_RES=my_fft_fun(<span class="number">1024</span>,data_list)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 作出X(k)的模值与k的关系图</span></span><br><span class="line">x_part=range(<span class="number">0</span>,<span class="number">1024</span>)</span><br><span class="line">y_part=[ abs(val) <span class="keyword">for</span> val <span class="keyword">in</span> FINAL_RES]</span><br><span class="line">plt.scatter(x_part,y_part,s=<span class="number">5</span>)</span><br><span class="line">plt.title(<span class="string">'DFT for Gauss Signal'</span>, fontsize=<span class="number">20</span>)</span><br><span class="line">plt.xlabel(<span class="string">'k'</span>, fontsize=<span class="number">14</span>)</span><br><span class="line">plt.ylabel(<span class="string">'X(k)'</span>, fontsize=<span class="number">14</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h4 id="效果作图如下"><a href="#效果作图如下" class="headerlink" title="效果作图如下"></a>效果作图如下</h4><p><img src="/img/fft_result.jpg" alt=""></p>
+<h4 id="有待改进之处"><a href="#有待改进之处" class="headerlink" title="有待改进之处"></a>有待改进之处</h4><p>算法仅涉及简单情形，即数据点的个数是2的指数倍，当需要计算非2的指数倍个数据点的FFT时，分治算法需要更加复杂。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/12/inline-asm-gcc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -348,129 +471,6 @@
           
             <h2 id="操作系统上机知识储备-一"><a href="#操作系统上机知识储备-一" class="headerlink" title="操作系统上机知识储备(一)"></a>操作系统上机知识储备(一)</h2><p>对gcc所支持的内联汇编格式及使用方法进行简要的介绍</p>
  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * This c file is a introduction of inline Assembly for gcc</span></span><br><span class="line"><span class="comment"> * Time： 2018/9/8</span></span><br><span class="line"><span class="comment"> * Author: myy</span></span><br><span class="line"><span class="comment"> * Reference： JeffreyLi  https://www.jianshu.com/p/1782e14a0766</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">////////////////////////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"><span class="comment">/*Formular:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	asm ( assembler template</span></span><br><span class="line"><span class="comment">        	: output operands               	// optional</span></span><br><span class="line"><span class="comment">        	: input operands                	// optional</span></span><br><span class="line"><span class="comment">        	: list of clobbered registers   	// optional</span></span><br><span class="line"><span class="comment">	);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The assembler template form:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* form1:"sentence?sentence?sentence"</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* form2:</span></span><br><span class="line"><span class="comment">			"sentence?"</span></span><br><span class="line"><span class="comment">			"sentence?"</span></span><br><span class="line"><span class="comment">			"sentence"</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Where the ? should be replaced by "\n\t" or ";".</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Access to C variables by %0 %1 and so on.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The operands form:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* "constraint" (C expression)</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Where constraint is mainly used for note Addressing type(memory or register).</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- For output operants, it should be decorated by "=", which means write-only.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- For multiple operants, they should be seperated by ",".</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- To use the operants in assempler template with %0 %1 %2 ...</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">				- First output operants then input operants.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">				- Signed in the list order.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- The output operants must be lvalue.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The clobber list:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* When a register is used in the assembler template, it should be in the clobber list.</span></span><br><span class="line"><span class="comment">		  Which let gcc no longer assume that the values previously stored in these registers</span></span><br><span class="line"><span class="comment">		  are still legal.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* If the instruction changes the memory value in an unpredictable form, you need to add</span></span><br><span class="line"><span class="comment">		  "memory" to the clobbered list.This allows GCC not to cache these memory values.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The volatile:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* If the assembly code is required to be executed at the location where it was placed</span></span><br><span class="line"><span class="comment">		 (for example, it cannot be moved out of the loop during the optimization), we need to</span></span><br><span class="line"><span class="comment">		  put a "volatile" keyword before the "()" after asm. This will prevent these codes from</span></span><br><span class="line"><span class="comment">		  being moved or deleted.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Useage: __asm__ __volatile__(...);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	Common constraints:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		***********************</span></span><br><span class="line"><span class="comment">		* r 	Register(s)</span></span><br><span class="line"><span class="comment">		* a 	%eax, %ax, %al</span></span><br><span class="line"><span class="comment">		* b 	%ebx, %bx, %bl</span></span><br><span class="line"><span class="comment">		* c 	%ecx, %cx, %cl</span></span><br><span class="line"><span class="comment">		* d 	%edx, %dx, %adl</span></span><br><span class="line"><span class="comment">		* S 	%esi, %si</span></span><br><span class="line"><span class="comment">		* D 	%edi, %di</span></span><br><span class="line"><span class="comment">		***********************</span></span><br><span class="line"><span class="comment">		* m     memory</span></span><br><span class="line"><span class="comment">		***********************</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- If use the register constraint, the value will first be stored at the register used,</span></span><br><span class="line"><span class="comment">                and then write back to the memory in the end.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Constraint "0" means: use the same register as the first output operants.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	Constraint Modifiers:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* "=": Write only.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* "&amp;": Means that this operand is an earlyclobber operand, which is modified before the</span></span><br><span class="line"><span class="comment">                instruction is finished using the input operands. Therefore, this operand may not lie in</span></span><br><span class="line"><span class="comment">                a register that is used as an input operand or as a part of any memory address.An input</span></span><br><span class="line"><span class="comment">                operand can be tied to an earlyclobber operand if its only use as an input occurs before</span></span><br><span class="line"><span class="comment">                the early result is written.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">////////////////////////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a = <span class="number">10</span>,b = <span class="number">5</span>,c;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Example: to realize c = a + b</span></span><br><span class="line">	__asm__ __volatile__ (  </span><br><span class="line">                            <span class="string">"movl %2,%%eax\n\t movl %1,%%ebx\n\t addl %%ebx,%%eax\n\t movl %%eax,%0"</span></span><br><span class="line">                              :<span class="string">"=r"</span>(c)</span><br><span class="line">                              :<span class="string">"r"</span>(a),<span class="string">"r"</span>(b)</span><br><span class="line">                              :<span class="string">"eax"</span>,<span class="string">"ebx"</span></span><br><span class="line">	);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"c = a + b = %d\n"</span>,c);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/12/fft-by-python/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mr.M">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="漫卷云舒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/12/fft-by-python/" itemprop="url">FFT with python</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-12T23:53:20+08:00">
-                2019-05-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="来自信号与系统的一个小作业"><a href="#来自信号与系统的一个小作业" class="headerlink" title="来自信号与系统的一个小作业"></a>来自信号与系统的一个小作业</h2><p>用python和其开源的科学计算库numpy实现快速傅里叶变换算法，并用数据可视化开源第三方库matplotlib作出频域图样。</p>
-<h4 id="代码实现如下"><a href="#代码实现如下" class="headerlink" title="代码实现如下"></a>代码实现如下</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#导入第三方库</span></span><br><span class="line"><span class="comment">###############################</span></span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment">###############################</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># TO GET THE DATA（take gauss signal sampling for example）</span></span><br><span class="line">data_list = [ exp(-pi*x*x/<span class="number">1024</span>/<span class="number">1024</span>) <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">1024</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># FFT FUNCTION PART (递归蝶形算法，输入为数据点数目和数据点列)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_fft_fun</span><span class="params">(NUM, DATA)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> NUM == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> DATA</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        ODD_DATA=DATA[<span class="number">0</span>::<span class="number">2</span>]</span><br><span class="line">        EVEN_DATA=DATA[<span class="number">1</span>::<span class="number">2</span>]</span><br><span class="line">        ODD_LIST=my_fft_fun(NUM//<span class="number">2</span>, ODD_DATA)   <span class="comment">#奇偶分治</span></span><br><span class="line">        EVEN_LIST=my_fft_fun(NUM//<span class="number">2</span>, EVEN_DATA) <span class="comment">#奇偶分治</span></span><br><span class="line">        RES_DATA=[ EVEN_LIST[k%(NUM//<span class="number">2</span>)]+ODD_LIST[k%(NUM//<span class="number">2</span>)]*(cos(<span class="number">2</span>*pi*k/NUM)+sin(<span class="number">2</span>*pi*k/NUM)*<span class="number">1j</span>) <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">0</span>,NUM)]</span><br><span class="line">        <span class="keyword">return</span> RES_DATA</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#调用定义好的FFT递归求解函数</span></span><br><span class="line">FINAL_RES=my_fft_fun(<span class="number">1024</span>,data_list)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 作出X(k)的模值与k的关系图</span></span><br><span class="line">x_part=range(<span class="number">0</span>,<span class="number">1024</span>)</span><br><span class="line">y_part=[ abs(val) <span class="keyword">for</span> val <span class="keyword">in</span> FINAL_RES]</span><br><span class="line">plt.scatter(x_part,y_part,s=<span class="number">5</span>)</span><br><span class="line">plt.title(<span class="string">'DFT for Gauss Signal'</span>, fontsize=<span class="number">20</span>)</span><br><span class="line">plt.xlabel(<span class="string">'k'</span>, fontsize=<span class="number">14</span>)</span><br><span class="line">plt.ylabel(<span class="string">'X(k)'</span>, fontsize=<span class="number">14</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<h4 id="效果作图如下"><a href="#效果作图如下" class="headerlink" title="效果作图如下"></a>效果作图如下</h4><p><img src="/img/fft_result.jpg" alt=""></p>
-<h4 id="有待改进之处"><a href="#有待改进之处" class="headerlink" title="有待改进之处"></a>有待改进之处</h4><p>算法仅涉及简单情形，即数据点的个数是2的指数倍，当需要计算非2的指数倍个数据点的FFT时，分治算法需要更加复杂。</p>
 
           
         
