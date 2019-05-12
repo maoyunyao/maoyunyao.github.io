@@ -275,6 +275,148 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/12/kernel_method/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.M">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="漫卷云舒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/12/kernel_method/" itemprop="url">机器学习之核函数</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-12T23:32:41+08:00">
+                2019-05-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="核函数"><a href="#核函数" class="headerlink" title="核函数"></a>核函数</h3><p>对于线性不可分样本问题(如简单的异或问题), 可以将样本从原始空间映射到一个更高维的特征空间, 使得样本在这个特征空间内线性可分. </p>
+<p>例如在支持向量机中, 原问题转化为求解特征空间上的凸二次规划问题:</p>
+<script type="math/tex; mode=display">
+f(\textbf{x}) = w^T \phi(\textbf{x}) + b</script><p>对上述线性可分支持向量机的求解涉及到如下对偶问题的求解(由拉格朗日乘子法得到对偶问题的具体过程此处不予讨论):</p>
+<script type="math/tex; mode=display">
+\mathop{max}_\alpha \quad \sum\limits_{i = 1}^{n}\alpha_i-\frac{1}{2}\sum\limits_{i=1}^{m}\sum\limits_{j=1}^{m}\alpha_i\alpha_jy_iy_j\phi(\textbf{x}_i)^T\phi(\textbf{x}_j)\\
+s.t. \quad \sum\limits_{i=1}^{m}\alpha_iy_i=0\\
+\alpha_i \ge 0, \quad i=1,2,...,m</script><p>求解上式涉及到计算 $\phi(\textbf{x}_i)^T\phi(\textbf{x}_j)$, 这是样本 $\textbf{x}_i$ 与$\textbf{} $$\textbf{x}_j$ 映射到特征空间之后的内积. 由于特征空间维数很高, 甚至可能是无穷维, 因此直接计算通常是困难的. 为了避开这个障碍, 可以设想这样一个函数:</p>
+<script type="math/tex; mode=display">
+k(\textbf{x}_i,\textbf{x}_j)=<\phi(\textbf{x}_i),\phi(\textbf{x}_j)>=\phi(\textbf{x}_i)^T\phi(\textbf{x}_j)</script><p>即 $\textbf{x}_i$ 与 $\textbf{x}_j$ 在特征空间的内积等于它们在原始样本空间中通过函数 $k(.,.)$ 计算的结果(此即核技巧). 有了这样的函数我们就不必直接去计算高维甚至无穷维特征空间中的内积, 于是对偶问题重写并求解可得</p>
+<script type="math/tex; mode=display">
+f(\textbf{x})=w^T\phi(\textbf{x})+b\\
+=\sum\limits_{i=1}^{m}\alpha_iy_i\phi(\textbf{x}_i)^T\phi(\textbf{x})+b\\
+=\sum\limits_{i=1}^{m}\alpha_iy_ik(\textbf{x},\textbf{x}_i)+b\\</script><p>这里的函数 $k(.,.)$ 就是 “核函数”  </p>
+<p>显然, 如果已知合适的映射 $\phi(.)$ 的具体形式, 则可写出核函数 $k(.,.)$. 但是 现实任务重我们通常不知道 $\phi(.)$ 是什么形式. 剩下的问题就是如何选择 $\phi(.)$:</p>
+<ul>
+<li>使用一个通用的 $\phi$, 例如无限维的 $\phi$, 它隐含地用在高斯核也即基于径向基函数 $(RBF)$ 核的核机器上</li>
+<li>手动地设计 $\phi$ , 在深度学习出现以前, 这一直是主流的方法</li>
+<li>深度学习的策略是去学习 $\phi$</li>
+</ul>
+<p>参考文献:</p>
+<p>[1]机器学习-周志华-第126, 127页</p>
+<p>[2]深度学习-花书-第106页</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/12/zero-contact/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -349,6 +491,127 @@
             <h2 id="不如"><a href="#不如" class="headerlink" title="不如"></a>不如</h2><p>来段紧张刺激的Hello,World代码如何：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(<span class="string">"Hello,World!"</span>)</span><br></pre></td></tr></table></figure>
 <p>THE END…</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/12/inline-asm-gcc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.M">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="漫卷云舒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/12/inline-asm-gcc/" itemprop="url">Inline Assembler in GCC</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-12T16:54:11+08:00">
+                2019-05-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="操作系统上机知识储备-一"><a href="#操作系统上机知识储备-一" class="headerlink" title="操作系统上机知识储备(一)"></a>操作系统上机知识储备(一)</h2><p>对gcc所支持的内联汇编格式及使用方法进行简要的介绍</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * This c file is a introduction of inline Assembly for gcc</span></span><br><span class="line"><span class="comment"> * Time： 2018/9/8</span></span><br><span class="line"><span class="comment"> * Author: myy</span></span><br><span class="line"><span class="comment"> * Reference： JeffreyLi  https://www.jianshu.com/p/1782e14a0766</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">////////////////////////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"><span class="comment">/*Formular:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	asm ( assembler template</span></span><br><span class="line"><span class="comment">        	: output operands               	// optional</span></span><br><span class="line"><span class="comment">        	: input operands                	// optional</span></span><br><span class="line"><span class="comment">        	: list of clobbered registers   	// optional</span></span><br><span class="line"><span class="comment">	);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The assembler template form:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* form1:"sentence?sentence?sentence"</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* form2:</span></span><br><span class="line"><span class="comment">			"sentence?"</span></span><br><span class="line"><span class="comment">			"sentence?"</span></span><br><span class="line"><span class="comment">			"sentence"</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Where the ? should be replaced by "\n\t" or ";".</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Access to C variables by %0 %1 and so on.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The operands form:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* "constraint" (C expression)</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Where constraint is mainly used for note Addressing type(memory or register).</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- For output operants, it should be decorated by "=", which means write-only.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- For multiple operants, they should be seperated by ",".</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- To use the operants in assempler template with %0 %1 %2 ...</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">				- First output operants then input operants.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">				- Signed in the list order.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- The output operants must be lvalue.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The clobber list:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* When a register is used in the assembler template, it should be in the clobber list.</span></span><br><span class="line"><span class="comment">		  Which let gcc no longer assume that the values previously stored in these registers</span></span><br><span class="line"><span class="comment">		  are still legal.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* If the instruction changes the memory value in an unpredictable form, you need to add</span></span><br><span class="line"><span class="comment">		  "memory" to the clobbered list.This allows GCC not to cache these memory values.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The volatile:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* If the assembly code is required to be executed at the location where it was placed</span></span><br><span class="line"><span class="comment">		 (for example, it cannot be moved out of the loop during the optimization), we need to</span></span><br><span class="line"><span class="comment">		  put a "volatile" keyword before the "()" after asm. This will prevent these codes from</span></span><br><span class="line"><span class="comment">		  being moved or deleted.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Useage: __asm__ __volatile__(...);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	Common constraints:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		***********************</span></span><br><span class="line"><span class="comment">		* r 	Register(s)</span></span><br><span class="line"><span class="comment">		* a 	%eax, %ax, %al</span></span><br><span class="line"><span class="comment">		* b 	%ebx, %bx, %bl</span></span><br><span class="line"><span class="comment">		* c 	%ecx, %cx, %cl</span></span><br><span class="line"><span class="comment">		* d 	%edx, %dx, %adl</span></span><br><span class="line"><span class="comment">		* S 	%esi, %si</span></span><br><span class="line"><span class="comment">		* D 	%edi, %di</span></span><br><span class="line"><span class="comment">		***********************</span></span><br><span class="line"><span class="comment">		* m     memory</span></span><br><span class="line"><span class="comment">		***********************</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- If use the register constraint, the value will first be stored at the register used,</span></span><br><span class="line"><span class="comment">                and then write back to the memory in the end.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Constraint "0" means: use the same register as the first output operants.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	Constraint Modifiers:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* "=": Write only.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* "&amp;": Means that this operand is an earlyclobber operand, which is modified before the</span></span><br><span class="line"><span class="comment">                instruction is finished using the input operands. Therefore, this operand may not lie in</span></span><br><span class="line"><span class="comment">                a register that is used as an input operand or as a part of any memory address.An input</span></span><br><span class="line"><span class="comment">                operand can be tied to an earlyclobber operand if its only use as an input occurs before</span></span><br><span class="line"><span class="comment">                the early result is written.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">////////////////////////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a = <span class="number">10</span>,b = <span class="number">5</span>,c;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Example: to realize c = a + b</span></span><br><span class="line">	__asm__ __volatile__ (  </span><br><span class="line">                            <span class="string">"movl %2,%%eax\n\t movl %1,%%ebx\n\t addl %%ebx,%%eax\n\t movl %%eax,%0"</span></span><br><span class="line">                              :<span class="string">"=r"</span>(c)</span><br><span class="line">                              :<span class="string">"r"</span>(a),<span class="string">"r"</span>(b)</span><br><span class="line">                              :<span class="string">"eax"</span>,<span class="string">"ebx"</span></span><br><span class="line">	);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"c = a + b = %d\n"</span>,c);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
           
         
@@ -635,127 +898,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/12/inline-asm-gcc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mr.M">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="漫卷云舒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/12/inline-asm-gcc/" itemprop="url">Inline Assembler in GCC</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-12T16:54:11+08:00">
-                2019-05-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="操作系统上机知识储备-一"><a href="#操作系统上机知识储备-一" class="headerlink" title="操作系统上机知识储备(一)"></a>操作系统上机知识储备(一)</h2><p>对gcc所支持的内联汇编格式及使用方法进行简要的介绍</p>
- <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * This c file is a introduction of inline Assembly for gcc</span></span><br><span class="line"><span class="comment"> * Time： 2018/9/8</span></span><br><span class="line"><span class="comment"> * Author: myy</span></span><br><span class="line"><span class="comment"> * Reference： JeffreyLi  https://www.jianshu.com/p/1782e14a0766</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">////////////////////////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"><span class="comment">/*Formular:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	asm ( assembler template</span></span><br><span class="line"><span class="comment">        	: output operands               	// optional</span></span><br><span class="line"><span class="comment">        	: input operands                	// optional</span></span><br><span class="line"><span class="comment">        	: list of clobbered registers   	// optional</span></span><br><span class="line"><span class="comment">	);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The assembler template form:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* form1:"sentence?sentence?sentence"</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* form2:</span></span><br><span class="line"><span class="comment">			"sentence?"</span></span><br><span class="line"><span class="comment">			"sentence?"</span></span><br><span class="line"><span class="comment">			"sentence"</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Where the ? should be replaced by "\n\t" or ";".</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Access to C variables by %0 %1 and so on.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The operands form:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* "constraint" (C expression)</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Where constraint is mainly used for note Addressing type(memory or register).</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- For output operants, it should be decorated by "=", which means write-only.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- For multiple operants, they should be seperated by ",".</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- To use the operants in assempler template with %0 %1 %2 ...</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">				- First output operants then input operants.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">				- Signed in the list order.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- The output operants must be lvalue.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The clobber list:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* When a register is used in the assembler template, it should be in the clobber list.</span></span><br><span class="line"><span class="comment">		  Which let gcc no longer assume that the values previously stored in these registers</span></span><br><span class="line"><span class="comment">		  are still legal.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* If the instruction changes the memory value in an unpredictable form, you need to add</span></span><br><span class="line"><span class="comment">		  "memory" to the clobbered list.This allows GCC not to cache these memory values.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The volatile:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* If the assembly code is required to be executed at the location where it was placed</span></span><br><span class="line"><span class="comment">		 (for example, it cannot be moved out of the loop during the optimization), we need to</span></span><br><span class="line"><span class="comment">		  put a "volatile" keyword before the "()" after asm. This will prevent these codes from</span></span><br><span class="line"><span class="comment">		  being moved or deleted.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Useage: __asm__ __volatile__(...);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	Common constraints:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		***********************</span></span><br><span class="line"><span class="comment">		* r 	Register(s)</span></span><br><span class="line"><span class="comment">		* a 	%eax, %ax, %al</span></span><br><span class="line"><span class="comment">		* b 	%ebx, %bx, %bl</span></span><br><span class="line"><span class="comment">		* c 	%ecx, %cx, %cl</span></span><br><span class="line"><span class="comment">		* d 	%edx, %dx, %adl</span></span><br><span class="line"><span class="comment">		* S 	%esi, %si</span></span><br><span class="line"><span class="comment">		* D 	%edi, %di</span></span><br><span class="line"><span class="comment">		***********************</span></span><br><span class="line"><span class="comment">		* m     memory</span></span><br><span class="line"><span class="comment">		***********************</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- If use the register constraint, the value will first be stored at the register used,</span></span><br><span class="line"><span class="comment">                and then write back to the memory in the end.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Constraint "0" means: use the same register as the first output operants.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	Constraint Modifiers:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* "=": Write only.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* "&amp;": Means that this operand is an earlyclobber operand, which is modified before the</span></span><br><span class="line"><span class="comment">                instruction is finished using the input operands. Therefore, this operand may not lie in</span></span><br><span class="line"><span class="comment">                a register that is used as an input operand or as a part of any memory address.An input</span></span><br><span class="line"><span class="comment">                operand can be tied to an earlyclobber operand if its only use as an input occurs before</span></span><br><span class="line"><span class="comment">                the early result is written.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">////////////////////////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a = <span class="number">10</span>,b = <span class="number">5</span>,c;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Example: to realize c = a + b</span></span><br><span class="line">	__asm__ __volatile__ (  </span><br><span class="line">                            <span class="string">"movl %2,%%eax\n\t movl %1,%%ebx\n\t addl %%ebx,%%eax\n\t movl %%eax,%0"</span></span><br><span class="line">                              :<span class="string">"=r"</span>(c)</span><br><span class="line">                              :<span class="string">"r"</span>(a),<span class="string">"r"</span>(b)</span><br><span class="line">                              :<span class="string">"eax"</span>,<span class="string">"ebx"</span></span><br><span class="line">	);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"c = a + b = %d\n"</span>,c);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -806,7 +948,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1357,6 +1499,28 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
 
   
 
