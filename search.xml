@@ -4,6 +4,9 @@
     <title><![CDATA[机器学习之核函数]]></title>
     <url>%2F2019%2F05%2F12%2Fkernel_method%2F</url>
     <content type="text"><![CDATA[核函数对于线性不可分样本问题(如简单的异或问题), 可以将样本从原始空间映射到一个更高维的特征空间, 使得样本在这个特征空间内线性可分. 例如在支持向量机中, 原问题转化为求解特征空间上的凸二次规划问题: f(\textbf{x}) = w^T \phi(\textbf{x}) + b对上述线性可分支持向量机的求解涉及到如下对偶问题的求解(由拉格朗日乘子法得到对偶问题的具体过程此处不予讨论): \mathop{max}_\alpha \quad \sum\limits_{i = 1}^{n}\alpha_i-\frac{1}{2}\sum\limits_{i=1}^{m}\sum\limits_{j=1}^{m}\alpha_i\alpha_jy_iy_j\phi(\textbf{x}_i)^T\phi(\textbf{x}_j)\\ s.t. \quad \sum\limits_{i=1}^{m}\alpha_iy_i=0\\ \alpha_i \ge 0, \quad i=1,2,...,m求解上式涉及到计算 $\phi(\textbf{x}_i)^T\phi(\textbf{x}_j)$, 这是样本 $\textbf{x}_i$ 与$\textbf{} $$\textbf{x}_j$ 映射到特征空间之后的内积. 由于特征空间维数很高, 甚至可能是无穷维, 因此直接计算通常是困难的. 为了避开这个障碍, 可以设想这样一个函数: k(\textbf{x}_i,\textbf{x}_j)==\phi(\textbf{x}_i)^T\phi(\textbf{x}_j)即 $\textbf{x}_i$ 与 $\textbf{x}_j$ 在特征空间的内积等于它们在原始样本空间中通过函数 $k(.,.)$ 计算的结果(此即核技巧). 有了这样的函数我们就不必直接去计算高维甚至无穷维特征空间中的内积, 于是对偶问题重写并求解可得 f(\textbf{x})=w^T\phi(\textbf{x})+b\\ =\sum\limits_{i=1}^{m}\alpha_iy_i\phi(\textbf{x}_i)^T\phi(\textbf{x})+b\\ =\sum\limits_{i=1}^{m}\alpha_iy_ik(\textbf{x},\textbf{x}_i)+b\\这里的函数 $k(.,.)$ 就是 “核函数” 显然, 如果已知合适的映射 $\phi(.)$ 的具体形式, 则可写出核函数 $k(.,.)$. 但是 现实任务重我们通常不知道 $\phi(.)$ 是什么形式. 剩下的问题就是如何选择 $\phi(.)$: 使用一个通用的 $\phi$, 例如无限维的 $\phi$, 它隐含地用在高斯核也即基于径向基函数 $(RBF)$ 核的核机器上 手动地设计 $\phi$ , 在深度学习出现以前, 这一直是主流的方法 深度学习的策略是去学习 $\phi$ 参考文献: [1]机器学习-周志华-第126, 127页 [2]深度学习-花书-第106页]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
   </entry>
   <entry>
     <title><![CDATA[Inline Assembler in GCC]]></title>
