@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="漫卷云舒">
 <meta property="og:description" content="自动求导requires_grad Pytorch 允许我们利用每个 Tensor 的requires_grad标志位来在计算图中排除一些不需要进行梯度计算的子图. 只要一个操作的输入中有一个Tensor的requires_grad为True, 则该操作的输出的requires_grad为True.相反只有所有的输入中所有的Tensor的requires_grad为False时该操作的输出的req">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-14T15:20:21.357Z">
+<meta property="og:updated_time" content="2019-05-14T16:55:55.341Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="自动求导机制">
 <meta name="twitter:description" content="自动求导requires_grad Pytorch 允许我们利用每个 Tensor 的requires_grad标志位来在计算图中排除一些不需要进行梯度计算的子图. 只要一个操作的输入中有一个Tensor的requires_grad为True, 则该操作的输出的requires_grad为True.相反只有所有的输入中所有的Tensor的requires_grad为False时该操作的输出的req">
@@ -384,7 +384,7 @@
 <p>在<code>model</code>中我们可以通过如下的操作改变其参数的<code>requires_grad</code>标志位以实现特定的需求, 如通过设置标志位为False来进行参数微调、跑测试集等.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">model = torchvision.models.resnet18(pretrained = <span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">for</span> param <span class="keyword">in</span> model.parameters():</span><br><span class="line">    param.requires_grad = <span class="keyword">False</span>;</span><br></pre></td></tr></table></figure>
 <p>当然我们也可以用如下的方法禁用梯度计算</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> torch</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.randn((<span class="number">5</span>, <span class="number">5</span>), requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">...		y = x + <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.requires_grad</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> torch</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.randn((<span class="number">5</span>, <span class="number">5</span>), requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">with</span> torch.no_grad():</span><br><span class="line"><span class="meta">... </span>	y = x + <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.requires_grad</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
