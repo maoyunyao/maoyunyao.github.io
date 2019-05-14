@@ -79,13 +79,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="漫卷云舒">
-<meta property="og:url" content="https://maoyunyao.github.io/archives/2018/01/index.html">
+<meta name="description" content="似然函数在数理统计学中, 似然函数是一种关于统计模型中的参数的函数, 表示模型参数的似然性. 统计学中似然性和概率有着明确的区分. 概率用于在已知一些参数的情况下, 预测接下来在观测上所得到的结果. 而似然性则是用于在已知某些观测所得到的结果时, 对相关参数进行估值. 似然函数的重要性不是它的具体取值, 而是当参数变化时函数到底是变大还是变小. 对同一个似然函数, 其所代表的模型中, 某项参数值具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="似然函数作为损失函数">
+<meta property="og:url" content="https://maoyunyao.github.io/2019/05/13/ml_loss_function/index.html">
 <meta property="og:site_name" content="漫卷云舒">
+<meta property="og:description" content="似然函数在数理统计学中, 似然函数是一种关于统计模型中的参数的函数, 表示模型参数的似然性. 统计学中似然性和概率有着明确的区分. 概率用于在已知一些参数的情况下, 预测接下来在观测上所得到的结果. 而似然性则是用于在已知某些观测所得到的结果时, 对相关参数进行估值. 似然函数的重要性不是它的具体取值, 而是当参数变化时函数到底是变大还是变小. 对同一个似然函数, 其所代表的模型中, 某项参数值具">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-05-13T10:09:54.535Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="漫卷云舒">
+<meta name="twitter:title" content="似然函数作为损失函数">
+<meta name="twitter:description" content="似然函数在数理统计学中, 似然函数是一种关于统计模型中的参数的函数, 表示模型参数的似然性. 统计学中似然性和概率有着明确的区分. 概率用于在已知一些参数的情况下, 预测接下来在观测上所得到的结果. 而似然性则是用于在已知某些观测所得到的结果时, 对相关参数进行估值. 似然函数的重要性不是它的具体取值, 而是当参数变化时函数到底是变大还是变小. 对同一个似然函数, 其所代表的模型中, 某项参数值具">
 
 
 
@@ -115,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://maoyunyao.github.io/archives/2018/01/"/>
+  <link rel="canonical" href="https://maoyunyao.github.io/2019/05/13/ml_loss_function/"/>
 
 
 
 
 
-  <title>Archive | 漫卷云舒</title>
+  <title>似然函数作为损失函数 | 漫卷云舒</title>
   
 
 
@@ -140,7 +144,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
   <!--Fork me on github-->
   <a href="https://github.com/maoyunyao" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
@@ -270,74 +274,189 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
-
-      <span class="archive-page-counter">
-        
-        
-        
-          
-        
-        Um..! 7 posts in total. Keep on posting.
-      </span>
-
-      
-
-        
-        
-        
-
-        
-          
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
-
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/13/ml_loss_function/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.M">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="漫卷云舒">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/01/01/hello-world/" itemprop="url">
-              
-                <span itemprop="name">Hello World</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">似然函数作为损失函数</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-01T12:00:00+08:00"
-              content="2018-01-01" >
-          01-01
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-13T12:00:00+08:00">
+                2019-05-13
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
+      
 
+      
+        <h2 id="似然函数"><a href="#似然函数" class="headerlink" title="似然函数"></a>似然函数</h2><p>在数理统计学中, 似然函数是一种关于统计模型中的参数的函数, 表示模型参数的似然性. 统计学中似然性和概率有着明确的区分. 概率用于在已知一些参数的情况下, 预测接下来在观测上所得到的结果. 而似然性则是用于在已知某些观测所得到的结果时, 对相关参数进行估值.</p>
+<p>似然函数的<strong>重要性不是它的具体取值</strong>, 而是当参数变化时函数到底是变大还是变小. 对同一个似然函数, 其所代表的模型中, 某项参数值具有多种可能, 但如果存在一个参数值使得它的函数值达到最大的话, 那么这个值就是该项参数最为”合理”的参数值.</p>
+<p>在已知某个参数 $B$ 时, 事件 $A$ 会发生的概率写作:</p>
+<script type="math/tex; mode=display">
+P(A|B) = \frac{P(A,B)}{P(B)}</script><p>由贝叶斯公式, 可知:</p>
+<script type="math/tex; mode=display">
+P(B|A) = \frac{P(A|B)P(B)}{P(A)}</script><p>故而, 我们可以反过来构造表示似然性的方法, 即已知有事件 $A$ 发生, 运用似然函数 $L(B|A)$ 估计参数 $B$ 的可能性.前面我们已经提到, 似然函数的重要性在于相对大小而不要求满足归一化条件. 因此我们将一个似然函数乘以一个正的常数后仍然是似然函数. 而对于特定的问题, $\frac{P(B)}{P(A)}$ 为不变的常数, 则:</p>
+<script type="math/tex; mode=display">
+L(b|A) = \alpha P(A|B=b)</script><p>当令 $\alpha=1$ 时, 关于参数 $B$ 的似然函数与给定参数 $B$ 的值后观测 $A$ 的条件概率等价.</p>
+<h2 id="似然函数作为损失函数"><a href="#似然函数作为损失函数" class="headerlink" title="似然函数作为损失函数"></a>似然函数作为损失函数</h2><p>既然似然函数可以用于在已知观测结果时对模型参数进行估值, 那么自然地可以作为机器学习中的损失函数来指导训练过程.</p>
+<p>考虑判别式模型中的场景, 作为损失函数的似然函数接收 $\textbf{label}$ 与 $\textbf{predict}$ 两部分输入. 其中 $\textbf{label}$ 为训练集的标签也就是一次观测时各类别的确切概率值, 如 $[0,…0,1,0…0]$. 而 $\textbf{predict}$ 为模型在给定输入后输出的各类别预测概率分布. 似然函数的目的就是衡量 $\textbf{predict}$ 背后的模型对于观测值,即 $\textbf{label}​$ 的解释程度.</p>
+<p>那么此时结合之前似然函数的讨论, 我们需要最大化似然函数, 即使得基于预测 $\textbf{predict}$ 时产生观测 $\textbf{label}$ 的概率最大. 单个样本时, 我们计算给定 $\textbf{predict}$ 时产生观测 $\textbf{label}$ 的概率如下:</p>
+<script type="math/tex; mode=display">
+P = \prod_{i=1}^{C}predict(i)^{label(i)}\\
+注:其中C为类别数目</script><p>下面我们对整个样本集(符合独立同分布定理)进行计算分析, 可将似然函数等价为条件概率:</p>
+<script type="math/tex; mode=display">
+L = \prod_{j=1}^{m}\prod_{i=1}^{C}predict(i)^{label(i)}\\
+注:其中m为训练集大小</script><p>由于指数以及累乘的存在, 很自然的我们想到对似然函数进行对数运算. 于是得到了所谓的<strong>对数似然函数</strong>. 由于对数的单调特性, 最大化似然函数等价于最大化对数似然函数.</p>
+<script type="math/tex; mode=display">
+L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script><h2 id="对数似然函数与交叉熵"><a href="#对数似然函数与交叉熵" class="headerlink" title="对数似然函数与交叉熵"></a>对数似然函数与交叉熵</h2><p>对数似然函数的形式与<strong>交叉熵</strong>极其相似, 事实上两者只相差了常系数项. 将上式中的对数似然函数除以m并取负数便得到所谓的<strong>负对数似然函数</strong>, 与交叉熵的形式一模一样. 于是原优化问题转化为最小化负对数似然函数, 即交叉熵.</p>
+<p>参考文献:</p>
+<p>[1]维基百科-似然函数</p>
+<p>[2]机器之心-似然函数与交叉熵</p>
+
+      
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/12/ml_kernel_method/" rel="next" title="机器学习之核函数">
+                <i class="fa fa-chevron-left"></i> 机器学习之核函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/14/pytorch_autograd/" rel="prev" title="自动求导机制">
+                自动求导机制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -345,6 +464,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -365,8 +488,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -431,6 +563,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#似然函数"><span class="nav-number">1.</span> <span class="nav-text">似然函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#似然函数作为损失函数"><span class="nav-number">2.</span> <span class="nav-text">似然函数作为损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对数似然函数与交叉熵"><span class="nav-number">3.</span> <span class="nav-text">对数似然函数与交叉熵</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -571,6 +719,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

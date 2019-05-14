@@ -285,7 +285,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/13/loss-function/">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/14/pytorch_autograd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Mr.M">
@@ -304,7 +304,156 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/05/13/loss-function/" itemprop="url">似然函数作为损失函数</a></h1>
+                <a class="post-title-link" href="/2019/05/14/pytorch_autograd/" itemprop="url">自动求导机制</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-14T12:00:00+08:00">
+                2019-05-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Pytorch/" itemprop="url" rel="index">
+                    <span itemprop="name">Pytorch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="自动求导"><a href="#自动求导" class="headerlink" title="自动求导"></a>自动求导</h2><p><code>requires_grad</code></p>
+<p>Pytorch 允许我们利用每个 Tensor 的<code>requires_grad</code>标志位来在计算图中排除一些不需要进行梯度计算的子图.</p>
+<p>只要一个操作的输入中有一个Tensor的<code>requires_grad</code>为True, 则该操作的输出的<code>requires_grad</code>为True.相反只有所有的输入中所有的Tensor的<code>requires_grad</code>为False时该操作的输出的<code>requires_grad</code>才为False.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.randn(<span class="number">5</span>, <span class="number">5</span>) <span class="comment"># requires_grad = False by default</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.randn(<span class="number">5</span>, <span class="number">5</span>) <span class="comment"># requires_grad = False by default</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = torch.randn((<span class="number">5</span>, <span class="number">5</span>), requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = x + y</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.requires_grad</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a + z</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.requires_grad</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<p>在<code>model</code>中我们可以通过如下的操作改变其参数的<code>requires_grad</code>标志位以实现特定的需求, 如通过设置标志位为False来进行参数微调、跑测试集等.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">model = torchvision.models.resnet18(pretrained = <span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">for</span> param <span class="keyword">in</span> model.parameters():</span><br><span class="line">    param.requires_grad = <span class="keyword">False</span>;</span><br></pre></td></tr></table></figure>
+<p>当然我们也可以用如下的方法禁用梯度计算</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> torch</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.randn((<span class="number">5</span>, <span class="number">5</span>), requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">...		y = x + <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.requires_grad</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/13/ml_loss_function/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.M">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="漫卷云舒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/13/ml_loss_function/" itemprop="url">似然函数作为损失函数</a></h1>
         
 
         <div class="post-meta">
@@ -449,7 +598,7 @@ L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/12/kernel_method/">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/12/ml_kernel_method/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Mr.M">
@@ -468,7 +617,7 @@ L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/05/12/kernel_method/" itemprop="url">机器学习之核函数</a></h1>
+                <a class="post-title-link" href="/2019/05/12/ml_kernel_method/" itemprop="url">机器学习之核函数</a></h1>
         
 
         <div class="post-meta">
@@ -1144,7 +1293,7 @@ f(\textbf{x})=w^T\phi(\textbf{x})+b\\
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1155,7 +1304,7 @@ f(\textbf{x})=w^T\phi(\textbf{x})+b\\
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
