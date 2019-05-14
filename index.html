@@ -434,6 +434,161 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/14/pytorch_cuda/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.M">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="漫卷云舒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/14/pytorch_cuda/" itemprop="url">CUDA支持</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-14T12:00:00+08:00">
+                2019-05-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Pytorch/" itemprop="url" rel="index">
+                    <span itemprop="name">Pytorch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="torch-cuda"><a href="#torch-cuda" class="headerlink" title="torch.cuda"></a>torch.cuda</h2><p>Pytorch 提供了 CUDA 的支持, <code>torch.cuda</code> 模块用于设置和运行 CUDA 上的操作, 它会记住所指定的 GPU, 你后续所新建的 CUDA 上的 Tensor 都将被默认在该 GPU 上创建. 当然你也可以用<code>torch.cuda.device</code>修改指定的GPU. 模块不支持跨 GPU 的操作, 除非使用类似拷贝的函数功能将变量转换到同一设备上, 如<code>to()</code>和<code>cuda()</code>等．</p>
+<h5 id="为cuda上的Tensor指定设备"><a href="#为cuda上的Tensor指定设备" class="headerlink" title="　为cuda上的Tensor指定设备"></a>　为cuda上的Tensor指定设备</h5><ul>
+<li>为每个Tensor单独指定一个设备</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> torch</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cuda = torch.device(<span class="string">'cuda'</span>)		<span class="comment"># 使用cuda默认的设备GPU0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cuda1 = torch.device(<span class="string">'cuda:1'</span>)	<span class="comment"># 指定GPU1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cuda2 = torch.device(<span class="string">'cuda:2'</span>)	<span class="comment"># 指定GPU2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>], device = cuda)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">0</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>]).cuda(cuda1)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>]).to(cuda2)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>设置上下文默认设备</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 指定cuda的GPU为GPU1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">with</span> torch.cuda.device(<span class="number">1</span>):</span><br><span class="line"><span class="meta">... </span>	a = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>], device = cuda)</span><br><span class="line"><span class="meta">... </span>	b = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>]).cuda()</span><br><span class="line"><span class="meta">... </span>	c = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>]).to(device = cuda)</span><br><span class="line">...		d = a + b + c</span><br><span class="line">...		<span class="comment"># 指定上下文后还是可以为每个tensor单独指定设备</span></span><br><span class="line">...		s = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>]).to(device = cuda2)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">"Outside device is 0"</span>)  		<span class="comment"># On device 0 (default in most scenarios)</span></span><br><span class="line"><span class="keyword">with</span> torch.cuda.device(<span class="number">1</span>):</span><br><span class="line">    print(<span class="string">"Inside device is 1"</span>)  	<span class="comment"># On device 1</span></span><br><span class="line">print(<span class="string">"Outside device is still 0"</span>)  <span class="comment"># On device 0</span></span><br></pre></td></tr></table></figure>
+<h5 id="Pytorch中CUDA使用的一个范例"><a href="#Pytorch中CUDA使用的一个范例" class="headerlink" title="Pytorch中CUDA使用的一个范例"></a>Pytorch中CUDA使用的一个范例</h5><p>由参数和主机的 CUDA 是否可用共同决定是使用 CPU 还是 CUDA</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">'PyTorch Example'</span>)</span><br><span class="line">parser.add_argument(<span class="string">'--disable-cuda'</span>, action=<span class="string">'store_true'</span>,</span><br><span class="line">                    help=<span class="string">'Disable CUDA'</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line">args.device = <span class="keyword">None</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> args.disable_cuda <span class="keyword">and</span> torch.cuda.is_available():</span><br><span class="line">    args.device = torch.device(<span class="string">'cuda'</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    args.device = torch.device(<span class="string">'cpu'</span>)</span><br></pre></td></tr></table></figure>
+<p>有了制定了设备后就可以进行 Tensor 或者 model 的部署了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = torch.empty((<span class="number">8</span>, <span class="number">42</span>), device=args.device)</span><br><span class="line">net = Network().to(device=args.device)</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/13/ml_loss_function/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1293,7 +1448,7 @@ f(\textbf{x})=w^T\phi(\textbf{x})+b\\
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
