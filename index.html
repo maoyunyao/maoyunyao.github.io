@@ -388,18 +388,18 @@
 <li><p>返回值类型: Tensor</p>
 </li>
 <li><p>特性:</p>
-<p>利用上述函数创建 Tensor 时, 它总是拷贝 data 内的数据然后利用这些数据结合参数构造一个新的叶结点变量, 故而:</p>
+<p>利用上述函数创建 Tensor 时, 它总是拷贝 data 内的数据然后利用这些数据结合相应参数构造一个新的叶结点变量, 故而:</p>
 <blockquote>
 <p><code>torch.tensor(x)</code> 等价于 <code>x.clone().detach()</code>. </p>
 <p><code>torch.tensor(x, requires_grad=True)</code> 等价于 <code>x.clone().detach().rquires_grad_(True)</code>.</p>
 </blockquote>
-<p>如果想要避免上述的拷贝-创建机制, 请不要使用这个函数:-). </p>
-<p>如果你想得到与原变量共享内存的一个新 Tensor 那么可以使用:</p>
+<p>如果想要避免上述的拷贝-创建机制, 请不要使用这个函数 :-). </p>
+<p>如果你想得到与原变量共享内存的一个新 Tensor, 那么可以使用如下的方法:</p>
 <blockquote>
-<p><code>torch.Tensor.detach()</code>可从原来的 Tensor 创造Tensor, 共享内存.</p>
-<p><code>torch.as_tensor()</code> 可从 Numpy 的 ndarray 创造 Tensor , 共享内存.</p>
+<p><code>torch.Tensor.detach()</code>可从原来的 Tensor 创造一个<code>requires_grad</code>标志位为 False 且不在原 Tensor 计算图中的 Tensor, 两者共享内存.</p>
+<p><code>torch.as_tensor()</code> 可从 Numpy 的 ndarray 创造 Tensor , 两者共享内存.</p>
 </blockquote>
-<p>如果你想修改原 Tensor 的一些性质, 可以使用:</p>
+<p>如果你想修改原 Tensor 的一些性质, 可以使用如下的方法:</p>
 <blockquote>
 <p><code>torch.Tensor.requires_grad_()</code>使 Tensor 的<code>requires_grad</code>标志位为真, 自动求导机制开始记录操作.</p>
 <p><code>torch.Tensor.detach_()</code>该函数与不含下划线的版本不同之处在于它修改原Torch的性质, 即将原 Tensor 从计算图中剥离并且置requires_grad为False. </p>
@@ -408,7 +408,7 @@
 <li><p>示例代码:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> torch</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="number">1.</span>, <span class="number">1.</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = [<span class="number">2.</span>, <span class="number">2.</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.tensor(a, requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.tensor(a, requires_grad = <span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x[<span class="number">0</span>] = <span class="number">-1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line">tensor([<span class="number">-1.</span>,  <span class="number">1.</span>], grad_fn=&lt;CopySlices&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">1.0</span>, <span class="number">1.0</span>]</span><br><span class="line"><span class="comment"># 可见 x 与 a 并不共享内存</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x_ = x.detach()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line">tensor([<span class="number">-1.</span>,  <span class="number">1.</span>], grad_fn=&lt;CopySlices&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x_</span><br><span class="line">tensor([<span class="number">-1.</span>,  <span class="number">1.</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x[<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line">tensor([<span class="number">1.</span>, <span class="number">1.</span>], grad_fn=&lt;CopySlices&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x_</span><br><span class="line">tensor([<span class="number">1.</span>, <span class="number">1.</span>])</span><br><span class="line"><span class="comment"># 可见 x 与 x_ 并共享内存</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x_ = x.detach()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line">tensor([<span class="number">-1.</span>,  <span class="number">1.</span>], grad_fn=&lt;CopySlices&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x_</span><br><span class="line">tensor([<span class="number">-1.</span>,  <span class="number">1.</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x[<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line">tensor([<span class="number">1.</span>, <span class="number">1.</span>], grad_fn=&lt;CopySlices&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x_</span><br><span class="line">tensor([<span class="number">1.</span>, <span class="number">1.</span>])</span><br><span class="line"><span class="comment"># 可见 x 与 x_ 共享内存</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
