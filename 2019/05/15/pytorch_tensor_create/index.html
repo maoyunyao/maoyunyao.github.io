@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="似然函数在数理统计学中, 似然函数是一种关于统计模型中的参数的函数, 表示模型参数的似然性. 统计学中似然性和概率有着明确的区分. 概率用于在已知一些参数的情况下, 预测接下来在观测上所得到的结果. 而似然性则是用于在已知某些观测所得到的结果时, 对相关参数进行估值. 似然函数的重要性不是它的具体取值, 而是当参数变化时函数到底是变大还是变小. 对同一个似然函数, 其所代表的模型中, 某项参数值具">
+<meta name="description" content="torch.TensorTensor 是 Pytorch 的数据结构, 是一种包含单一数据类型的多维张量. 其上定义了诸多的操作. 　张量的创建 torch.tensor()  函数原型: torch.tensor(data, dtype=None, device=None, requires_grad=False, pin_memory=False)  返回值类型: Tensor  特性: 利用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="似然函数作为损失函数">
-<meta property="og:url" content="https://maoyunyao.github.io/2019/05/13/ml_loss_function/index.html">
+<meta property="og:title" content="张量的创建">
+<meta property="og:url" content="https://maoyunyao.github.io/2019/05/15/pytorch_tensor_create/index.html">
 <meta property="og:site_name" content="漫卷云舒">
-<meta property="og:description" content="似然函数在数理统计学中, 似然函数是一种关于统计模型中的参数的函数, 表示模型参数的似然性. 统计学中似然性和概率有着明确的区分. 概率用于在已知一些参数的情况下, 预测接下来在观测上所得到的结果. 而似然性则是用于在已知某些观测所得到的结果时, 对相关参数进行估值. 似然函数的重要性不是它的具体取值, 而是当参数变化时函数到底是变大还是变小. 对同一个似然函数, 其所代表的模型中, 某项参数值具">
+<meta property="og:description" content="torch.TensorTensor 是 Pytorch 的数据结构, 是一种包含单一数据类型的多维张量. 其上定义了诸多的操作. 　张量的创建 torch.tensor()  函数原型: torch.tensor(data, dtype=None, device=None, requires_grad=False, pin_memory=False)  返回值类型: Tensor  特性: 利用">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-13T10:09:54.535Z">
+<meta property="og:updated_time" content="2019-05-15T07:15:41.305Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="似然函数作为损失函数">
-<meta name="twitter:description" content="似然函数在数理统计学中, 似然函数是一种关于统计模型中的参数的函数, 表示模型参数的似然性. 统计学中似然性和概率有着明确的区分. 概率用于在已知一些参数的情况下, 预测接下来在观测上所得到的结果. 而似然性则是用于在已知某些观测所得到的结果时, 对相关参数进行估值. 似然函数的重要性不是它的具体取值, 而是当参数变化时函数到底是变大还是变小. 对同一个似然函数, 其所代表的模型中, 某项参数值具">
+<meta name="twitter:title" content="张量的创建">
+<meta name="twitter:description" content="torch.TensorTensor 是 Pytorch 的数据结构, 是一种包含单一数据类型的多维张量. 其上定义了诸多的操作. 　张量的创建 torch.tensor()  函数原型: torch.tensor(data, dtype=None, device=None, requires_grad=False, pin_memory=False)  返回值类型: Tensor  特性: 利用">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://maoyunyao.github.io/2019/05/13/ml_loss_function/"/>
+  <link rel="canonical" href="https://maoyunyao.github.io/2019/05/15/pytorch_tensor_create/"/>
 
 
 
 
 
-  <title>似然函数作为损失函数 | 漫卷云舒</title>
+  <title>张量的创建 | 漫卷云舒</title>
   
 
 
@@ -288,7 +288,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/13/ml_loss_function/">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/15/pytorch_tensor_create/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Mr.M">
@@ -305,7 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">似然函数作为损失函数</h1>
+          <h1 class="post-title" itemprop="name headline">张量的创建</h1>
         
 
         <div class="post-meta">
@@ -317,8 +317,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-13T12:00:00+08:00">
-                2019-05-13
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-15T12:00:00+08:00">
+                2019-05-15
               </time>
             
 
@@ -340,8 +340,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
+                  <a href="/categories/Pytorch/" itemprop="url" rel="index">
+                    <span itemprop="name">Pytorch</span>
                   </a>
                 </span>
 
@@ -377,29 +377,63 @@
       
 
       
-        <h2 id="似然函数"><a href="#似然函数" class="headerlink" title="似然函数"></a>似然函数</h2><p>在数理统计学中, 似然函数是一种关于统计模型中的参数的函数, 表示模型参数的似然性. 统计学中似然性和概率有着明确的区分. 概率用于在已知一些参数的情况下, 预测接下来在观测上所得到的结果. 而似然性则是用于在已知某些观测所得到的结果时, 对相关参数进行估值.</p>
-<p>似然函数的<strong>重要性不是它的具体取值</strong>, 而是当参数变化时函数到底是变大还是变小. 对同一个似然函数, 其所代表的模型中, 某项参数值具有多种可能, 但如果存在一个参数值使得它的函数值达到最大的话, 那么这个值就是该项参数最为”合理”的参数值.</p>
-<p>在已知某个参数 $B$ 时, 事件 $A$ 会发生的概率写作:</p>
-<script type="math/tex; mode=display">
-P(A|B) = \frac{P(A,B)}{P(B)}</script><p>由贝叶斯公式, 可知:</p>
-<script type="math/tex; mode=display">
-P(B|A) = \frac{P(A|B)P(B)}{P(A)}</script><p>故而, 我们可以反过来构造表示似然性的方法, 即已知有事件 $A$ 发生, 运用似然函数 $L(B|A)$ 估计参数 $B$ 的可能性.前面我们已经提到, 似然函数的重要性在于相对大小而不要求满足归一化条件. 因此我们将一个似然函数乘以一个正的常数后仍然是似然函数. 而对于特定的问题, $\frac{P(B)}{P(A)}$ 为不变的常数, 则:</p>
-<script type="math/tex; mode=display">
-L(b|A) = \alpha P(A|B=b)</script><p>当令 $\alpha=1$ 时, 关于参数 $B$ 的似然函数与给定参数 $B$ 的值后观测 $A$ 的条件概率等价.</p>
-<h2 id="似然函数作为损失函数"><a href="#似然函数作为损失函数" class="headerlink" title="似然函数作为损失函数"></a>似然函数作为损失函数</h2><p>既然似然函数可以用于在已知观测结果时对模型参数进行估值, 那么自然地可以作为机器学习中的损失函数来指导训练过程.</p>
-<p>考虑判别式模型中的场景, 作为损失函数的似然函数接收 $\textbf{label}$ 与 $\textbf{predict}$ 两部分输入. 其中 $\textbf{label}$ 为训练集的标签也就是一次观测时各类别的确切概率值, 如 $[0,…0,1,0…0]$. 而 $\textbf{predict}$ 为模型在给定输入后输出的各类别预测概率分布. 似然函数的目的就是衡量 $\textbf{predict}$ 背后的模型对于观测值,即 $\textbf{label}​$ 的解释程度.</p>
-<p>那么此时结合之前似然函数的讨论, 我们需要最大化似然函数, 即使得基于预测 $\textbf{predict}$ 时产生观测 $\textbf{label}$ 的概率最大. 单个样本时, 我们计算给定 $\textbf{predict}$ 时产生观测 $\textbf{label}$ 的概率如下:</p>
-<script type="math/tex; mode=display">
-P = \prod_{i=1}^{C}predict(i)^{label(i)}\\
-注:其中C为类别数目</script><p>下面我们对整个样本集(符合独立同分布定理)进行计算分析, 可将似然函数等价为条件概率:</p>
-<script type="math/tex; mode=display">
-L = \prod_{j=1}^{m}\prod_{i=1}^{C}predict(i)^{label(i)}\\
-注:其中m为训练集大小</script><p>由于指数以及累乘的存在, 很自然的我们想到对似然函数进行对数运算. 于是得到了所谓的<strong>对数似然函数</strong>. 由于对数的单调特性, 最大化似然函数等价于最大化对数似然函数.</p>
-<script type="math/tex; mode=display">
-L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script><h2 id="对数似然函数与交叉熵"><a href="#对数似然函数与交叉熵" class="headerlink" title="对数似然函数与交叉熵"></a>对数似然函数与交叉熵</h2><p>对数似然函数的形式与<strong>交叉熵</strong>极其相似, 事实上两者只相差了常系数项. 将上式中的对数似然函数除以m并取负数便得到所谓的<strong>负对数似然函数</strong>, 与交叉熵的形式一模一样. 于是原优化问题转化为最小化负对数似然函数, 即交叉熵.</p>
-<p>参考文献:</p>
-<p>[1]维基百科-似然函数</p>
-<p>[2]机器之心-似然函数与交叉熵</p>
+        <h2 id="torch-Tensor"><a href="#torch-Tensor" class="headerlink" title="torch.Tensor"></a>torch.Tensor</h2><p>Tensor 是 Pytorch 的数据结构, 是一种包含单一数据类型的多维张量. 其上定义了诸多的操作.</p>
+<h5 id="张量的创建"><a href="#张量的创建" class="headerlink" title="　张量的创建"></a>　张量的创建</h5><ul>
+<li><p><strong>torch.tensor()</strong></p>
+<ul>
+<li><p>函数原型:</p>
+<p><code>torch.tensor(data, dtype=None, device=None, requires_grad=False, pin_memory=False)</code></p>
+</li>
+<li><p>返回值类型: Tensor</p>
+</li>
+<li><p>特性:</p>
+<p>利用上述函数创建 Tensor 时, 它总是拷贝 data 内的数据然后利用这些数据结合参数构造一个新的叶结点变量, 故而:</p>
+<blockquote>
+<p><code>torch.tensor(x)</code> 等价于 <code>x.clone().detach()</code>. </p>
+<p><code>torch.tensor(x, requires_grad=True)</code> 等价于 <code>x.clone().detach().rquires_grad_(True)</code>.</p>
+</blockquote>
+<p>如果想要避免上述的拷贝-创建机制, 请不要使用这个函数:-). </p>
+<p>如果你想得到与原变量共享内存的一个新 Tensor 那么可以使用:</p>
+<blockquote>
+<p><code>torch.Tensor.detach()</code>可从原来的 Tensor 创造Tensor, 共享内存.</p>
+<p><code>torch.as_tensor()</code> 可从 Numpy 的 ndarray 创造 Tensor , 共享内存.</p>
+</blockquote>
+<p>如果你想修改原 Tensor 的一些性质, 可以使用:</p>
+<blockquote>
+<p><code>torch.Tensor.requires_grad_()</code>使 Tensor 的<code>requires_grad</code>标志位为真, 自动求导机制开始记录操作.</p>
+<p><code>torch.Tensor.detach_()</code>该函数与不含下划线的版本不同之处在于它修改原Torch的性质, 即将原 Tensor 从计算图中剥离并且置requires_grad为False. </p>
+</blockquote>
+</li>
+<li><p>示例代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> torch</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="number">1.</span>, <span class="number">1.</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = [<span class="number">2.</span>, <span class="number">2.</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.tensor(a, requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.tensor(a, requires_grad = <span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x[<span class="number">0</span>] = <span class="number">-1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line">tensor([<span class="number">-1.</span>,  <span class="number">1.</span>], grad_fn=&lt;CopySlices&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">1.0</span>, <span class="number">1.0</span>]</span><br><span class="line"><span class="comment"># 可见 x 与 a 并不共享内存</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x_ = x.detach()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line">tensor([<span class="number">-1.</span>,  <span class="number">1.</span>], grad_fn=&lt;CopySlices&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x_</span><br><span class="line">tensor([<span class="number">-1.</span>,  <span class="number">1.</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x[<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line">tensor([<span class="number">1.</span>, <span class="number">1.</span>], grad_fn=&lt;CopySlices&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x_</span><br><span class="line">tensor([<span class="number">1.</span>, <span class="number">1.</span>])</span><br><span class="line"><span class="comment"># 可见 x 与 x_ 并共享内存</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>torch.as_tensor()</strong></p>
+<ul>
+<li><p>函数原型:</p>
+<p><code>torch.as_tensor(data, dtype=None, device=None)</code></p>
+</li>
+<li><p>返回值类型: Tensor</p>
+</li>
+<li><p>特性:</p>
+<p>如果 data 是一个 Tensor 且数据类型与设备参数相同, 则直接共享该 Tensor 的内存给新 Tensor.</p>
+<p>如果 data 是一个 Tensor 而数据类型或设备不符, 则会新创建一个 Tensor, 新 Tensor 保持原 Tensor 的计算图和<code>requires_grad</code>标志位.</p>
+<p>如果 data 是一个数据类型相同的 ndarray , 且参数中指定的设备为CPU, 则新 Tensor 与 该 ndarray 共享内存.</p>
+</li>
+<li><p>示例代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = numpy.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = torch.as_tensor(a)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t[<span class="number">0</span>] = <span class="number">-1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">-1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = numpy.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = torch.as_tensor(a, device=torch.device(<span class="string">'cuda'</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t[<span class="number">0</span>] = <span class="number">-1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>其他一些创建方法</strong></li>
+</ul>
 
       
     </div>
@@ -424,8 +458,8 @@ L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/12/ml_kernel_method/" rel="next" title="机器学习之核函数">
-                <i class="fa fa-chevron-left"></i> 机器学习之核函数
+              <a href="/2019/05/14/pytorch_autograd/" rel="next" title="自动求导机制">
+                <i class="fa fa-chevron-left"></i> 自动求导机制
               </a>
             
           </div>
@@ -433,10 +467,6 @@ L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/14/pytorch_cuda/" rel="prev" title="CUDA支持">
-                CUDA支持 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -573,7 +603,7 @@ L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#似然函数"><span class="nav-number">1.</span> <span class="nav-text">似然函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#似然函数作为损失函数"><span class="nav-number">2.</span> <span class="nav-text">似然函数作为损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对数似然函数与交叉熵"><span class="nav-number">3.</span> <span class="nav-text">对数似然函数与交叉熵</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#torch-Tensor"><span class="nav-number">1.</span> <span class="nav-text">torch.Tensor</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#张量的创建"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">　张量的创建</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -1097,26 +1127,6 @@ L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script
   
 
   
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
