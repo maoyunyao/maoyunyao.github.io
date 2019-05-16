@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="torch.TensorTensor 是 Pytorch 的数据结构, 非常类似于 Numpy 里的 ndarray. 是一种包含单一数据类型的多维张量. 其上定义了诸多的操作. 如我们讨论过的自动求导机制等. 张量的创建 torch.tensor()  1torch.tensor(data,dtype=None,device=None,requires_grad=False,pin_memory">
+<meta name="description" content="torch.TensorTensor 是 Pytorch 的数据结构, 非常类似于 Numpy 里的 ndarray. 是一种包含单一数据类型的多维张量. 其上定义了诸多的操作. 如我们讨论过的自动求导机制等. 张量的创建torch.tensor() 1torch.tensor(data,dtype=None,device=None,requires_grad=False,pin_memory=F">
 <meta property="og:type" content="article">
 <meta property="og:title" content="张量的创建">
 <meta property="og:url" content="https://maoyunyao.github.io/2019/05/15/pytorch_tensor_create/index.html">
 <meta property="og:site_name" content="漫卷云舒">
-<meta property="og:description" content="torch.TensorTensor 是 Pytorch 的数据结构, 非常类似于 Numpy 里的 ndarray. 是一种包含单一数据类型的多维张量. 其上定义了诸多的操作. 如我们讨论过的自动求导机制等. 张量的创建 torch.tensor()  1torch.tensor(data,dtype=None,device=None,requires_grad=False,pin_memory">
+<meta property="og:description" content="torch.TensorTensor 是 Pytorch 的数据结构, 非常类似于 Numpy 里的 ndarray. 是一种包含单一数据类型的多维张量. 其上定义了诸多的操作. 如我们讨论过的自动求导机制等. 张量的创建torch.tensor() 1torch.tensor(data,dtype=None,device=None,requires_grad=False,pin_memory=F">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-16T07:37:29.984Z">
+<meta property="og:updated_time" content="2019-05-16T07:40:07.693Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="张量的创建">
-<meta name="twitter:description" content="torch.TensorTensor 是 Pytorch 的数据结构, 非常类似于 Numpy 里的 ndarray. 是一种包含单一数据类型的多维张量. 其上定义了诸多的操作. 如我们讨论过的自动求导机制等. 张量的创建 torch.tensor()  1torch.tensor(data,dtype=None,device=None,requires_grad=False,pin_memory">
+<meta name="twitter:description" content="torch.TensorTensor 是 Pytorch 的数据结构, 非常类似于 Numpy 里的 ndarray. 是一种包含单一数据类型的多维张量. 其上定义了诸多的操作. 如我们讨论过的自动求导机制等. 张量的创建torch.tensor() 1torch.tensor(data,dtype=None,device=None,requires_grad=False,pin_memory=F">
 
 
 
@@ -378,9 +378,7 @@
 
       
         <h2 id="torch-Tensor"><a href="#torch-Tensor" class="headerlink" title="torch.Tensor"></a>torch.Tensor</h2><p>Tensor 是 Pytorch 的数据结构, 非常类似于 Numpy 里的 ndarray. 是一种包含单一数据类型的多维张量. 其上定义了诸多的操作. 如我们讨论过的自动求导机制等.</p>
-<h5 id="张量的创建"><a href="#张量的创建" class="headerlink" title="张量的创建"></a>张量的创建</h5><ul>
-<li><code>torch.tensor()</code></li>
-</ul>
+<h5 id="张量的创建"><a href="#张量的创建" class="headerlink" title="张量的创建"></a>张量的创建</h5><p><strong>torch.tensor()</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.tensor(data,dtype=<span class="keyword">None</span>,device=<span class="keyword">None</span>,requires_grad=<span class="keyword">False</span>,pin_memory=<span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
 <p>利用上述函数创建 Tensor 时, 它总是拷贝 data 内的数据然后利用这些数据结合相应参数构造一个新的叶结点变量, 故而 <code>torch.tensor(x)</code> 与 <code>x.clone().detach()</code> 等价, 而 <code>torch.tensor(x,requires_grad=True)</code> 则与 <code>x.clone().detach().rquires_grad_(True)</code> 等价.</p>
 <p>如果想要避免上述的拷贝-创建机制, 请不要使用这个函数 :-). 而如果你想得到一个与原变量共享内存的新 Tensor, 那么可以使用 <code>torch.Tensor.detach()</code> 或者 <code>torch.as_tensor()</code> 等方法. 前者可以从原来的 Tensor 创造一个 <code>requires_grad</code> 标志位为 False 且不在原 Tensor 计算图中的 Tensor, 两者共享内存. 而后者可从 Numpy 的一个 ndarray 创造 Tensor , 两者共享内存.</p>
@@ -389,9 +387,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> torch</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="number">1.</span>, <span class="number">1.</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = [<span class="number">2.</span>, <span class="number">2.</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.tensor(a, requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.tensor(a, requires_grad = <span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x[<span class="number">0</span>] = <span class="number">-1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line">tensor([<span class="number">-1.</span>,  <span class="number">1.</span>], grad_fn=&lt;CopySlices&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">1.0</span>, <span class="number">1.0</span>]</span><br><span class="line"><span class="comment"># 可见 x 与 a 并不共享内存</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x_ = x.detach()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line">tensor([<span class="number">-1.</span>,  <span class="number">1.</span>], grad_fn=&lt;CopySlices&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x_</span><br><span class="line">tensor([<span class="number">-1.</span>,  <span class="number">1.</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x[<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line">tensor([<span class="number">1.</span>, <span class="number">1.</span>], grad_fn=&lt;CopySlices&gt;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x_</span><br><span class="line">tensor([<span class="number">1.</span>, <span class="number">1.</span>])</span><br><span class="line"><span class="comment"># 可见 x 与 x_ 共享内存</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>torch.as_tensor()</code></li>
-</ul>
+<p><strong>torch.as_tensor()</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.as_tensor(data, dtype=<span class="keyword">None</span>, device=<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
 <p>如果 data 是一个 Tensor 且数据类型与设备参数相同, 则直接共享该 Tensor 的内存给新 Tensor. 如果 data 是一个 Tensor 而数据类型或设备不符, 则会新创建一个 Tensor, 新 Tensor 保持原 Tensor 的计算图和 <code>requires_grad</code> 标志位. 如果 data 是一个数据类型相同的 ndarray , 且参数中指定的设备为 CPU, 则新 Tensor 与该 ndarray 共享内存.</p>
 <p>示例代码:</p>
