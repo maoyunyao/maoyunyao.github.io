@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[分支限界法]]></title>
+    <url>%2F2019%2F05%2F18%2Falgorithm_branch_bound%2F</url>
+    <content type="text"><![CDATA[分支限界法01背包问题]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[利用GPU训练]]></title>
     <url>%2F2019%2F05%2F17%2Fpytorch_train_with_gpu%2F</url>
     <content type="text"><![CDATA[Train with GPU之前我们已经讨论过 Pytorch 对与 CUDA 的良好支持, 那么自然地我们可以使用强悍的 GPU 设备来训练搭建好的神经网络, 以此来达到加速训练的效果. 毕竟炼丹还是需要良好的硬件支持的是吧. 单GPU训练使用单个 GPU 训练的方法非常简单, 我们只需要将网络部署到 CUDA 的 GPU 设备上并且将数据也部署到相同的设备上即可. 部署的方式与我们之前讨论过的 Tensor 的部署方法相同. 123&gt;&gt;&gt; device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")&gt;&gt;&gt; net.to(device)&gt;&gt;&gt; inputs, labels = inputs.to(device), labels.to(device) 注意此处 tensor.to(device) 仅仅将原 Tensor 在 GPU 上作一个拷贝并返回拷贝的 Tensor, 并不对原 Tensor 有任何修改. 多GPU训练默认情况下 Pytorch 只会使用单个 GPU 进行模型的训练, 你可以使用 DataParallel 来实现多 GPU 的模型计算, 其原型为 1torch.nn.DataParallel(module, device_ids=None, output_device=None, dim=0) 参数解释如下: module: 需要多 GPU 并行计算的模型 device_ids: CUDA 设备的 ID, 默认为全部可用设备 output_device: 输出所在设备, 默认为 device_ids[0] 12345if torch.cuda.device_count() == 3: print("Let's use", torch.cuda.device_count(), "GPUs!") model = nn.DataParallel(model, device_ids=[0, 1, 2])model.to(device) 没错就是这么简单, 结束了. 参考文献: [1]Pytorch - Docs [2]Pytorch - Tutorials: A 60 Minute Blitz]]></content>
