@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="似然函数在数理统计学中, 似然函数是一种关于统计模型中的参数的函数, 表示模型参数的似然性. 统计学中似然性和概率有着明确的区分. 概率用于在已知一些参数的情况下, 预测接下来在观测上所得到的结果. 而似然性则是用于在已知某些观测所得到的结果时, 对相关参数进行估值. 似然函数的重要性不是它的具体取值, 而是当参数变化时函数到底是变大还是变小. 对同一个似然函数, 其所代表的模型中, 某项参数值具">
+<meta name="description" content="torch.nn我们可以利用 torch.nn 来搭建神经网络, 其中 nn.Mudule 包含了神经网络的层以及一个 forward(input) 方法从输入获取神经网络的输出. 神经网络训练流程 定义带有可训练参数 (权重) 的神经网络结构 训练数据输入神经网络前向传播获得输出 利用数据标签和网络输出计算损失函数 执行反向传播算法, 获得损失函数的输出相对于各参数的梯度值 利用梯度值更新网络的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="似然函数作为损失函数">
-<meta property="og:url" content="https://maoyunyao.github.io/2019/05/13/ml_loss_function/index.html">
+<meta property="og:title" content="神经网络搭建">
+<meta property="og:url" content="https://maoyunyao.github.io/2019/05/15/pytorch_nn/index.html">
 <meta property="og:site_name" content="漫卷云舒">
-<meta property="og:description" content="似然函数在数理统计学中, 似然函数是一种关于统计模型中的参数的函数, 表示模型参数的似然性. 统计学中似然性和概率有着明确的区分. 概率用于在已知一些参数的情况下, 预测接下来在观测上所得到的结果. 而似然性则是用于在已知某些观测所得到的结果时, 对相关参数进行估值. 似然函数的重要性不是它的具体取值, 而是当参数变化时函数到底是变大还是变小. 对同一个似然函数, 其所代表的模型中, 某项参数值具">
+<meta property="og:description" content="torch.nn我们可以利用 torch.nn 来搭建神经网络, 其中 nn.Mudule 包含了神经网络的层以及一个 forward(input) 方法从输入获取神经网络的输出. 神经网络训练流程 定义带有可训练参数 (权重) 的神经网络结构 训练数据输入神经网络前向传播获得输出 利用数据标签和网络输出计算损失函数 执行反向传播算法, 获得损失函数的输出相对于各参数的梯度值 利用梯度值更新网络的">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-13T10:09:54.535Z">
+<meta property="og:updated_time" content="2019-05-17T05:39:41.937Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="似然函数作为损失函数">
-<meta name="twitter:description" content="似然函数在数理统计学中, 似然函数是一种关于统计模型中的参数的函数, 表示模型参数的似然性. 统计学中似然性和概率有着明确的区分. 概率用于在已知一些参数的情况下, 预测接下来在观测上所得到的结果. 而似然性则是用于在已知某些观测所得到的结果时, 对相关参数进行估值. 似然函数的重要性不是它的具体取值, 而是当参数变化时函数到底是变大还是变小. 对同一个似然函数, 其所代表的模型中, 某项参数值具">
+<meta name="twitter:title" content="神经网络搭建">
+<meta name="twitter:description" content="torch.nn我们可以利用 torch.nn 来搭建神经网络, 其中 nn.Mudule 包含了神经网络的层以及一个 forward(input) 方法从输入获取神经网络的输出. 神经网络训练流程 定义带有可训练参数 (权重) 的神经网络结构 训练数据输入神经网络前向传播获得输出 利用数据标签和网络输出计算损失函数 执行反向传播算法, 获得损失函数的输出相对于各参数的梯度值 利用梯度值更新网络的">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://maoyunyao.github.io/2019/05/13/ml_loss_function/"/>
+  <link rel="canonical" href="https://maoyunyao.github.io/2019/05/15/pytorch_nn/"/>
 
 
 
 
 
-  <title>似然函数作为损失函数 | 漫卷云舒</title>
+  <title>神经网络搭建 | 漫卷云舒</title>
   
 
 
@@ -288,7 +288,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/13/ml_loss_function/">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/15/pytorch_nn/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Mr.M">
@@ -305,7 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">似然函数作为损失函数</h1>
+          <h1 class="post-title" itemprop="name headline">神经网络搭建</h1>
         
 
         <div class="post-meta">
@@ -317,8 +317,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-13T12:00:00+08:00">
-                2019-05-13
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-15T12:00:00+08:00">
+                2019-05-15
               </time>
             
 
@@ -340,8 +340,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
+                  <a href="/categories/Pytorch/" itemprop="url" rel="index">
+                    <span itemprop="name">Pytorch</span>
                   </a>
                 </span>
 
@@ -377,29 +377,30 @@
       
 
       
-        <h2 id="似然函数"><a href="#似然函数" class="headerlink" title="似然函数"></a>似然函数</h2><p>在数理统计学中, 似然函数是一种关于统计模型中的参数的函数, 表示模型参数的似然性. 统计学中似然性和概率有着明确的区分. 概率用于在已知一些参数的情况下, 预测接下来在观测上所得到的结果. 而似然性则是用于在已知某些观测所得到的结果时, 对相关参数进行估值.</p>
-<p>似然函数的<strong>重要性不是它的具体取值</strong>, 而是当参数变化时函数到底是变大还是变小. 对同一个似然函数, 其所代表的模型中, 某项参数值具有多种可能, 但如果存在一个参数值使得它的函数值达到最大的话, 那么这个值就是该项参数最为”合理”的参数值.</p>
-<p>在已知某个参数 $B$ 时, 事件 $A$ 会发生的概率写作:</p>
-<script type="math/tex; mode=display">
-P(A|B) = \frac{P(A,B)}{P(B)}</script><p>由贝叶斯公式, 可知:</p>
-<script type="math/tex; mode=display">
-P(B|A) = \frac{P(A|B)P(B)}{P(A)}</script><p>故而, 我们可以反过来构造表示似然性的方法, 即已知有事件 $A$ 发生, 运用似然函数 $L(B|A)$ 估计参数 $B$ 的可能性.前面我们已经提到, 似然函数的重要性在于相对大小而不要求满足归一化条件. 因此我们将一个似然函数乘以一个正的常数后仍然是似然函数. 而对于特定的问题, $\frac{P(B)}{P(A)}$ 为不变的常数, 则:</p>
-<script type="math/tex; mode=display">
-L(b|A) = \alpha P(A|B=b)</script><p>当令 $\alpha=1$ 时, 关于参数 $B$ 的似然函数与给定参数 $B$ 的值后观测 $A$ 的条件概率等价.</p>
-<h2 id="似然函数作为损失函数"><a href="#似然函数作为损失函数" class="headerlink" title="似然函数作为损失函数"></a>似然函数作为损失函数</h2><p>既然似然函数可以用于在已知观测结果时对模型参数进行估值, 那么自然地可以作为机器学习中的损失函数来指导训练过程.</p>
-<p>考虑判别式模型中的场景, 作为损失函数的似然函数接收 $\textbf{label}$ 与 $\textbf{predict}$ 两部分输入. 其中 $\textbf{label}$ 为训练集的标签也就是一次观测时各类别的确切概率值, 如 $[0,…0,1,0…0]$. 而 $\textbf{predict}$ 为模型在给定输入后输出的各类别预测概率分布. 似然函数的目的就是衡量 $\textbf{predict}$ 背后的模型对于观测值,即 $\textbf{label}​$ 的解释程度.</p>
-<p>那么此时结合之前似然函数的讨论, 我们需要最大化似然函数, 即使得基于预测 $\textbf{predict}$ 时产生观测 $\textbf{label}$ 的概率最大. 单个样本时, 我们计算给定 $\textbf{predict}$ 时产生观测 $\textbf{label}$ 的概率如下:</p>
-<script type="math/tex; mode=display">
-P = \prod_{i=1}^{C}predict(i)^{label(i)}\\
-注:其中C为类别数目</script><p>下面我们对整个样本集(符合独立同分布定理)进行计算分析, 可将似然函数等价为条件概率:</p>
-<script type="math/tex; mode=display">
-L = \prod_{j=1}^{m}\prod_{i=1}^{C}predict(i)^{label(i)}\\
-注:其中m为训练集大小</script><p>由于指数以及累乘的存在, 很自然的我们想到对似然函数进行对数运算. 于是得到了所谓的<strong>对数似然函数</strong>. 由于对数的单调特性, 最大化似然函数等价于最大化对数似然函数.</p>
-<script type="math/tex; mode=display">
-L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script><h2 id="对数似然函数与交叉熵"><a href="#对数似然函数与交叉熵" class="headerlink" title="对数似然函数与交叉熵"></a>对数似然函数与交叉熵</h2><p>对数似然函数的形式与<strong>交叉熵</strong>极其相似, 事实上两者只相差了常系数项. 将上式中的对数似然函数除以m并取负数便得到所谓的<strong>负对数似然函数</strong>, 与交叉熵的形式一模一样. 于是原优化问题转化为最小化负对数似然函数, 即交叉熵.</p>
-<p>参考文献:</p>
-<p>[1]维基百科-似然函数</p>
-<p>[2]机器之心-似然函数与交叉熵</p>
+        <h2 id="torch-nn"><a href="#torch-nn" class="headerlink" title="torch.nn"></a>torch.nn</h2><p>我们可以利用 <code>torch.nn</code> 来搭建神经网络, 其中 <code>nn.Mudule</code> 包含了神经网络的层以及一个 <code>forward(input)</code> 方法从输入获取神经网络的输出.</p>
+<h5 id="神经网络训练流程"><a href="#神经网络训练流程" class="headerlink" title="神经网络训练流程"></a>神经网络训练流程</h5><ul>
+<li>定义带有可训练参数 (权重) 的神经网络结构</li>
+<li>训练数据输入神经网络前向传播获得输出</li>
+<li>利用数据标签和网络输出计算损失函数</li>
+<li>执行反向传播算法, 获得损失函数的输出相对于各参数的梯度值</li>
+<li>利用梯度值更新网络的权值 <code>weight = weight - learning_rate * gradient</code></li>
+</ul>
+<h5 id="定义网络"><a href="#定义网络" class="headerlink" title="定义网络"></a>定义网络</h5><p>在模型中只需到定义 <code>forward()</code> 方法, 而 <code>backward()</code> 方法会自动定义. 在 <code>forward()</code> 方法中可以使用任何的对 Tensor 的操作. 下面的代码是 LeNet 的 Pytorch 实现:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Net</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super(Net, self).__init__()</span><br><span class="line">        <span class="comment"># 1 input image channel, 6 output channels, 5x5 square convolution</span></span><br><span class="line">        <span class="comment"># kernel</span></span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">1</span>, <span class="number">6</span>, <span class="number">5</span>)</span><br><span class="line">        self.conv2 = nn.Conv2d(<span class="number">6</span>, <span class="number">16</span>, <span class="number">5</span>)</span><br><span class="line">        <span class="comment"># an affine operation: y = Wx + b</span></span><br><span class="line">        self.fc1 = nn.Linear(<span class="number">16</span> * <span class="number">5</span> * <span class="number">5</span>, <span class="number">120</span>)</span><br><span class="line">        self.fc2 = nn.Linear(<span class="number">120</span>, <span class="number">84</span>)</span><br><span class="line">        self.fc3 = nn.Linear(<span class="number">84</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        <span class="comment"># Max pooling over a (2, 2) window</span></span><br><span class="line">        x = F.max_pool2d(F.relu(self.conv1(x)), (<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">        <span class="comment"># If the size is a square you can only specify a single number</span></span><br><span class="line">        x = F.max_pool2d(F.relu(self.conv2(x)), <span class="number">2</span>)</span><br><span class="line">        x = x.view(<span class="number">-1</span>, self.num_flat_features(x))</span><br><span class="line">        x = F.relu(self.fc1(x))</span><br><span class="line">        x = F.relu(self.fc2(x))</span><br><span class="line">        x = self.fc3(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">num_flat_features</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        size = x.size()[<span class="number">1</span>:]  <span class="comment"># all dimensions except the batch dimension</span></span><br><span class="line">        num_features = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> s <span class="keyword">in</span> size:</span><br><span class="line">            num_features *= s</span><br><span class="line">        <span class="keyword">return</span> num_features</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>net = Net()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(net)</span><br><span class="line">Net(</span><br><span class="line">  (conv1): Conv2d(<span class="number">1</span>, <span class="number">6</span>, kernel_size=(<span class="number">5</span>, <span class="number">5</span>), stride=(<span class="number">1</span>, <span class="number">1</span>))</span><br><span class="line">  (conv2): Conv2d(<span class="number">6</span>, <span class="number">16</span>, kernel_size=(<span class="number">5</span>, <span class="number">5</span>), stride=(<span class="number">1</span>, <span class="number">1</span>))</span><br><span class="line">  (fc1): Linear(in_features=<span class="number">400</span>, out_features=<span class="number">120</span>, bias=<span class="keyword">True</span>)</span><br><span class="line">  (fc2): Linear(in_features=<span class="number">120</span>, out_features=<span class="number">84</span>, bias=<span class="keyword">True</span>)</span><br><span class="line">  (fc3): Linear(in_features=<span class="number">84</span>, out_features=<span class="number">10</span>, bias=<span class="keyword">True</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>模型中可以学习的参数可以由 <code>net.parameters()</code> 返回</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>params = list(net.parameters())</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(len(params))</span><br><span class="line"><span class="number">10</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(params[<span class="number">0</span>].size())  <span class="comment"># conv1's .weight</span></span><br><span class="line">torch.Size([<span class="number">6</span>, <span class="number">1</span>, <span class="number">5</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure>
+<h5 id="前向传播"><a href="#前向传播" class="headerlink" title="前向传播"></a>前向传播</h5><p>我们可以尝试给如上的网络一个随机的输入, 观察他的输出情况. 注意此处的输入 size 为 (1, 1, 32, 32), 这是因为 <code>torch.nn</code> 只支持 <code>mini-batches</code> 的输入. 例如, 对于 <code>nn.Conv2d</code> , 它所要求的输入是一个 4 维的 Tensor, 即: <code>nSamples * nChannels * Height * Width</code>. 故而如果你的输入是单个样本, 可以利用 <code>input.unsqueeze(0)</code> 来添加一个虚拟维度.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>input = torch.randn(<span class="number">1</span>, <span class="number">1</span>, <span class="number">32</span>, <span class="number">32</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>out = net(input)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(out)</span><br><span class="line">tensor([[<span class="number">-0.1258</span>, <span class="number">-0.0585</span>, <span class="number">-0.0102</span>, <span class="number">-0.0407</span>, <span class="number">-0.0695</span>, <span class="number">-0.0808</span>,  <span class="number">0.0731</span>, <span class="number">-0.1482</span>,</span><br><span class="line">          <span class="number">0.0575</span>, <span class="number">-0.0164</span>]], grad_fn=&lt;AddmmBackward&gt;)</span><br></pre></td></tr></table></figure>
+<h5 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h5><p>损失函数使用 <code>(output, target)</code> 对作为输出, 计算出的值用于度量 output 相对于 target 的距离. <code>porch.nn</code> 中定义了许多现成的损失函数. 一个最简单的例子便是均方误差函数 <code>nn.MSELoss</code> .</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">output = net(input)</span><br><span class="line">target = torch.randn(<span class="number">10</span>)		<span class="comment"># a dummy target, for example</span></span><br><span class="line">target = target.view(<span class="number">1</span>, <span class="number">-1</span>)		<span class="comment"># make it the same shape as output</span></span><br><span class="line">criterion = nn.MSELoss()</span><br><span class="line"></span><br><span class="line">loss = criterion(output, target)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(loss)</span><br><span class="line">tensor(<span class="number">0.5244</span>, grad_fn=&lt;MseLossBackward&gt;)</span><br></pre></td></tr></table></figure>
+<h5 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h5><p>由于多次反向传播的梯度值的累加机制, 我们在进行一次反向传播更新权重之前, 我们需要用 <code>zero_grad()</code> 对所有参数的 grad 清零, 然后对 loss 调用 <code>backward()</code> 方法就可以得到损失函数的输出关于各可训练参数的梯度了.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>net.zero_grad()</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(net.conv1.bias.grad)</span><br><span class="line">tensor([<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>loss.backward()</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(net.conv1.bias.grad)</span><br><span class="line">tensor([ <span class="number">0.0185</span>,  <span class="number">0.0110</span>,  <span class="number">0.0038</span>,  <span class="number">0.0098</span>, <span class="number">-0.0105</span>, <span class="number">-0.0002</span>])</span><br></pre></td></tr></table></figure>
+<h5 id="更新网络权重"><a href="#更新网络权重" class="headerlink" title="更新网络权重"></a>更新网络权重</h5><p>一个最简单的权重更新方法是随机梯度下降(SGD), 他的策略是 <code>weight = weight - learning_rate * gradient</code> , 我们可以简单实现如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">learning_rate = <span class="number">0.01</span></span><br><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> net.parameters():</span><br><span class="line">    f.data.sub_(f.grad.data * learning_rate)</span><br></pre></td></tr></table></figure>
+<p>不过, 作为一个成熟的深度学习框架, Pytorch 应该学会自己更新权重, 故而 <code>torch.optim</code> 实现了许多权重更新的算法供我们使用, 而且使用方法非常简单:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"></span><br><span class="line"><span class="comment"># create your optimizer</span></span><br><span class="line">optimizer = optim.SGD(net.parameters(), lr=<span class="number">0.01</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># in your training loop:</span></span><br><span class="line">optimizer.zero_grad()   <span class="comment"># zero the gradient buffers</span></span><br><span class="line"></span><br><span class="line">output = net(input)</span><br><span class="line">loss = criterion(output, target)</span><br><span class="line">loss.backward()</span><br><span class="line"></span><br><span class="line">optimizer.step()    	<span class="comment"># Does the update</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -424,8 +425,8 @@ L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/12/ml_kernel_method/" rel="next" title="机器学习之核函数">
-                <i class="fa fa-chevron-left"></i> 机器学习之核函数
+              <a href="/2019/05/14/pytorch_autograd/" rel="next" title="自动求导机制">
+                <i class="fa fa-chevron-left"></i> 自动求导机制
               </a>
             
           </div>
@@ -434,8 +435,8 @@ L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/05/14/pytorch_cuda/" rel="prev" title="CUDA支持">
-                CUDA支持 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/05/15/pytorch_tensor_create/" rel="prev" title="张量的创建">
+                张量的创建 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -573,7 +574,7 @@ L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#似然函数"><span class="nav-number">1.</span> <span class="nav-text">似然函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#似然函数作为损失函数"><span class="nav-number">2.</span> <span class="nav-text">似然函数作为损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对数似然函数与交叉熵"><span class="nav-number">3.</span> <span class="nav-text">对数似然函数与交叉熵</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#torch-nn"><span class="nav-number">1.</span> <span class="nav-text">torch.nn</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#神经网络训练流程"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">神经网络训练流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#定义网络"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">定义网络</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#前向传播"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">前向传播</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#损失函数"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#反向传播"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">反向传播</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#更新网络权重"><span class="nav-number">1.0.0.6.</span> <span class="nav-text">更新网络权重</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -1097,26 +1098,6 @@ L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script
   
 
   
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
