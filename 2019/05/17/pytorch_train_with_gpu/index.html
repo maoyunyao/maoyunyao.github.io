@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="漫卷云舒">
 <meta property="og:description" content="Train with GPU之前我们已经讨论过 Pytorch 对与 CUDA 的良好支持, 那么自然地我们可以使用强悍的 GPU 设备来训练搭建好的神经网络, 以此来达到加速训练的效果. 毕竟炼丹还是需要良好的硬件支持的是吧. 单GPU训练使用单个 GPU 训练的方法非常简单, 我们只需要将网络部署到 CUDA 的 GPU 设备上并且将数据也部署到相同的设备上即可. 部署的方式与我们之前讨论过的">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-17T16:06:05.157Z">
+<meta property="og:updated_time" content="2019-05-17T16:19:55.511Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="利用GPU训练">
 <meta name="twitter:description" content="Train with GPU之前我们已经讨论过 Pytorch 对与 CUDA 的良好支持, 那么自然地我们可以使用强悍的 GPU 设备来训练搭建好的神经网络, 以此来达到加速训练的效果. 毕竟炼丹还是需要良好的硬件支持的是吧. 单GPU训练使用单个 GPU 训练的方法非常简单, 我们只需要将网络部署到 CUDA 的 GPU 设备上并且将数据也部署到相同的设备上即可. 部署的方式与我们之前讨论过的">
@@ -381,8 +381,15 @@
 <h4 id="单GPU训练"><a href="#单GPU训练" class="headerlink" title="单GPU训练"></a>单GPU训练</h4><p>使用单个 GPU 训练的方法非常简单, 我们只需要将网络部署到 CUDA 的 GPU 设备上并且将数据也部署到相同的设备上即可. 部署的方式与我们之前讨论过的 Tensor 的部署方法相同.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>device = torch.device(<span class="string">"cuda:0"</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">"cpu"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>net.to(device)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>inputs, labels = inputs.to(device), labels.to(device)</span><br></pre></td></tr></table></figure>
 <p>注意此处 <code>tensor.to(device)</code> 仅仅将原 Tensor 在 GPU 上作一个拷贝并返回拷贝的 Tensor, 并不对原 Tensor 有任何修改.</p>
-<h4 id="多GPU训练"><a href="#多GPU训练" class="headerlink" title="多GPU训练"></a>多GPU训练</h4><p>默认情况下 Pytorch 只会使用单个 GPU 进行模型的训练, 你可以使用 <code>DataParallel</code> 来实现多 GPU 的模型计算:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> torch.cuda.device_count() &gt; <span class="number">1</span>:</span><br><span class="line">  print(<span class="string">"Let's use"</span>, torch.cuda.device_count(), <span class="string">"GPUs!"</span>)</span><br><span class="line">  <span class="comment"># dim = 0 [30, xxx] -&gt; [10, ...], [10, ...], [10, ...] on 3 GPUs</span></span><br><span class="line">  model = nn.DataParallel(model)</span><br><span class="line"></span><br><span class="line">model.to(device)</span><br></pre></td></tr></table></figure>
+<h4 id="多GPU训练"><a href="#多GPU训练" class="headerlink" title="多GPU训练"></a>多GPU训练</h4><p>默认情况下 Pytorch 只会使用单个 GPU 进行模型的训练, 你可以使用 <code>DataParallel</code> 来实现多 GPU 的模型计算, 其原型为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.nn.DataParallel(module, device_ids=None, output_device=None, dim=0)</span><br></pre></td></tr></table></figure>
+<p>参数解释如下:</p>
+<ul>
+<li><code>module</code>: 需要多 GPU 并行计算的模型</li>
+<li><code>device_ids</code>: CUDA 设备的 ID, 默认为全部可用设备</li>
+<li><code>output_device</code>: 输出所在设备, 默认为 <code>device_ids[0]</code></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> torch.cuda.device_count() == <span class="number">3</span>:</span><br><span class="line">  print(<span class="string">"Let's use"</span>, torch.cuda.device_count(), <span class="string">"GPUs!"</span>)</span><br><span class="line">  model = nn.DataParallel(model, device_ids=[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">model.to(device)</span><br></pre></td></tr></table></figure>
 <p>没错就是这么简单, 结束了.</p>
 <p>参考文献:</p>
 <p>[1]Pytorch - Docs</p>
