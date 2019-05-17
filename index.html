@@ -285,6 +285,153 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/17/pytorch_train_with_gpu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.M">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="漫卷云舒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/17/pytorch_train_with_gpu/" itemprop="url">利用GPU训练</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-17T18:00:00+08:00">
+                2019-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Pytorch/" itemprop="url" rel="index">
+                    <span itemprop="name">Pytorch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Train-with-GPU"><a href="#Train-with-GPU" class="headerlink" title="Train with GPU"></a>Train with GPU</h2><p>之前我们已经讨论过 Pytorch 对与 CUDA 的良好支持, 那么自然地我们可以使用强悍的 GPU 设备来训练搭建好的神经网络, 以此来达到加速训练的效果. 毕竟炼丹还是需要良好的硬件支持的是吧.</p>
+<h4 id="单GPU训练"><a href="#单GPU训练" class="headerlink" title="单GPU训练"></a>单GPU训练</h4><p>使用单个 GPU 训练的方法非常简单, 我们只需要将网络部署到 CUDA 的 GPU 设备上并且将数据也部署到相同的设备上即可. 部署的方式与我们之前讨论过的 Tensor 的部署方法相同.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>device = torch.device(<span class="string">"cuda:0"</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">"cpu"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>net.to(device)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>inputs, labels = inputs.to(device), labels.to(device)</span><br></pre></td></tr></table></figure>
+<h4 id="多GPU训练"><a href="#多GPU训练" class="headerlink" title="多GPU训练"></a>多GPU训练</h4><p>参考文献:</p>
+<p>[1]Pytorch - Docs</p>
+<p>[2]Pytorch - Tutorials: A 60 Minute Blitz</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/17/pytorch_nn/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -379,29 +526,32 @@
         
           
             <h2 id="torch-nn"><a href="#torch-nn" class="headerlink" title="torch.nn"></a>torch.nn</h2><p>我们可以利用 <code>torch.nn</code> 来搭建神经网络, 其中 <code>nn.Mudule</code> 你可以定义一系列网络层以及一个 <code>forward(input)</code> 方法从输入获取神经网络的输出.</p>
-<h5 id="神经网络训练流程"><a href="#神经网络训练流程" class="headerlink" title="神经网络训练流程"></a>神经网络训练流程</h5><ul>
+<h4 id="神经网络训练流程"><a href="#神经网络训练流程" class="headerlink" title="神经网络训练流程"></a>神经网络训练流程</h4><ul>
 <li>定义带有可训练参数 (权重) 的神经网络结构</li>
 <li>训练数据输入神经网络前向传播获得输出</li>
 <li>利用数据标签和网络输出计算损失函数</li>
 <li>执行反向传播算法, 获得损失函数的输出相对于各参数的梯度值</li>
 <li>利用梯度值更新网络的权值</li>
 </ul>
-<h5 id="定义网络"><a href="#定义网络" class="headerlink" title="定义网络"></a>定义网络</h5><p>在模型中只需到定义 <code>forward()</code> 方法, 而 <code>backward()</code> 方法会自动定义. 在 <code>forward()</code> 方法中可以使用任何的对 Tensor 的操作. 下面的代码是 LeNet 的 Pytorch 实现:</p>
+<h4 id="定义网络"><a href="#定义网络" class="headerlink" title="定义网络"></a>定义网络</h4><p>在模型中只需到定义 <code>forward()</code> 方法, 而 <code>backward()</code> 方法会自动定义. 在 <code>forward()</code> 方法中可以使用任何的对 Tensor 的操作. 下面的代码是 LeNet 的 Pytorch 实现:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Net</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super(Net, self).__init__()</span><br><span class="line">        <span class="comment"># 1 input image channel, 6 output channels, 5x5 square convolution</span></span><br><span class="line">        <span class="comment"># kernel</span></span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">1</span>, <span class="number">6</span>, <span class="number">5</span>)</span><br><span class="line">        self.conv2 = nn.Conv2d(<span class="number">6</span>, <span class="number">16</span>, <span class="number">5</span>)</span><br><span class="line">        <span class="comment"># an affine operation: y = Wx + b</span></span><br><span class="line">        self.fc1 = nn.Linear(<span class="number">16</span> * <span class="number">5</span> * <span class="number">5</span>, <span class="number">120</span>)</span><br><span class="line">        self.fc2 = nn.Linear(<span class="number">120</span>, <span class="number">84</span>)</span><br><span class="line">        self.fc3 = nn.Linear(<span class="number">84</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        <span class="comment"># Max pooling over a (2, 2) window</span></span><br><span class="line">        x = F.max_pool2d(F.relu(self.conv1(x)), (<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">        <span class="comment"># If the size is a square you can only specify a single number</span></span><br><span class="line">        x = F.max_pool2d(F.relu(self.conv2(x)), <span class="number">2</span>)</span><br><span class="line">        x = x.view(<span class="number">-1</span>, self.num_flat_features(x))</span><br><span class="line">        x = F.relu(self.fc1(x))</span><br><span class="line">        x = F.relu(self.fc2(x))</span><br><span class="line">        x = self.fc3(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">num_flat_features</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        size = x.size()[<span class="number">1</span>:]  <span class="comment"># all dimensions except the batch dimension</span></span><br><span class="line">        num_features = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> s <span class="keyword">in</span> size:</span><br><span class="line">            num_features *= s</span><br><span class="line">        <span class="keyword">return</span> num_features</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>net = Net()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(net)</span><br><span class="line">Net(</span><br><span class="line">  (conv1): Conv2d(<span class="number">1</span>, <span class="number">6</span>, kernel_size=(<span class="number">5</span>, <span class="number">5</span>), stride=(<span class="number">1</span>, <span class="number">1</span>))</span><br><span class="line">  (conv2): Conv2d(<span class="number">6</span>, <span class="number">16</span>, kernel_size=(<span class="number">5</span>, <span class="number">5</span>), stride=(<span class="number">1</span>, <span class="number">1</span>))</span><br><span class="line">  (fc1): Linear(in_features=<span class="number">400</span>, out_features=<span class="number">120</span>, bias=<span class="keyword">True</span>)</span><br><span class="line">  (fc2): Linear(in_features=<span class="number">120</span>, out_features=<span class="number">84</span>, bias=<span class="keyword">True</span>)</span><br><span class="line">  (fc3): Linear(in_features=<span class="number">84</span>, out_features=<span class="number">10</span>, bias=<span class="keyword">True</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p>模型中可以学习的参数可以由 <code>net.parameters()</code> 返回, 参数是一个个的 Tensor, <code>requires_grad</code> 标志位为 True.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>params = list(net.parameters())</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(len(params))</span><br><span class="line"><span class="number">10</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(params[<span class="number">0</span>].size())  <span class="comment"># conv1's .weight</span></span><br><span class="line">torch.Size([<span class="number">6</span>, <span class="number">1</span>, <span class="number">5</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure>
-<h5 id="前向传播"><a href="#前向传播" class="headerlink" title="前向传播"></a>前向传播</h5><p>我们可以尝试给如上的网络一个随机的输入, 观察他的输出情况. 注意此处的输入 size 为 (1, 1, 32, 32), 这是因为 <code>torch.nn</code> 只支持 <code>mini-batches</code> 的输入. 例如, 对于 <code>nn.Conv2d</code> , 它所要求的输入是一个 4 维的 Tensor, 即: <code>nSamples * nChannels * Height * Width</code>. 故而如果你的输入是单个样本, 可以利用 <code>input.unsqueeze(0)</code> 来添加一个虚拟维度.</p>
+<h4 id="前向传播"><a href="#前向传播" class="headerlink" title="前向传播"></a>前向传播</h4><p>我们可以尝试给如上的网络一个随机的输入, 观察他的输出情况. 注意此处的输入 size 为 (1, 1, 32, 32), 这是因为 <code>torch.nn</code> 只支持 <code>mini-batches</code> 的输入. 例如, 对于 <code>nn.Conv2d</code> , 它所要求的输入是一个 4 维的 Tensor, 即: <code>nSamples * nChannels * Height * Width</code>. 故而如果你的输入是单个样本, 可以利用 <code>input.unsqueeze(0)</code> 来添加一个虚拟维度.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>input = torch.randn(<span class="number">1</span>, <span class="number">1</span>, <span class="number">32</span>, <span class="number">32</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>out = net(input)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(out)</span><br><span class="line">tensor([[<span class="number">-0.1258</span>, <span class="number">-0.0585</span>, <span class="number">-0.0102</span>, <span class="number">-0.0407</span>, <span class="number">-0.0695</span>, <span class="number">-0.0808</span>,  <span class="number">0.0731</span>, <span class="number">-0.1482</span>,</span><br><span class="line">          <span class="number">0.0575</span>, <span class="number">-0.0164</span>]], grad_fn=&lt;AddmmBackward&gt;)</span><br></pre></td></tr></table></figure>
-<h5 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h5><p>损失函数使用 <code>(output, target)</code> 对作为输出, 计算出的值用于度量 output 相对于 target 的距离. <code>porch.nn</code> 中定义了许多现成的损失函数. 一个最简单的例子便是均方误差函数 <code>nn.MSELoss</code> .</p>
+<h4 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h4><p>损失函数使用 <code>(output, target)</code> 对作为输出, 计算出的值用于度量 output 相对于 target 的距离. <code>porch.nn</code> 中定义了许多现成的损失函数. 一个最简单的例子便是均方误差函数 <code>nn.MSELoss</code> .</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">output = net(input)</span><br><span class="line">target = torch.randn(<span class="number">10</span>)		<span class="comment"># a dummy target, for example</span></span><br><span class="line">target = target.view(<span class="number">1</span>, <span class="number">-1</span>)		<span class="comment"># make it the same shape as output</span></span><br><span class="line">criterion = nn.MSELoss()</span><br><span class="line"></span><br><span class="line">loss = criterion(output, target)</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(loss)</span><br><span class="line">tensor(<span class="number">0.5244</span>, grad_fn=&lt;MseLossBackward&gt;)</span><br></pre></td></tr></table></figure>
-<h5 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h5><p>由于多次反向传播的梯度值的累加机制, 我们在进行一次反向传播更新权重之前, 我们需要用 <code>zero_grad()</code> 对所有参数的 grad 清零, 然后对 loss 调用 <code>backward()</code> 方法就可以得到当前损失函数的输出关于各可训练参数的梯度了.</p>
+<h4 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h4><p>由于多次反向传播的梯度值的累加机制, 我们在进行一次反向传播更新权重之前, 我们需要用 <code>zero_grad()</code> 对所有参数的 grad 清零, 然后对 loss 调用 <code>backward()</code> 方法就可以得到当前损失函数的输出关于各可训练参数的梯度了.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>net.zero_grad()</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(net.conv1.bias.grad)</span><br><span class="line">tensor([<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>loss.backward()</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(net.conv1.bias.grad)</span><br><span class="line">tensor([ <span class="number">0.0185</span>,  <span class="number">0.0110</span>,  <span class="number">0.0038</span>,  <span class="number">0.0098</span>, <span class="number">-0.0105</span>, <span class="number">-0.0002</span>])</span><br></pre></td></tr></table></figure>
-<h5 id="更新网络权重"><a href="#更新网络权重" class="headerlink" title="更新网络权重"></a>更新网络权重</h5><p>一个最简单的权重更新方法是随机梯度下降(SGD), 他的策略是 <code>weight = weight - learning_rate * gradient</code> , 我们可以简单实现如下:</p>
+<h4 id="更新网络权重"><a href="#更新网络权重" class="headerlink" title="更新网络权重"></a>更新网络权重</h4><p>一个最简单的权重更新方法是随机梯度下降(SGD), 他的策略是 <code>weight = weight - learning_rate * gradient</code> , 我们可以简单实现如下:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">learning_rate = <span class="number">0.01</span></span><br><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> net.parameters():</span><br><span class="line">    f.data.sub_(f.grad.data * learning_rate)</span><br></pre></td></tr></table></figure>
 <p>不过, 作为一个成熟的深度学习框架, Pytorch 应该学会自己更新权重, 故而 <code>torch.optim</code> 实现了许多权重更新的算法供我们使用, 而且使用方法非常简单:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"></span><br><span class="line"><span class="comment"># create your optimizer</span></span><br><span class="line">optimizer = optim.SGD(net.parameters(), lr=<span class="number">0.01</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># in your training loop:</span></span><br><span class="line">optimizer.zero_grad()   <span class="comment"># zero the gradient buffers</span></span><br><span class="line"></span><br><span class="line">output = net(input)</span><br><span class="line">loss = criterion(output, target)</span><br><span class="line">loss.backward()</span><br><span class="line"></span><br><span class="line">optimizer.step()    	<span class="comment"># Does the update</span></span><br></pre></td></tr></table></figure>
+<p>参考文献:</p>
+<p>[1]Pytorch - Docs</p>
+<p>[2]Pytorch - Tutorials: A 60 Minute Blitz</p>
 
           
         
@@ -544,7 +694,7 @@
         
           
             <h2 id="torch-Tensor"><a href="#torch-Tensor" class="headerlink" title="torch.Tensor"></a>torch.Tensor</h2><p>Tensor 是 Pytorch 的数据结构, 非常类似于 Numpy 里的 ndarray. 是一种包含单一数据类型的多维张量. 其上定义了诸多的操作. 如我们讨论过的自动求导机制等.</p>
-<h5 id="张量的创建"><a href="#张量的创建" class="headerlink" title="张量的创建"></a>张量的创建</h5><p><strong>torch.tensor()</strong></p>
+<h4 id="张量的创建"><a href="#张量的创建" class="headerlink" title="张量的创建"></a>张量的创建</h4><p><strong>torch.tensor()</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.tensor(data,dtype=<span class="keyword">None</span>,device=<span class="keyword">None</span>,requires_grad=<span class="keyword">False</span>,pin_memory=<span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
 <p>利用上述函数创建 Tensor 时, 它总是拷贝 data 内的数据然后利用这些数据结合相应参数构造一个新的叶结点变量, 故而 <code>torch.tensor(x)</code> 与 <code>x.clone().detach()</code> 等价, 而 <code>torch.tensor(x,requires_grad=True)</code> 则与 <code>x.clone().detach().rquires_grad_(True)</code> 等价.</p>
 <p>如果想要避免上述的拷贝-创建机制, 请不要使用这个函数 :-). 而如果你想得到一个与原变量共享内存的新 Tensor, 那么可以使用 <code>torch.Tensor.detach()</code> 或者 <code>torch.as_tensor()</code> 等方法. 前者可以从原来的 Tensor 创造一个 <code>requires_grad</code> 标志位为 False 且不在原 Tensor 计算图中的 Tensor, 两者共享内存. 而后者可从 Numpy 的一个 ndarray 创造 Tensor , 两者共享内存.</p>
@@ -558,7 +708,10 @@
 <p>如果 data 是一个 Tensor 且数据类型与设备参数相同, 则直接共享该 Tensor 的内存给新 Tensor. 如果 data 是一个 Tensor 而数据类型或设备不符, 则会新创建一个 Tensor, 新 Tensor 保持原 Tensor 的计算图和 <code>requires_grad</code> 标志位. 如果 data 是一个数据类型相同的 ndarray , 且参数中指定的设备为 CPU, 则新 Tensor 与该 ndarray 共享内存.</p>
 <p>示例代码:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = numpy.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = torch.as_tensor(a)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t[<span class="number">0</span>] = <span class="number">-1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">-1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = numpy.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = torch.as_tensor(a, device=torch.device(<span class="string">'cuda'</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t[<span class="number">0</span>] = <span class="number">-1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br></pre></td></tr></table></figure>
-<h5 id="其他一些创建方法"><a href="#其他一些创建方法" class="headerlink" title="其他一些创建方法"></a>其他一些创建方法</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>torch.ones(<span class="number">5</span>, <span class="number">6</span>)</span><br><span class="line">tensor([[<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>]])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>q = torch.zeros(<span class="number">5</span>, <span class="number">6</span>)</span><br><span class="line">tensor([[<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>]])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>torch.ones_like(q)</span><br><span class="line">tensor([[<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>]])</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<h4 id="其他一些创建方法"><a href="#其他一些创建方法" class="headerlink" title="其他一些创建方法"></a>其他一些创建方法</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>torch.ones(<span class="number">5</span>, <span class="number">6</span>)</span><br><span class="line">tensor([[<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>]])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>q = torch.zeros(<span class="number">5</span>, <span class="number">6</span>)</span><br><span class="line">tensor([[<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>]])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>torch.ones_like(q)</span><br><span class="line">tensor([[<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>]])</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p>参考文献:</p>
+<p>[1]Pytorch - Docs</p>
+<p>[2]Pytorch - Tutorials: A 60 Minute Blitz</p>
 
           
         
@@ -701,13 +854,13 @@
         
           
             <h2 id="自动求导"><a href="#自动求导" class="headerlink" title="自动求导"></a>自动求导</h2><h4 id="requires-grad-标志位"><a href="#requires-grad-标志位" class="headerlink" title="requires_grad 标志位"></a><code>requires_grad</code> 标志位</h4><p>Pytorch 允许我们利用每个 Tensor 的 <code>requires_grad</code> 标志位来在计算图中排除一些不需要进行梯度计算的子图.</p>
-<p>只要一个操作的输入中有一个Tensor的 <code>requires_grad</code> 为True, 则该操作的输出的 <code>requires_grad</code> 为True.相反只有所有的输入中所有的Tensor的 <code>requires_grad</code> 为False时该操作的输出的 <code>requires_grad</code> 才为False.</p>
+<p>一个操作的输入中只要有一个Tensor的 <code>requires_grad</code> 为True, 则该操作的输出的 <code>requires_grad</code> 为True.相反只有输入中所有的Tensor的 <code>requires_grad</code> 为False时该操作的输出的 <code>requires_grad</code> 才为False.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.randn(<span class="number">5</span>, <span class="number">5</span>) <span class="comment"># requires_grad = False by default</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.randn(<span class="number">5</span>, <span class="number">5</span>) <span class="comment"># requires_grad = False by default</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = torch.randn((<span class="number">5</span>, <span class="number">5</span>), requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = x + y</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.requires_grad</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a + z</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.requires_grad</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
 <p>在 <code>model</code> 中我们可以通过如下的操作改变其参数的 <code>requires_grad</code> 标志位以实现特定的需求, 如通过设置标志位为False来进行参数微调、跑测试集等.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">model = torchvision.models.resnet18(pretrained = <span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">for</span> param <span class="keyword">in</span> model.parameters():</span><br><span class="line">    param.requires_grad = <span class="keyword">False</span>;</span><br></pre></td></tr></table></figure>
 <p>当然我们也可以用如下的方法禁用梯度计算</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> torch</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.randn((<span class="number">5</span>, <span class="number">5</span>), requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">with</span> torch.no_grad():</span><br><span class="line"><span class="meta">... </span>	y = x + <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.requires_grad</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
-<h4 id="反向传播求导"><a href="#反向传播求导" class="headerlink" title="反向传播求导"></a>反向传播求导</h4><p>如果你想要求输出 Tensor 关于各参数的偏导数, 可对输出的 Tensor 调用 <code>backward()</code> 方法 . 如果输出的 Tensor 是一个标量, 则无需对 <code>backward()</code> 指定任何参数. 而如果输出的 Tensor 不是一个标量, 则需指定该方法的参数为一个 Tensor, 其形状与输出的 Tensor 相同, 其值作为计算梯度时输出 Tensor 各元素乘上的系数.</p>
+<h4 id="反向传播求导"><a href="#反向传播求导" class="headerlink" title="反向传播求导"></a>反向传播求导</h4><p>如果你想要求输出 Tensor 关于各参数的偏导数, 可对输出的 Tensor 调用 <code>backward()</code> 方法 . 如果输出的 Tensor 是一个标量, 则无需对 <code>backward()</code> 指定任何参数. 而如果输出的 Tensor 不是一个标量, 则需为该方法指定一个参数, 该参数为一个 Tensor, 其形状与输出的 Tensor 相同, 其值作为计算梯度时输出 Tensor 各元素乘上的系数.</p>
 <p>输出为标量的例子:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.ones(<span class="number">2</span>, <span class="number">2</span>, requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = x + <span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = y * y * <span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>out = z.mean()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>out</span><br><span class="line">tensor(<span class="number">27.</span>, grad_fn=&lt;MeanBackward0&gt;)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>out.backward()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad	<span class="comment">#输出为out对x各元素的偏导数</span></span><br><span class="line">tensor([[<span class="number">4.5000</span>, <span class="number">4.5000</span>],</span><br><span class="line">        [<span class="number">4.5000</span>, <span class="number">4.5000</span>]])</span><br></pre></td></tr></table></figure>
 <p>输出为向量的例子:</p>
@@ -716,6 +869,9 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.tensor([[<span class="number">1.</span>, <span class="number">1.</span>], [<span class="number">2.</span>, <span class="number">2.</span>]], requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.tensor([[<span class="number">3.</span>, <span class="number">3.</span>], [<span class="number">4.</span>, <span class="number">4.</span>]], requires_grad = <span class="keyword">True</span>) </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = x.mm(y)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = torch.tensor([[<span class="number">1.</span>, <span class="number">0.</span>], [<span class="number">0.</span>, <span class="number">0.</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z.backward(a)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad</span><br><span class="line">tensor([[<span class="number">3.</span>, <span class="number">4.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>]])</span><br></pre></td></tr></table></figure>
 <p>如果调用 backward() 方法时没有设置参数 retain<em>variable = True, 则在完成一次 backward() 后计算图会被释放, 无法进行第二次反向传播. 设置 retain_variable = True 的作用是保持计算图不释放, 每次反向传播的梯度累加. 而若需要将 Tensor 的梯度清零, 则可调用 zero</em>() 函数:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad</span><br><span class="line">tensor([[<span class="number">6.</span>, <span class="number">8.</span>],</span><br><span class="line">        [<span class="number">6.</span>, <span class="number">8.</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad.zero_()</span><br><span class="line">tensor([[<span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad</span><br><span class="line">tensor([[<span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>]])</span><br></pre></td></tr></table></figure>
+<p>参考文献:</p>
+<p>[1]Pytorch - Docs</p>
+<p>[2]Pytorch - Tutorials: A 60 Minute Blitz</p>
 
           
         
@@ -858,7 +1014,7 @@
         
           
             <h2 id="torch-cuda"><a href="#torch-cuda" class="headerlink" title="torch.cuda"></a>torch.cuda</h2><p>Pytorch 提供了 CUDA 的支持, <code>torch.cuda</code> 模块用于设置和运行 CUDA 上的操作, 它会记住所指定的 GPU, 你后续所新建的 CUDA 上的 Tensor 都将被默认在该 GPU 上创建. 当然你也可以用<code>torch.cuda.device</code>修改 CUDA 默认指定的 GPU 或者为 Tensor 单独指定 GPU. 模块不支持跨 GPU 的操作, 除非使用类似拷贝的函数功能将变量转换到同一设备上, 如<code>to()</code>和<code>cuda()</code>等．</p>
-<h5 id="为cuda上的Tensor指定设备"><a href="#为cuda上的Tensor指定设备" class="headerlink" title="　为cuda上的Tensor指定设备"></a>　为cuda上的Tensor指定设备</h5><ul>
+<h4 id="为cuda上的Tensor指定设备"><a href="#为cuda上的Tensor指定设备" class="headerlink" title="　为cuda上的Tensor指定设备"></a>　为cuda上的Tensor指定设备</h4><ul>
 <li>为每个Tensor单独指定/转换到一个设备</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> torch</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cuda = torch.device(<span class="string">'cuda'</span>)		<span class="comment"># 使用cuda默认的设备GPU0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cuda1 = torch.device(<span class="string">'cuda:1'</span>)	<span class="comment"># 指定GPU1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cuda2 = torch.device(<span class="string">'cuda:2'</span>)	<span class="comment"># 指定GPU2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>], device = cuda)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">0</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.device</span><br><span class="line">device(type=<span class="string">'cpu'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = y.cuda(cuda1)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>])</span><br><span class="line">device(type=<span class="string">'cpu'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = z.to(cuda2)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
@@ -867,10 +1023,13 @@
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 指定cuda的GPU为GPU1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">with</span> torch.cuda.device(<span class="number">1</span>):</span><br><span class="line"><span class="meta">... </span>	a = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>], device = cuda)</span><br><span class="line"><span class="meta">... </span>	b = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>]).cuda()</span><br><span class="line"><span class="meta">... </span>	c = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>]).to(device = cuda)</span><br><span class="line"><span class="meta">... </span>	d = a + b + c</span><br><span class="line"><span class="meta">... </span>	<span class="comment"># 指定上下文后还是可以为每个tensor单独指定设备</span></span><br><span class="line"><span class="meta">... </span>	s = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>]).to(device = cuda2)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">"Outside device is 0"</span>)		<span class="comment"># On device 0 (default in most scenarios)</span></span><br><span class="line"><span class="keyword">with</span> torch.cuda.device(<span class="number">1</span>):</span><br><span class="line">    print(<span class="string">"Inside device is 1"</span>)		<span class="comment"># On device 1</span></span><br><span class="line">print(<span class="string">"Outside device is still 0"</span>)  <span class="comment"># On device 0</span></span><br></pre></td></tr></table></figure>
-<h5 id="Pytorch中CUDA使用的一个范例"><a href="#Pytorch中CUDA使用的一个范例" class="headerlink" title="Pytorch中CUDA使用的一个范例"></a>Pytorch中CUDA使用的一个范例</h5><p>由参数和主机的 CUDA 是否可用共同决定是使用 CPU 还是 CUDA</p>
+<h4 id="Pytorch中CUDA使用的一个范例"><a href="#Pytorch中CUDA使用的一个范例" class="headerlink" title="Pytorch中CUDA使用的一个范例"></a>Pytorch中CUDA使用的一个范例</h4><p>由参数和主机的 CUDA 是否可用共同决定是使用 CPU 还是 CUDA</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">'PyTorch Example'</span>)</span><br><span class="line">parser.add_argument(<span class="string">'--disable-cuda'</span>, action=<span class="string">'store_true'</span>,</span><br><span class="line">                    help=<span class="string">'Disable CUDA'</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line">args.device = <span class="keyword">None</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> args.disable_cuda <span class="keyword">and</span> torch.cuda.is_available():</span><br><span class="line">    args.device = torch.device(<span class="string">'cuda'</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    args.device = torch.device(<span class="string">'cpu'</span>)</span><br></pre></td></tr></table></figure>
 <p>有了制定了设备后就可以进行 Tensor 或者 model 的部署了</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = torch.empty((<span class="number">8</span>, <span class="number">42</span>), device=args.device)</span><br><span class="line">net = Network().to(device=args.device)</span><br></pre></td></tr></table></figure>
+<p>参考文献:</p>
+<p>[1]Pytorch - Docs</p>
+<p>[2]Pytorch - Tutorials: A 60 Minute Blitz</p>
 
           
         
@@ -1600,137 +1759,13 @@ f(\textbf{x})=w^T\phi(\textbf{x})+b\\
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2018/01/01/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mr.M">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="漫卷云舒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/01/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-01T12:00:00+08:00">
-                2018-01-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1778,7 +1813,7 @@ f(\textbf{x})=w^T\phi(\textbf{x})+b\\
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

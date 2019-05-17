@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="核函数对于线性不可分样本问题(如简单的异或问题), 可以将样本从原始空间映射到一个更高维的特征空间, 使得样本在这个特征空间内线性可分.  例如在支持向量机中, 原问题转化为求解特征空间上的凸二次规划问题:  f(\textbf{x}) = w^T \phi(\textbf{x}) + b对上述线性可分支持向量机的求解涉及到如下对偶问题的求解(由拉格朗日乘子法得到对偶问题的具体过程此处不予讨论):">
+<meta name="description" content="Train with GPU之前我们已经讨论过 Pytorch 对与 CUDA 的良好支持, 那么自然地我们可以使用强悍的 GPU 设备来训练搭建好的神经网络, 以此来达到加速训练的效果. 毕竟炼丹还是需要良好的硬件支持的是吧. 单GPU训练使用单个 GPU 训练的方法非常简单, 我们只需要将网络部署到 CUDA 的 GPU 设备上并且将数据也部署到相同的设备上即可. 部署的方式与我们之前讨论过的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="机器学习之核函数">
-<meta property="og:url" content="https://maoyunyao.github.io/2019/05/12/ml_kernel_method/index.html">
+<meta property="og:title" content="利用GPU训练">
+<meta property="og:url" content="https://maoyunyao.github.io/2019/05/17/pytorch_train_with_gpu/index.html">
 <meta property="og:site_name" content="漫卷云舒">
-<meta property="og:description" content="核函数对于线性不可分样本问题(如简单的异或问题), 可以将样本从原始空间映射到一个更高维的特征空间, 使得样本在这个特征空间内线性可分.  例如在支持向量机中, 原问题转化为求解特征空间上的凸二次规划问题:  f(\textbf{x}) = w^T \phi(\textbf{x}) + b对上述线性可分支持向量机的求解涉及到如下对偶问题的求解(由拉格朗日乘子法得到对偶问题的具体过程此处不予讨论):">
+<meta property="og:description" content="Train with GPU之前我们已经讨论过 Pytorch 对与 CUDA 的良好支持, 那么自然地我们可以使用强悍的 GPU 设备来训练搭建好的神经网络, 以此来达到加速训练的效果. 毕竟炼丹还是需要良好的硬件支持的是吧. 单GPU训练使用单个 GPU 训练的方法非常简单, 我们只需要将网络部署到 CUDA 的 GPU 设备上并且将数据也部署到相同的设备上即可. 部署的方式与我们之前讨论过的">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-13T04:34:04.397Z">
+<meta property="og:updated_time" content="2019-05-17T09:05:50.883Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="机器学习之核函数">
-<meta name="twitter:description" content="核函数对于线性不可分样本问题(如简单的异或问题), 可以将样本从原始空间映射到一个更高维的特征空间, 使得样本在这个特征空间内线性可分.  例如在支持向量机中, 原问题转化为求解特征空间上的凸二次规划问题:  f(\textbf{x}) = w^T \phi(\textbf{x}) + b对上述线性可分支持向量机的求解涉及到如下对偶问题的求解(由拉格朗日乘子法得到对偶问题的具体过程此处不予讨论):">
+<meta name="twitter:title" content="利用GPU训练">
+<meta name="twitter:description" content="Train with GPU之前我们已经讨论过 Pytorch 对与 CUDA 的良好支持, 那么自然地我们可以使用强悍的 GPU 设备来训练搭建好的神经网络, 以此来达到加速训练的效果. 毕竟炼丹还是需要良好的硬件支持的是吧. 单GPU训练使用单个 GPU 训练的方法非常简单, 我们只需要将网络部署到 CUDA 的 GPU 设备上并且将数据也部署到相同的设备上即可. 部署的方式与我们之前讨论过的">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://maoyunyao.github.io/2019/05/12/ml_kernel_method/"/>
+  <link rel="canonical" href="https://maoyunyao.github.io/2019/05/17/pytorch_train_with_gpu/"/>
 
 
 
 
 
-  <title>机器学习之核函数 | 漫卷云舒</title>
+  <title>利用GPU训练 | 漫卷云舒</title>
   
 
 
@@ -288,7 +288,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/12/ml_kernel_method/">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/17/pytorch_train_with_gpu/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Mr.M">
@@ -305,7 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">机器学习之核函数</h1>
+          <h1 class="post-title" itemprop="name headline">利用GPU训练</h1>
         
 
         <div class="post-meta">
@@ -317,8 +317,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-12T12:00:00+08:00">
-                2019-05-12
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-17T18:00:00+08:00">
+                2019-05-17
               </time>
             
 
@@ -340,8 +340,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
+                  <a href="/categories/Pytorch/" itemprop="url" rel="index">
+                    <span itemprop="name">Pytorch</span>
                   </a>
                 </span>
 
@@ -377,29 +377,12 @@
       
 
       
-        <h2 id="核函数"><a href="#核函数" class="headerlink" title="核函数"></a>核函数</h2><p>对于线性不可分样本问题(如简单的异或问题), 可以将样本从原始空间映射到一个更高维的特征空间, 使得样本在这个特征空间内线性可分. </p>
-<p>例如在支持向量机中, 原问题转化为求解特征空间上的凸二次规划问题:</p>
-<script type="math/tex; mode=display">
-f(\textbf{x}) = w^T \phi(\textbf{x}) + b</script><p>对上述线性可分支持向量机的求解涉及到如下对偶问题的求解(由拉格朗日乘子法得到对偶问题的具体过程此处不予讨论):</p>
-<script type="math/tex; mode=display">
-\mathop{max}_\alpha \quad \sum\limits_{i = 1}^{n}\alpha_i-\frac{1}{2}\sum\limits_{i=1}^{m}\sum\limits_{j=1}^{m}\alpha_i\alpha_jy_iy_j\phi(\textbf{x}_i)^T\phi(\textbf{x}_j)\\
-s.t. \quad \sum\limits_{i=1}^{m}\alpha_iy_i=0\\
-\alpha_i \ge 0, \quad i=1,2,...,m</script><p>求解上式涉及到计算 $\phi(\textbf{x}_i)^T\phi(\textbf{x}_j)$, 这是样本 $\textbf{x}_i$ 与$\textbf{} $$\textbf{x}_j$ 映射到特征空间之后的内积. 由于特征空间维数很高, 甚至可能是无穷维, 因此直接计算通常是困难的. 为了避开这个障碍, 可以设想这样一个函数:</p>
-<script type="math/tex; mode=display">
-k(\textbf{x}_i,\textbf{x}_j)=<\phi(\textbf{x}_i),\phi(\textbf{x}_j)>=\phi(\textbf{x}_i)^T\phi(\textbf{x}_j)</script><p>即 $\textbf{x}_i$ 与 $\textbf{x}_j$ 在特征空间的内积等于它们在原始样本空间中通过函数 $k(.,.)$ 计算的结果(此即核技巧). 有了这样的函数我们就不必直接去计算高维甚至无穷维特征空间中的内积, 于是对偶问题重写并求解可得</p>
-<script type="math/tex; mode=display">
-f(\textbf{x})=w^T\phi(\textbf{x})+b\\
-=\sum\limits_{i=1}^{m}\alpha_iy_i\phi(\textbf{x}_i)^T\phi(\textbf{x})+b\\
-=\sum\limits_{i=1}^{m}\alpha_iy_ik(\textbf{x},\textbf{x}_i)+b\\</script><p>这里的函数 $k(.,.)$ 就是 “核函数”  </p>
-<p>显然, 如果已知合适的映射 $\phi(.)$ 的具体形式, 则可写出核函数 $k(.,.)$. 但是 现实任务重我们通常不知道 $\phi(.)$ 是什么形式. 剩下的问题就是如何选择 $\phi(.)$:</p>
-<ul>
-<li>使用一个通用的 $\phi$, 例如无限维的 $\phi$, 它隐含地用在高斯核也即基于径向基函数 $(RBF)$ 核的核机器上</li>
-<li>手动地设计 $\phi$ , 在深度学习出现以前, 这一直是主流的方法</li>
-<li>深度学习的策略是去学习 $\phi$</li>
-</ul>
-<p>参考文献:</p>
-<p>[1]机器学习-周志华-第126, 127页</p>
-<p>[2]深度学习-花书-第106页</p>
+        <h2 id="Train-with-GPU"><a href="#Train-with-GPU" class="headerlink" title="Train with GPU"></a>Train with GPU</h2><p>之前我们已经讨论过 Pytorch 对与 CUDA 的良好支持, 那么自然地我们可以使用强悍的 GPU 设备来训练搭建好的神经网络, 以此来达到加速训练的效果. 毕竟炼丹还是需要良好的硬件支持的是吧.</p>
+<h4 id="单GPU训练"><a href="#单GPU训练" class="headerlink" title="单GPU训练"></a>单GPU训练</h4><p>使用单个 GPU 训练的方法非常简单, 我们只需要将网络部署到 CUDA 的 GPU 设备上并且将数据也部署到相同的设备上即可. 部署的方式与我们之前讨论过的 Tensor 的部署方法相同.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>device = torch.device(<span class="string">"cuda:0"</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">"cpu"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>net.to(device)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>inputs, labels = inputs.to(device), labels.to(device)</span><br></pre></td></tr></table></figure>
+<h4 id="多GPU训练"><a href="#多GPU训练" class="headerlink" title="多GPU训练"></a>多GPU训练</h4><p>参考文献:</p>
+<p>[1]Pytorch - Docs</p>
+<p>[2]Pytorch - Tutorials: A 60 Minute Blitz</p>
 
       
     </div>
@@ -424,8 +407,8 @@ f(\textbf{x})=w^T\phi(\textbf{x})+b\\
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/05/inline-asm-gcc/" rel="next" title="Inline Assembler in GCC">
-                <i class="fa fa-chevron-left"></i> Inline Assembler in GCC
+              <a href="/2019/05/17/pytorch_nn/" rel="next" title="神经网络搭建">
+                <i class="fa fa-chevron-left"></i> 神经网络搭建
               </a>
             
           </div>
@@ -433,10 +416,6 @@ f(\textbf{x})=w^T\phi(\textbf{x})+b\\
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/13/ml_loss_function/" rel="prev" title="似然函数作为损失函数">
-                似然函数作为损失函数 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -573,7 +552,7 @@ f(\textbf{x})=w^T\phi(\textbf{x})+b\\
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#核函数"><span class="nav-number">1.</span> <span class="nav-text">核函数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Train-with-GPU"><span class="nav-number">1.</span> <span class="nav-text">Train with GPU</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单GPU训练"><span class="nav-number">1.0.1.</span> <span class="nav-text">单GPU训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多GPU训练"><span class="nav-number">1.0.2.</span> <span class="nav-text">多GPU训练</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -1097,26 +1076,6 @@ f(\textbf{x})=w^T\phi(\textbf{x})+b\\
   
 
   
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
