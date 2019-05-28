@@ -79,17 +79,22 @@
 
 
 
-<meta name="description" content="自动求导requires_grad 标志位Pytorch 允许我们利用每个 Tensor 的 requires_grad 标志位来在计算图中排除一些不需要进行梯度计算的子图. 一个操作的输入中只要有一个Tensor的 requires_grad 为True, 则该操作的输出的 requires_grad 为True.相反只有输入中所有的Tensor的 requires_grad 为False时该操">
+<meta name="description" content="利用孪生网络进行相似性学习训练一个 Siamese 网络, 利用相似性计算来实现在 search image 上定位 exemplar image. 训练图片:从被标注的视频(每帧中的目标都被 bounding box 框出)中获取用于训练的图片对,  两张图片的帧间隔小于T. 其中 search image 是以目标为中心的大小为 $255 \times 255$ 的图片, 超出原图的区域用合理">
 <meta property="og:type" content="article">
-<meta property="og:title" content="自动求导机制">
-<meta property="og:url" content="https://maoyunyao.github.io/2019/05/14/pytorch_autograd/index.html">
+<meta property="og:title" content="SiamFCN">
+<meta property="og:url" content="https://maoyunyao.github.io/2019/05/28/paper_Siam_FCN/index.html">
 <meta property="og:site_name" content="漫卷云舒">
-<meta property="og:description" content="自动求导requires_grad 标志位Pytorch 允许我们利用每个 Tensor 的 requires_grad 标志位来在计算图中排除一些不需要进行梯度计算的子图. 一个操作的输入中只要有一个Tensor的 requires_grad 为True, 则该操作的输出的 requires_grad 为True.相反只有输入中所有的Tensor的 requires_grad 为False时该操">
+<meta property="og:description" content="利用孪生网络进行相似性学习训练一个 Siamese 网络, 利用相似性计算来实现在 search image 上定位 exemplar image. 训练图片:从被标注的视频(每帧中的目标都被 bounding box 框出)中获取用于训练的图片对,  两张图片的帧间隔小于T. 其中 search image 是以目标为中心的大小为 $255 \times 255$ 的图片, 超出原图的区域用合理">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-17T09:20:23.376Z">
+<meta property="og:image" content="https://maoyunyao.github.io/img/siamFCN/exemplar.png">
+<meta property="og:image" content="https://maoyunyao.github.io/img/siamFCN/pipeline.png">
+<meta property="og:image" content="https://maoyunyao.github.io/img/siamFCN/parameter.png">
+<meta property="og:image" content="https://maoyunyao.github.io/img/siamFCN/fcn.png">
+<meta property="og:updated_time" content="2019-05-28T09:33:58.294Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="自动求导机制">
-<meta name="twitter:description" content="自动求导requires_grad 标志位Pytorch 允许我们利用每个 Tensor 的 requires_grad 标志位来在计算图中排除一些不需要进行梯度计算的子图. 一个操作的输入中只要有一个Tensor的 requires_grad 为True, 则该操作的输出的 requires_grad 为True.相反只有输入中所有的Tensor的 requires_grad 为False时该操">
+<meta name="twitter:title" content="SiamFCN">
+<meta name="twitter:description" content="利用孪生网络进行相似性学习训练一个 Siamese 网络, 利用相似性计算来实现在 search image 上定位 exemplar image. 训练图片:从被标注的视频(每帧中的目标都被 bounding box 框出)中获取用于训练的图片对,  两张图片的帧间隔小于T. 其中 search image 是以目标为中心的大小为 $255 \times 255$ 的图片, 超出原图的区域用合理">
+<meta name="twitter:image" content="https://maoyunyao.github.io/img/siamFCN/exemplar.png">
 
 
 
@@ -119,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="https://maoyunyao.github.io/2019/05/14/pytorch_autograd/"/>
+  <link rel="canonical" href="https://maoyunyao.github.io/2019/05/28/paper_Siam_FCN/"/>
 
 
 
 
 
-  <title>自动求导机制 | 漫卷云舒</title>
+  <title>SiamFCN | 漫卷云舒</title>
   
 
 
@@ -288,7 +293,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/14/pytorch_autograd/">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/28/paper_Siam_FCN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Mr.M">
@@ -305,7 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">自动求导机制</h1>
+          <h1 class="post-title" itemprop="name headline">SiamFCN</h1>
         
 
         <div class="post-meta">
@@ -317,8 +322,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-14T12:00:00+08:00">
-                2019-05-14
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-28T12:00:00+08:00">
+                2019-05-28
               </time>
             
 
@@ -340,8 +345,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Pytorch/" itemprop="url" rel="index">
-                    <span itemprop="name">Pytorch</span>
+                  <a href="/categories/论文阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">论文阅读</span>
                   </a>
                 </span>
 
@@ -377,25 +382,67 @@
       
 
       
-        <h2 id="自动求导"><a href="#自动求导" class="headerlink" title="自动求导"></a>自动求导</h2><h4 id="requires-grad-标志位"><a href="#requires-grad-标志位" class="headerlink" title="requires_grad 标志位"></a><code>requires_grad</code> 标志位</h4><p>Pytorch 允许我们利用每个 Tensor 的 <code>requires_grad</code> 标志位来在计算图中排除一些不需要进行梯度计算的子图.</p>
-<p>一个操作的输入中只要有一个Tensor的 <code>requires_grad</code> 为True, 则该操作的输出的 <code>requires_grad</code> 为True.相反只有输入中所有的Tensor的 <code>requires_grad</code> 为False时该操作的输出的 <code>requires_grad</code> 才为False.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.randn(<span class="number">5</span>, <span class="number">5</span>) <span class="comment"># requires_grad = False by default</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.randn(<span class="number">5</span>, <span class="number">5</span>) <span class="comment"># requires_grad = False by default</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = torch.randn((<span class="number">5</span>, <span class="number">5</span>), requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = x + y</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.requires_grad</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a + z</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.requires_grad</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<p>在 <code>model</code> 中我们可以通过如下的操作改变其参数的 <code>requires_grad</code> 标志位以实现特定的需求, 如通过设置标志位为False来进行参数微调、跑测试集等.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">model = torchvision.models.resnet18(pretrained = <span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">for</span> param <span class="keyword">in</span> model.parameters():</span><br><span class="line">    param.requires_grad = <span class="keyword">False</span>;</span><br></pre></td></tr></table></figure>
-<p>当然我们也可以用如下的方法禁用梯度计算</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> torch</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.randn((<span class="number">5</span>, <span class="number">5</span>), requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">with</span> torch.no_grad():</span><br><span class="line"><span class="meta">... </span>	y = x + <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.requires_grad</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
-<h4 id="反向传播求导"><a href="#反向传播求导" class="headerlink" title="反向传播求导"></a>反向传播求导</h4><p>如果你想要求输出 Tensor 关于各参数的偏导数, 可对输出的 Tensor 调用 <code>backward()</code> 方法 . 如果输出的 Tensor 是一个标量, 则无需对 <code>backward()</code> 指定任何参数. 而如果输出的 Tensor 不是一个标量, 则需为该方法指定一个参数, 该参数为一个 Tensor, 其形状与输出的 Tensor 相同, 其值作为计算梯度时输出 Tensor 各元素乘上的系数.</p>
-<p>输出为标量的例子:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.ones(<span class="number">2</span>, <span class="number">2</span>, requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = x + <span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = y * y * <span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>out = z.mean()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>out</span><br><span class="line">tensor(<span class="number">27.</span>, grad_fn=&lt;MeanBackward0&gt;)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>out.backward()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad	<span class="comment">#输出为out对x各元素的偏导数</span></span><br><span class="line">tensor([[<span class="number">4.5000</span>, <span class="number">4.5000</span>],</span><br><span class="line">        [<span class="number">4.5000</span>, <span class="number">4.5000</span>]])</span><br></pre></td></tr></table></figure>
-<p>输出为向量的例子:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.tensor([[<span class="number">1.</span>, <span class="number">1.</span>], [<span class="number">2.</span>, <span class="number">2.</span>]], requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.tensor([[<span class="number">3.</span>, <span class="number">3.</span>], [<span class="number">4.</span>, <span class="number">4.</span>]], requires_grad = <span class="keyword">True</span>) </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = x.mm(y)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z.backward(torch.ones(<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad</span><br><span class="line">tensor([[<span class="number">6.</span>, <span class="number">8.</span>],</span><br><span class="line">        [<span class="number">6.</span>, <span class="number">8.</span>]])</span><br></pre></td></tr></table></figure>
-<p>可以发现当输出不是标量时, 如果传给 <code>backward()</code> 的参数为一个全一的 Tensor (正如我们上面所做), 则反向传播求得的对输入的梯度值是输出 Tensor 中各个元素对输入的梯度的累加值. 若想单独得到输出 Tensor 的某一个元素对输入的梯度值, 则可以通过给 <code>backward()</code> 提供特定的参数实现, 比如下面的例子就展示了矩阵乘法情况下输出Tensor z 的左上角元素对输入的梯度求解过程.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.tensor([[<span class="number">1.</span>, <span class="number">1.</span>], [<span class="number">2.</span>, <span class="number">2.</span>]], requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.tensor([[<span class="number">3.</span>, <span class="number">3.</span>], [<span class="number">4.</span>, <span class="number">4.</span>]], requires_grad = <span class="keyword">True</span>) </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = x.mm(y)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = torch.tensor([[<span class="number">1.</span>, <span class="number">0.</span>], [<span class="number">0.</span>, <span class="number">0.</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z.backward(a)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad</span><br><span class="line">tensor([[<span class="number">3.</span>, <span class="number">4.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>]])</span><br></pre></td></tr></table></figure>
-<p>如果调用 <code>backward()</code> 方法时没有设置参数 <code>retain_graph</code> = True, 则在完成一次 <code>backward()</code> 后计算图会被释放, 无法进行第二次反向传播. 设置 <code>retain_graph</code> = True 的作用是保持计算图不释放, 每次反向传播的梯度累加. 而若需要将 Tensor 的梯度清零, 则可调用 <code>zero_()</code> 函数:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad</span><br><span class="line">tensor([[<span class="number">6.</span>, <span class="number">8.</span>],</span><br><span class="line">        [<span class="number">6.</span>, <span class="number">8.</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad.zero_()</span><br><span class="line">tensor([[<span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad</span><br><span class="line">tensor([[<span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>]])</span><br></pre></td></tr></table></figure>
-<p>参考文献:</p>
-<p>[1]Pytorch - Docs</p>
-<p>[2]Pytorch - Tutorials: A 60 Minute Blitz</p>
+        <h4 id="利用孪生网络进行相似性学习"><a href="#利用孪生网络进行相似性学习" class="headerlink" title="利用孪生网络进行相似性学习"></a>利用孪生网络进行相似性学习</h4><p>训练一个 Siamese 网络, 利用相似性计算来实现在 <strong>search image</strong> 上定位 <strong>exemplar image</strong>.</p>
+<h5 id="训练图片"><a href="#训练图片" class="headerlink" title="训练图片:"></a>训练图片:</h5><p>从被标注的视频(<em>每帧中的目标都被 bounding box 框出</em>)中获取用于训练的图片对,  两张图片的帧间隔小于T. 其中 <strong>search image</strong> 是以目标为中心的大小为 $255 \times 255$ 的图片, 超出原图的区域用合理的RGB值填充, 不对原图进行缩放. 而 <strong>exemplar image</strong> 是以目标为中心的大小为 $127 \times 127$ 的图片. 具体地, 若 bounding box(红色框) 的大小为 (w, h), padding 的大小为 p, 则调整因子 s 由以下约束决定, 个人理解下面的两个 s 是不同的调整因子, 最终得到的是一个正方形框图, 即对 $(w+2p) \times (h+2p)$ 以外而 $127 \times 127$ 以内的部分进行合理颜色填充.</p>
+<script type="math/tex; mode=display">
+s(w + 2p) * s(h + 2p) = A\\
+A = 127^2\\
+p = (w + h) / 4\\</script><p><img src="/img/siamFCN/exemplar.png" alt=""></p>
+<center><i>图1:训练数据的获取</i></center>
+
+
+
+<h5 id="训练标注"><a href="#训练标注" class="headerlink" title="训练标注:"></a>训练标注:</h5><p>由于训练帧的目标都在图片中心, 故而训练帧对应的 <strong>score map</strong>, 具体意义参见网络结构)的值由如下规则给出: 距离 <strong>score map</strong> 中心 R 以内的点为正例, 其他点为反例.(需考虑 stride 值, 其中 stride 值为 <strong>search image</strong> 中选出 <strong>candidate image</strong> 时的步长, 由 φ 网络中的池化层决定). 其中 u 为 <strong>score map</strong> D中的点, c 为 <strong>score map</strong> 的中心点, k为 stride 值.</p>
+<script type="math/tex; mode=display">
+\textbf{y}[u]=\left\{
+\begin{aligned}
++1 & & if \space k||u - c|| \leq R \\
+-1 & & otherwise \\
+\end{aligned}
+\right.\\</script><h5 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数:"></a>损失函数:</h5><p>单分数的损失函数和 <strong>score map</strong> 的平均损失函数定义如下, 其中 <strong>v</strong> 为前向传播得到的分数矩阵 <strong>score map</strong>, <strong>y</strong> 为真实标注的 <strong>score map</strong>.</p>
+<script type="math/tex; mode=display">
+l(y,v) = log(1 + exp(-yv))\\
+L(\textbf y,\textbf v) = \frac{1}{|D|} \sum_{u\in D} l(\textbf y[u],\textbf v[u])\\</script><h5 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构:"></a>网络结构:</h5><ul>
+<li>φ 网络为全卷积网络,用于 <strong>exemplar image</strong> 和 <strong>candidate image</strong> 的特征提取, 图中的两个 φ 网络共享所有参数.</li>
+<li><strong>exemplar image</strong> 经过 φ 网络得到其对应的大小为 $6\times 6\times 128$ 的特征映射.</li>
+<li>由于 <strong>search image</strong> 的尺寸大于 <strong>exemplar image</strong> , 为了定位目标在 <strong>search image</strong> 中的位置,理论上需要需要穷举 <strong>search image</strong> 上所有可能的与 <strong>exemplar image</strong> 尺寸相同的候选子图.   而全卷积网络的<strong>计算共享</strong>的特性使得这样的穷举在一次前向传播中就能够实现.</li>
+<li>全卷积网络作用在 <strong>search image</strong> 上的结果是得到一个大小为 $22\times 22\times 128$ 的特征映射,在这个特征映射中可以截取得到所有可能的 <strong>candidate iname</strong> 的特征映射.</li>
+<li>将两张图片上得到的特征映射作互相关(内积)并作一定处理后得到 <strong>exemplar image</strong> 与 <strong>search image</strong> 上的各候选子图的相似度分数, 以 <strong>score map</strong> 的形式展现, 其中 <strong>score map</strong> 中的各个点的分数在几何上与 <strong>search image</strong> 中相应位置的 <strong>candidate image</strong> 一一对应.</li>
+</ul>
+<p><img src="/img/siamFCN/pipeline.png" alt=""></p>
+<center><i>图2: 孪生网络结构图</i></center>
+
+<p><img src="/img/siamFCN/parameter.png" alt=""></p>
+<center><i>图3: 子网络φ超参数 </i></center>
+
+
+
+<h5 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程:"></a>训练过程:</h5><p>以一对训练图片为例, 将 <strong>exemplar image</strong> 喂给上图中的 <strong>z</strong>, 将 <strong>search image</strong> 喂给上图中的 <strong>x</strong> , 之后进行前向传播得到 <strong>score map</strong>, 根据训练标注中所定义的作为 ground truth 的分数矩阵计算 <strong>loss</strong> 执行反向传播算法更新全卷积网络 φ 中的参数.</p>
+<h5 id="跟踪测试"><a href="#跟踪测试" class="headerlink" title="跟踪测试:"></a>跟踪测试:</h5><ul>
+<li><p>利用第一帧中 bounding box 框出的待检测目标,通过与之前在训练集中使用的相同的裁剪填充操作得到<strong>exemplar image</strong>.</p>
+</li>
+<li><p>以前一帧检测到的目标位置作为中心,通过与之前在训练集中使用的相同的裁剪填充操作得到当前帧的 <strong>search image</strong> 并结合 <strong>exemplar image</strong> 执行前向传播算法得到对应 <strong>score map</strong>.</p>
+</li>
+<li><p>利用 <strong>score map</strong> 的最大值点相对于 <strong>score map</strong> 中心点的偏移乘以 stride 得到当前帧中目标相对于上一帧中目标的偏移量.</p>
+</li>
+<li><p>目标尺寸空间的跟踪通过对 <strong>search image</strong> 的不同缩放版本来实现. </p>
+</li>
+<li><p>考虑到目标移动的连续性, 引入 <strong>cosine window</strong> 来实现对大幅度偏移的惩罚, 目标尺寸的大幅度变化也会受到惩罚.</p>
+</li>
+</ul>
+<h4 id="全卷积网络的特性"><a href="#全卷积网络的特性" class="headerlink" title="全卷积网络的特性:"></a>全卷积网络的特性:</h4><ul>
+<li><p>输入大小可变</p>
+</li>
+<li><p>计算共享</p>
+<ul>
+<li>如图 4 中, 当输入的大小大于 $16\times 16$ 时, 输出的大小相应变为 $2 \times 2$. 其中输出结果中的蓝色点对应了输入图片中蓝色部分的结果.</li>
+<li>还可以看到, 由于网络中池化层的存在, 当 $14 \times 14$ 的 “滑动窗口” 移动 2 个像素时才会产生一个输出点. 这个移动距离就是文中提到的 stride 值, 论文 Overfeat 中将其比喻成 “滑动窗口的” 分辨率.</li>
+<li>当然严格的计算共享需要保证网络中没有 padding 的存在.</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/siamFCN/fcn.png" alt=""></p>
+<center><i>图4: Overfeat中关于全卷积网络特性的解释</i></center>
 
       
     </div>
@@ -420,8 +467,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/13/ml_loss_function/" rel="next" title="似然函数作为损失函数">
-                <i class="fa fa-chevron-left"></i> 似然函数作为损失函数
+              <a href="/2019/05/19/pytorch_save_load_model/" rel="next" title="模型存取">
+                <i class="fa fa-chevron-left"></i> 模型存取
               </a>
             
           </div>
@@ -429,10 +476,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/14/pytorch_cuda/" rel="prev" title="CUDA支持">
-                CUDA支持 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -569,7 +612,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#自动求导"><span class="nav-number">1.</span> <span class="nav-text">自动求导</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#requires-grad-标志位"><span class="nav-number">1.0.1.</span> <span class="nav-text">requires_grad 标志位</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#反向传播求导"><span class="nav-number">1.0.2.</span> <span class="nav-text">反向传播求导</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#利用孪生网络进行相似性学习"><span class="nav-number">1.</span> <span class="nav-text">利用孪生网络进行相似性学习</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#训练图片"><span class="nav-number">1.1.</span> <span class="nav-text">训练图片:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#训练标注"><span class="nav-number">1.2.</span> <span class="nav-text">训练标注:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#损失函数"><span class="nav-number">1.3.</span> <span class="nav-text">损失函数:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#网络结构"><span class="nav-number">1.4.</span> <span class="nav-text">网络结构:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#训练过程"><span class="nav-number">1.5.</span> <span class="nav-text">训练过程:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#跟踪测试"><span class="nav-number">1.6.</span> <span class="nav-text">跟踪测试:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#全卷积网络的特性"><span class="nav-number">2.</span> <span class="nav-text">全卷积网络的特性:</span></a></li></ol></div>
             
 
           </div>
@@ -1093,6 +1136,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

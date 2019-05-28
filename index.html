@@ -285,6 +285,208 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/28/paper_Siam_FCN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.M">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="漫卷云舒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/28/paper_Siam_FCN/" itemprop="url">SiamFCN</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-28T12:00:00+08:00">
+                2019-05-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">论文阅读</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="利用孪生网络进行相似性学习"><a href="#利用孪生网络进行相似性学习" class="headerlink" title="利用孪生网络进行相似性学习"></a>利用孪生网络进行相似性学习</h4><p>训练一个 Siamese 网络, 利用相似性计算来实现在 <strong>search image</strong> 上定位 <strong>exemplar image</strong>.</p>
+<h5 id="训练图片"><a href="#训练图片" class="headerlink" title="训练图片:"></a>训练图片:</h5><p>从被标注的视频(<em>每帧中的目标都被 bounding box 框出</em>)中获取用于训练的图片对,  两张图片的帧间隔小于T. 其中 <strong>search image</strong> 是以目标为中心的大小为 $255 \times 255$ 的图片, 超出原图的区域用合理的RGB值填充, 不对原图进行缩放. 而 <strong>exemplar image</strong> 是以目标为中心的大小为 $127 \times 127$ 的图片. 具体地, 若 bounding box(红色框) 的大小为 (w, h), padding 的大小为 p, 则调整因子 s 由以下约束决定, 个人理解下面的两个 s 是不同的调整因子, 最终得到的是一个正方形框图, 即对 $(w+2p) \times (h+2p)$ 以外而 $127 \times 127$ 以内的部分进行合理颜色填充.</p>
+<script type="math/tex; mode=display">
+s(w + 2p) * s(h + 2p) = A\\
+A = 127^2\\
+p = (w + h) / 4\\</script><p><img src="/img/siamFCN/exemplar.png" alt=""></p>
+<center><i>图1:训练数据的获取</i></center>
+
+
+
+<h5 id="训练标注"><a href="#训练标注" class="headerlink" title="训练标注:"></a>训练标注:</h5><p>由于训练帧的目标都在图片中心, 故而训练帧对应的 <strong>score map</strong>, 具体意义参见网络结构)的值由如下规则给出: 距离 <strong>score map</strong> 中心 R 以内的点为正例, 其他点为反例.(需考虑 stride 值, 其中 stride 值为 <strong>search image</strong> 中选出 <strong>candidate image</strong> 时的步长, 由 φ 网络中的池化层决定). 其中 u 为 <strong>score map</strong> D中的点, c 为 <strong>score map</strong> 的中心点, k为 stride 值.</p>
+<script type="math/tex; mode=display">
+\textbf{y}[u]=\left\{
+\begin{aligned}
++1 & & if \space k||u - c|| \leq R \\
+-1 & & otherwise \\
+\end{aligned}
+\right.\\</script><h5 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数:"></a>损失函数:</h5><p>单分数的损失函数和 <strong>score map</strong> 的平均损失函数定义如下, 其中 <strong>v</strong> 为前向传播得到的分数矩阵 <strong>score map</strong>, <strong>y</strong> 为真实标注的 <strong>score map</strong>.</p>
+<script type="math/tex; mode=display">
+l(y,v) = log(1 + exp(-yv))\\
+L(\textbf y,\textbf v) = \frac{1}{|D|} \sum_{u\in D} l(\textbf y[u],\textbf v[u])\\</script><h5 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构:"></a>网络结构:</h5><ul>
+<li>φ 网络为全卷积网络,用于 <strong>exemplar image</strong> 和 <strong>candidate image</strong> 的特征提取, 图中的两个 φ 网络共享所有参数.</li>
+<li><strong>exemplar image</strong> 经过 φ 网络得到其对应的大小为 $6\times 6\times 128$ 的特征映射.</li>
+<li>由于 <strong>search image</strong> 的尺寸大于 <strong>exemplar image</strong> , 为了定位目标在 <strong>search image</strong> 中的位置,理论上需要需要穷举 <strong>search image</strong> 上所有可能的与 <strong>exemplar image</strong> 尺寸相同的候选子图.   而全卷积网络的<strong>计算共享</strong>的特性使得这样的穷举在一次前向传播中就能够实现.</li>
+<li>全卷积网络作用在 <strong>search image</strong> 上的结果是得到一个大小为 $22\times 22\times 128$ 的特征映射,在这个特征映射中可以截取得到所有可能的 <strong>candidate iname</strong> 的特征映射.</li>
+<li>将两张图片上得到的特征映射作互相关(内积)并作一定处理后得到 <strong>exemplar image</strong> 与 <strong>search image</strong> 上的各候选子图的相似度分数, 以 <strong>score map</strong> 的形式展现, 其中 <strong>score map</strong> 中的各个点的分数在几何上与 <strong>search image</strong> 中相应位置的 <strong>candidate image</strong> 一一对应.</li>
+</ul>
+<p><img src="/img/siamFCN/pipeline.png" alt=""></p>
+<center><i>图2: 孪生网络结构图</i></center>
+
+<p><img src="/img/siamFCN/parameter.png" alt=""></p>
+<center><i>图3: 子网络φ超参数 </i></center>
+
+
+
+<h5 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程:"></a>训练过程:</h5><p>以一对训练图片为例, 将 <strong>exemplar image</strong> 喂给上图中的 <strong>z</strong>, 将 <strong>search image</strong> 喂给上图中的 <strong>x</strong> , 之后进行前向传播得到 <strong>score map</strong>, 根据训练标注中所定义的作为 ground truth 的分数矩阵计算 <strong>loss</strong> 执行反向传播算法更新全卷积网络 φ 中的参数.</p>
+<h5 id="跟踪测试"><a href="#跟踪测试" class="headerlink" title="跟踪测试:"></a>跟踪测试:</h5><ul>
+<li><p>利用第一帧中 bounding box 框出的待检测目标,通过与之前在训练集中使用的相同的裁剪填充操作得到<strong>exemplar image</strong>.</p>
+</li>
+<li><p>以前一帧检测到的目标位置作为中心,通过与之前在训练集中使用的相同的裁剪填充操作得到当前帧的 <strong>search image</strong> 并结合 <strong>exemplar image</strong> 执行前向传播算法得到对应 <strong>score map</strong>.</p>
+</li>
+<li><p>利用 <strong>score map</strong> 的最大值点相对于 <strong>score map</strong> 中心点的偏移乘以 stride 得到当前帧中目标相对于上一帧中目标的偏移量.</p>
+</li>
+<li><p>目标尺寸空间的跟踪通过对 <strong>search image</strong> 的不同缩放版本来实现. </p>
+</li>
+<li><p>考虑到目标移动的连续性, 引入 <strong>cosine window</strong> 来实现对大幅度偏移的惩罚, 目标尺寸的大幅度变化也会受到惩罚.</p>
+</li>
+</ul>
+<h4 id="全卷积网络的特性"><a href="#全卷积网络的特性" class="headerlink" title="全卷积网络的特性:"></a>全卷积网络的特性:</h4><ul>
+<li><p>输入大小可变</p>
+</li>
+<li><p>计算共享</p>
+<ul>
+<li>如图 4 中, 当输入的大小大于 $16\times 16$ 时, 输出的大小相应变为 $2 \times 2$. 其中输出结果中的蓝色点对应了输入图片中蓝色部分的结果.</li>
+<li>还可以看到, 由于网络中池化层的存在, 当 $14 \times 14$ 的 “滑动窗口” 移动 2 个像素时才会产生一个输出点. 这个移动距离就是文中提到的 stride 值, 论文 Overfeat 中将其比喻成 “滑动窗口的” 分辨率.</li>
+<li>当然严格的计算共享需要保证网络中没有 padding 的存在.</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/siamFCN/fcn.png" alt=""></p>
+<center><i>图4: Overfeat中关于全卷积网络特性的解释</i></center>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/19/pytorch_save_load_model/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1706,127 +1908,6 @@ f(\textbf{x})=w^T\phi(\textbf{x})+b\\
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2018/10/05/inline-asm-gcc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mr.M">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="漫卷云舒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/05/inline-asm-gcc/" itemprop="url">Inline Assembler in GCC</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-05T12:00:00+08:00">
-                2018-10-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="操作系统上机知识储备-一"><a href="#操作系统上机知识储备-一" class="headerlink" title="操作系统上机知识储备(一)"></a>操作系统上机知识储备(一)</h2><p>对gcc所支持的内联汇编格式及使用方法进行简要的介绍</p>
- <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * This c file is a introduction of inline Assembly for gcc</span></span><br><span class="line"><span class="comment"> * Time： 2018/9/8</span></span><br><span class="line"><span class="comment"> * Author: myy</span></span><br><span class="line"><span class="comment"> * Reference： JeffreyLi  https://www.jianshu.com/p/1782e14a0766</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">////////////////////////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"><span class="comment">/*Formular:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	asm ( assembler template</span></span><br><span class="line"><span class="comment">        	: output operands               	// optional</span></span><br><span class="line"><span class="comment">        	: input operands                	// optional</span></span><br><span class="line"><span class="comment">        	: list of clobbered registers   	// optional</span></span><br><span class="line"><span class="comment">	);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The assembler template form:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* form1:"sentence?sentence?sentence"</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* form2:</span></span><br><span class="line"><span class="comment">			"sentence?"</span></span><br><span class="line"><span class="comment">			"sentence?"</span></span><br><span class="line"><span class="comment">			"sentence"</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Where the ? should be replaced by "\n\t" or ";".</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Access to C variables by %0 %1 and so on.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The operands form:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* "constraint" (C expression)</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Where constraint is mainly used for note Addressing type(memory or register).</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- For output operants, it should be decorated by "=", which means write-only.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- For multiple operants, they should be seperated by ",".</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- To use the operants in assempler template with %0 %1 %2 ...</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">				- First output operants then input operants.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">				- Signed in the list order.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- The output operants must be lvalue.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The clobber list:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* When a register is used in the assembler template, it should be in the clobber list.</span></span><br><span class="line"><span class="comment">		  Which let gcc no longer assume that the values previously stored in these registers</span></span><br><span class="line"><span class="comment">		  are still legal.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* If the instruction changes the memory value in an unpredictable form, you need to add</span></span><br><span class="line"><span class="comment">		  "memory" to the clobbered list.This allows GCC not to cache these memory values.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	The volatile:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* If the assembly code is required to be executed at the location where it was placed</span></span><br><span class="line"><span class="comment">		 (for example, it cannot be moved out of the loop during the optimization), we need to</span></span><br><span class="line"><span class="comment">		  put a "volatile" keyword before the "()" after asm. This will prevent these codes from</span></span><br><span class="line"><span class="comment">		  being moved or deleted.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Useage: __asm__ __volatile__(...);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	Common constraints:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		***********************</span></span><br><span class="line"><span class="comment">		* r 	Register(s)</span></span><br><span class="line"><span class="comment">		* a 	%eax, %ax, %al</span></span><br><span class="line"><span class="comment">		* b 	%ebx, %bx, %bl</span></span><br><span class="line"><span class="comment">		* c 	%ecx, %cx, %cl</span></span><br><span class="line"><span class="comment">		* d 	%edx, %dx, %adl</span></span><br><span class="line"><span class="comment">		* S 	%esi, %si</span></span><br><span class="line"><span class="comment">		* D 	%edi, %di</span></span><br><span class="line"><span class="comment">		***********************</span></span><br><span class="line"><span class="comment">		* m     memory</span></span><br><span class="line"><span class="comment">		***********************</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- If use the register constraint, the value will first be stored at the register used,</span></span><br><span class="line"><span class="comment">                and then write back to the memory in the end.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		--- Constraint "0" means: use the same register as the first output operants.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	Constraint Modifiers:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* "=": Write only.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		* "&amp;": Means that this operand is an earlyclobber operand, which is modified before the</span></span><br><span class="line"><span class="comment">                instruction is finished using the input operands. Therefore, this operand may not lie in</span></span><br><span class="line"><span class="comment">                a register that is used as an input operand or as a part of any memory address.An input</span></span><br><span class="line"><span class="comment">                operand can be tied to an earlyclobber operand if its only use as an input occurs before</span></span><br><span class="line"><span class="comment">                the early result is written.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">////////////////////////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a = <span class="number">10</span>,b = <span class="number">5</span>,c;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Example: to realize c = a + b</span></span><br><span class="line">	__asm__ __volatile__ (  </span><br><span class="line">                            <span class="string">"movl %2,%%eax\n\t movl %1,%%ebx\n\t addl %%ebx,%%eax\n\t movl %%eax,%0"</span></span><br><span class="line">                              :<span class="string">"=r"</span>(c)</span><br><span class="line">                              :<span class="string">"r"</span>(a),<span class="string">"r"</span>(b)</span><br><span class="line">                              :<span class="string">"eax"</span>,<span class="string">"ebx"</span></span><br><span class="line">	);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"c = a + b = %d\n"</span>,c);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1881,7 +1962,7 @@ f(\textbf{x})=w^T\phi(\textbf{x})+b\\
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1892,7 +1973,7 @@ f(\textbf{x})=w^T\phi(\textbf{x})+b\\
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
