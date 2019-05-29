@@ -285,6 +285,153 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/29/paper_GAN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.M">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="漫卷云舒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/29/paper_GAN/" itemprop="url">Generative Adversarial Nets</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-29T12:00:00+08:00">
+                2019-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">论文阅读</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="生成对抗网络"><a href="#生成对抗网络" class="headerlink" title="生成对抗网络"></a>生成对抗网络</h4><p>同时训练两个网络, 分别是生成网络 $G$ 和判别网络 $D​$. 其中 $G​$ 网络用于学习真实数据的分布, 而 $D​$ 网络用于判别输入的样本是来自真实数据还是来自 $G​$ 生成的伪数据.</p>
+<h5 id="研究背景"><a href="#研究背景" class="headerlink" title="研究背景:"></a>研究背景:</h5><p>截至作者提出生成对抗网络之前, 深度学习的主要成就集中在判别网络的应用中. 这主要归功于反向传播和 $Dropout​$ 算法的成功应用. 但是对于生成网络, 其损失函数的设计成了一个难题. 类似于极大似然估计这种损失函数难以很好地被应用在学习的过程当中.</p>
+<h5 id="生成网络"><a href="#生成网络" class="headerlink" title="生成网络:"></a>生成网络:</h5><p>生成网络的任务就是学习一个数据分布 $p_g(x)$ 来拟合真实数据的分布 ​$p_{data}(x)​$. 生成网络 ​$G​$ 接受分布为 ​$p_z(z)​$ 的随机噪声 ​$z​$ 作为输入, 则 ​$G​$ 可视为从到噪声空间到数据空间的一个映射 ​$G(z;\theta_g): z \to x​$. 而函数 ​$G​$ 是由多层感知机构成的, 以 ​$\theta_g​$ 为参数的可导函数.</p>
+<h5 id="判别网络"><a href="#判别网络" class="headerlink" title="判别网络:"></a>判别网络:</h5><p>判别网络与常见的判别式网络类似, 它完成一个二分类任务. 以数据样本作为输入, 然后输出一个标量用于表示输入的样本是来自真实数据的概率. 其形式化为 $D(\textbf{x};\theta_d)​$.</p>
+<h5 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数:"></a>损失函数:</h5><p>生成对抗网络的损失函数如下:</p>
+<script type="math/tex; mode=display">
+\min \limits_G \space \max \limits_D \space V(D,G) = E_{\textbf{x} \sim p_{data}(\textbf{x})}[logD(\textbf{x})] + E_{\textbf{z} \sim p_{\textbf{z}}(\textbf{z})}[log(1-D(G(\textbf{z})))]</script><h5 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程:"></a>训练过程:</h5><h5 id="理论阐述"><a href="#理论阐述" class="headerlink" title="理论阐述:"></a>理论阐述:</h5>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/28/paper_Siam_FCN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1744,170 +1891,6 @@ L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/12/ml_kernel_method/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mr.M">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="漫卷云舒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/12/ml_kernel_method/" itemprop="url">机器学习之核函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-12T12:00:00+08:00">
-                2019-05-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="核函数"><a href="#核函数" class="headerlink" title="核函数"></a>核函数</h2><p>对于线性不可分样本问题(如简单的异或问题), 可以将样本从原始空间映射到一个更高维的特征空间, 使得样本在这个特征空间内线性可分. </p>
-<p>例如在支持向量机中, 原问题转化为求解特征空间上的凸二次规划问题:</p>
-<script type="math/tex; mode=display">
-f(\textbf{x}) = w^T \phi(\textbf{x}) + b</script><p>对上述线性可分支持向量机的求解涉及到如下对偶问题的求解(由拉格朗日乘子法得到对偶问题的具体过程此处不予讨论):</p>
-<script type="math/tex; mode=display">
-\mathop{max}_\alpha \quad \sum\limits_{i = 1}^{n}\alpha_i-\frac{1}{2}\sum\limits_{i=1}^{m}\sum\limits_{j=1}^{m}\alpha_i\alpha_jy_iy_j\phi(\textbf{x}_i)^T\phi(\textbf{x}_j)\\
-s.t. \quad \sum\limits_{i=1}^{m}\alpha_iy_i=0\\
-\alpha_i \ge 0, \quad i=1,2,...,m</script><p>求解上式涉及到计算 $\phi(\textbf{x}_i)^T\phi(\textbf{x}_j)$, 这是样本 $\textbf{x}_i$ 与$\textbf{} $$\textbf{x}_j$ 映射到特征空间之后的内积. 由于特征空间维数很高, 甚至可能是无穷维, 因此直接计算通常是困难的. 为了避开这个障碍, 可以设想这样一个函数:</p>
-<script type="math/tex; mode=display">
-k(\textbf{x}_i,\textbf{x}_j)=<\phi(\textbf{x}_i),\phi(\textbf{x}_j)>=\phi(\textbf{x}_i)^T\phi(\textbf{x}_j)</script><p>即 $\textbf{x}_i$ 与 $\textbf{x}_j$ 在特征空间的内积等于它们在原始样本空间中通过函数 $k(.,.)$ 计算的结果(此即核技巧). 有了这样的函数我们就不必直接去计算高维甚至无穷维特征空间中的内积, 于是对偶问题重写并求解可得</p>
-<script type="math/tex; mode=display">
-f(\textbf{x})=w^T\phi(\textbf{x})+b\\
-=\sum\limits_{i=1}^{m}\alpha_iy_i\phi(\textbf{x}_i)^T\phi(\textbf{x})+b\\
-=\sum\limits_{i=1}^{m}\alpha_iy_ik(\textbf{x},\textbf{x}_i)+b\\</script><p>这里的函数 $k(.,.)$ 就是 “核函数”  </p>
-<p>显然, 如果已知合适的映射 $\phi(.)$ 的具体形式, 则可写出核函数 $k(.,.)$. 但是 现实任务重我们通常不知道 $\phi(.)$ 是什么形式. 剩下的问题就是如何选择 $\phi(.)$:</p>
-<ul>
-<li>使用一个通用的 $\phi$, 例如无限维的 $\phi$, 它隐含地用在高斯核也即基于径向基函数 $(RBF)$ 核的核机器上</li>
-<li>手动地设计 $\phi$ , 在深度学习出现以前, 这一直是主流的方法</li>
-<li>深度学习的策略是去学习 $\phi$</li>
-</ul>
-<p>参考文献:</p>
-<p>[1]机器学习-周志华-第126, 127页</p>
-<p>[2]深度学习-花书-第106页</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1962,7 +1945,7 @@ f(\textbf{x})=w^T\phi(\textbf{x})+b\\
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
