@@ -86,10 +86,13 @@
 <meta property="og:site_name" content="漫卷云舒">
 <meta property="og:description" content="生成对抗网络同时训练两个网络, 分别是生成网络 $G​$ 和判别网络 $D​$. 其中 $G​$ 网络用于学习真实数据的分布, 而 $D​$ 网络用于判别输入的样本是来自真实数据还是来自 $G​$ 生成的伪数据. 研究背景:截至作者提出生成对抗网络之前, 深度学习的主要成就集中在判别网络的应用中. 这主要归功于反向传播和 $Dropout$ 算法的成功应用. 但是对于生成网络, 其损失函数的设计成">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-31T02:07:45.417Z">
+<meta property="og:image" content="https://maoyunyao.github.io/img/GAN/algorithm_of_gan.png">
+<meta property="og:image" content="https://maoyunyao.github.io/img/GAN/example.png">
+<meta property="og:updated_time" content="2019-05-31T06:35:16.118Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Generative Adversarial Nets">
 <meta name="twitter:description" content="生成对抗网络同时训练两个网络, 分别是生成网络 $G​$ 和判别网络 $D​$. 其中 $G​$ 网络用于学习真实数据的分布, 而 $D​$ 网络用于判别输入的样本是来自真实数据还是来自 $G​$ 生成的伪数据. 研究背景:截至作者提出生成对抗网络之前, 深度学习的主要成就集中在判别网络的应用中. 这主要归功于反向传播和 $Dropout$ 算法的成功应用. 但是对于生成网络, 其损失函数的设计成">
+<meta name="twitter:image" content="https://maoyunyao.github.io/img/GAN/algorithm_of_gan.png">
 
 
 
@@ -383,22 +386,17 @@
 <h5 id="判别网络"><a href="#判别网络" class="headerlink" title="判别网络:"></a>判别网络:</h5><p>判别网络与常见的判别式网络类似, 它完成一个二分类任务. 以数据样本作为输入, 然后输出一个标量用于表示输入的样本是来自真实数据的概率. 其形式化为 $D(\textbf{x};\theta_d)$.</p>
 <h5 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数:"></a>损失函数:</h5><p>生成对抗网络理论上的损失函数如下:</p>
 <script type="math/tex; mode=display">
-\min \limits_G \space \max \limits_D \space V(D,G) = E_{\textbf{x} \sim p_{data}(\textbf{x})}[logD(\textbf{x})] + E_{\textbf{z} \sim p_{\textbf{z}}(\textbf{z})}[log(1-D(G(\textbf{z})))]</script><p>其直观解释是在最大化 $D$ 对数据样本的判别能力的条件下，最小化 $D$ 对 $G$ 所生成样本的判别能力. 两个网络就像在进行一场博弈, 逐步提升各自的能力, 直到最后 $G$ 学到的分布完全拟合真实数据分布, 从而达到一个最优的状态. 这时, $D$ 的输出始终为 $1/2$, 即无法对输入样本进行有效的判断. </p>
-<h5 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程:"></a>训练过程:</h5><p>GAN 的训练过程是一个生成网络 $G$ 和判别网络 $D$ 交替迭代训练的过程, 即在训练 $D$ 时固定 $G$ 的参数, 而训练 $G$ 时固定 $D$ 的参数, 由此循环往复直到训练结束. 结合损失函数我们可以发现, 在训练 $G$ 时,由于 $D$ 被固定, $logD(\textbf{x})$ 就成为了一个常数, 此时训练的目标就是最小化 $logD(1-G(\textbf{z}))$.</p>
-<blockquote>
-<p><strong>Algorithm 1</strong> <em>Minibatch stochastic gradient descent training of generative adversarial nets. The number of steps to apply to the dscriminator, k, is a hyperparameter. We used k = 1, the least expensive option, in our experiments.</em></p>
-</blockquote>
-<p>$\textbf{for} \space number\space of \space training \space iterations \space \textbf{do}​$</p>
-<p>$\qquad \textbf{for} \space k \space steps \space \textbf{do}​$</p>
-<p>$\qquad \qquad  Sample \space minibatch \space of \space m \space noise \space samples \space {\textbf{z}^{(1)}, …, \textbf{z}^{(m)}} \space from \space noise \space prior \space p_{\textbf{z}}(\textbf{z}).​$</p>
-<p>$\qquad \qquad Sample \space minibatch \space of \space m \space examples\space {\textbf{x}^{(1)},…,\textbf{x}^{(m)}} \space from \space data \space generating \space distribution \space p_{data}(\textbf{x})$</p>
-<p>$\qquad \qquad Update \space the \space discriminator \space by \space descending \space its \space stochastic \space gradient:$</p>
-<script type="math/tex; mode=display">
-\nabla_{\theta_d} \frac{1}{m} \sum\limits_{i=1}^{m}[logD(\textbf{x}^{(i)}) + log(1-D(G(\textbf{z}^{(i)})))]</script><p>$\qquad \textbf{end} \space \textbf{for}$</p>
-<p>$\qquad Sample \space minibatch \space of \space m \space noise \space samples \space {\textbf{z}^{(1)}, …, \textbf{z}^{(m)}} \space from \space noise \space prior \space p_{\textbf{z}}(\textbf{z}).​$</p>
-<p>$\qquad Update \space the \space generator \space by \space descending \space its \space stochastic \space gradient:$</p>
-<script type="math/tex; mode=display">
-\nabla_{\theta_g} \frac{1}{m} \sum\limits_{i=1}^{m}[log(1-D(G(\textbf{z}^{(i)})))]</script><p>$\textbf{end} \space \textbf{for}​$</p>
+\min \limits_G \space \max \limits_D \space V(D,G) = E_{\textbf{x} \sim p_{data}(\textbf{x})}[logD(\textbf{x})] + E_{\textbf{z} \sim p_{\textbf{z}}(\textbf{z})}[log(1-D(G(\textbf{z})))]</script><p>其直观解释是在最大化 $D​$ 对数据样本的判别能力的条件下，最小化 $D​$ 对 $G​$ 所生成样本的判别能力. 两个网络就像在进行一场博弈, 逐步提升各自的能力, 直到最后 $G​$ 学到的分布完全拟合真实数据分布, 从而达到一个最优的状态. 这时, $D​$ 的输出始终为 $1/2​$, 即无法对输入样本进行有效的判断. </p>
+<h5 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程:"></a>训练过程:</h5><p>GAN 的训练过程是一个生成网络 $G​$ 和判别网络 $D​$ 交替迭代训练的过程, 即在训练 $D​$ 时固定 $G​$ 的参数, 而训练 $G​$ 时固定 $D​$ 的参数, 由此循环往复直到训练结束. 结合损失函数我们可以发现, 在训练 $G​$ 时,由于 $D​$ 被固定, $logD(\textbf{x})​$ 就成为了一个常数, 此时训练的目标就是最小化 $log(1-D(G(\textbf{z})))​$.</p>
+<p><img src="/img/GAN/algorithm_of_gan.png" alt=""></p>
+<center><i>图1:生成对抗网络的训练算法</i></center>
+
+<p>如上图所示的训练算法, 由训练样本的独立同分布采样假设, 理论损失函数中期望的计算可以简单地用样本的平均值来代替. 此外, 对于训练 $G$ 时所采用的 $log(1-D(G(\textbf{z})))$ 损失函数, 在早期会有梯度不足的问题. 因为早期的生成器 $G$ 的能力很弱, 生成的数据很容易被判别器 $D$ 分辨, 从而可能存在绝大多数的生成数据都被分辨出来而导致损失函数值接近 $0$ 的情况. 这时整个训练就进行地十分缓慢, 因为 $log$ 函数在函数值 $0$ 周围梯度比较小. 故而实际训练可以用最大化 $logD(G(\textbf{z}))$ 来代替原来的最小化 $log(1-D(G(\textbf{z})))​$ 的策略, 或者标签反转也是不错的选择.</p>
+<p><img src="/img/GAN/example.png" alt=""></p>
+<center><i>图2:一个简单的例子</i></center>
+
+
+
 <h5 id="理论阐述"><a href="#理论阐述" class="headerlink" title="理论阐述:"></a>理论阐述:</h5>
       
     </div>
