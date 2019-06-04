@@ -458,7 +458,7 @@ AP = \frac{1}{11} \sum \limits_{r \in\{1, 0.1, 0.2, ... , 1\}}p_{interp}(r)</scr
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; The precision at each recall level r is interpolated by taking</span><br><span class="line">&gt; the maximum precision measured for a method for which</span><br><span class="line">&gt; the corresponding recall exceeds r:</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
 </blockquote>
 <script type="math/tex; mode=display">
-p_{interp}(r)= \max \limits_{\tilde r:\tilde r \ge r}(r)\\
+p_{interp}(r)= \max \limits_{\tilde r:\tilde r \ge r}p(r)\\
 where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script><p>Basically we use the maximum precision for a given recall value.</p>
 <p><strong>The mAP hence is the Mean of all the Average Precision values across all your classes as measured above</strong>.</p>
 <p>This is in essence how the Mean Average Precision is calculated for Object Detection evaluation. There might be some variation at times, for example the COCO evaluation is more strict, enforcing various metrics with various IOUs and object sizes(<a href="http://cocodataset.org/#detection-eval" target="_blank" rel="noopener">more details here</a>). If any of you want me to go into details of that, do let me know in the comments.</p>
