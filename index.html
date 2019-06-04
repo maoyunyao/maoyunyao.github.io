@@ -285,6 +285,238 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/06/04/measure_mAP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.M">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="漫卷云舒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/04/measure_mAP/" itemprop="url">检测模型评估之mAP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-04T12:00:00+08:00">
+                2019-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="The-object-detection-problem"><a href="#The-object-detection-problem" class="headerlink" title="The object detection problem"></a>The object detection problem</h2><p>Given an image, find the objects in it, <strong>locate their position</strong> and <strong>classify</strong> them.</p>
+<p>Trained on a <strong>fixed set of classes</strong>, so the model would locate and classify only those classes in the image.</p>
+<p>The location of the object is generally in the form of <strong>a bounding rectangle</strong>.</p>
+<h4 id="Dataset-example"><a href="#Dataset-example" class="headerlink" title="Dataset example:"></a>Dataset example:</h4><ul>
+<li>Actual image</li>
+</ul>
+<p><img src="/img/mAP/example.png" alt=""></p>
+<ul>
+<li>Notation</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Class</th>
+<th style="text-align:center">X coordinate</th>
+<th style="text-align:center">Y coordinate</th>
+<th style="text-align:center">Box Width</th>
+<th style="text-align:center">Box Height</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Dog</td>
+<td style="text-align:center">100</td>
+<td style="text-align:center">600</td>
+<td style="text-align:center">150</td>
+<td style="text-align:center">100</td>
+</tr>
+<tr>
+<td style="text-align:center">Horse</td>
+<td style="text-align:center">700</td>
+<td style="text-align:center">300</td>
+<td style="text-align:center">200</td>
+<td style="text-align:center">250</td>
+</tr>
+<tr>
+<td style="text-align:center">Person</td>
+<td style="text-align:center">400</td>
+<td style="text-align:center">400</td>
+<td style="text-align:center">100</td>
+<td style="text-align:center">500</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>Bounding box with class(only for visualization)</li>
+</ul>
+<p><img src="/img/mAP/example_visual.png" alt=""></p>
+<h2 id="The-Mean-Average-Precision-aka-the-mAP"><a href="#The-Mean-Average-Precision-aka-the-mAP" class="headerlink" title="The Mean Average Precision aka, the mAP"></a>The Mean Average Precision aka, the mAP</h2><p>Every image in an object detection problem could have <strong>different objects of different classes</strong>. So both the classification and localization of a model need to be evaluated. </p>
+<h4 id="IoU"><a href="#IoU" class="headerlink" title="IoU"></a>IoU</h4><p>We first need to know how to judge the correctness of each of those detections. The metric that tells us the correctness of a given bounding box is the <strong>IoU</strong> - <strong>Intersection over Union</strong>. It is a very simple visual quantity.</p>
+<p><img src="/img/mAP/iou.png" alt=""></p>
+<p>The intersection includes the overlap area(the area colored in Cyan), and the union includes the Orange and Cyan regions both.</p>
+<p>The IoU will then be calculated like this</p>
+<p><img src="/img/mAP/cal_iou.png" alt=""></p>
+<h4 id="Identifying-correct-detections-and-calculating-precision-and-recall"><a href="#Identifying-correct-detections-and-calculating-precision-and-recall" class="headerlink" title="Identifying correct detections and calculating precision and recall"></a>Identifying correct detections and calculating <strong>precision</strong> and <strong>recall</strong></h4><p>For calculating <a href="https://tarangshah.com/blog/2018-01-27/what-is-map-understanding-the-statistic-of-choice-for-comparing-object-detection-models/" target="_blank" rel="noopener">Precision and Recall</a>, as with all machine learning problems, we have to identify <strong>True Positives(TP)</strong>, <strong>False Positives(FP)</strong>, <strong>True Negatives(TN)</strong> and <strong>False Negatives(FN)</strong>.</p>
+<p><strong>TP</strong> and <strong>FP</strong> are indentified with IoU and a threshold <strong>in a specific class</strong>.</p>
+<p>If IoU &gt; threshold: True Positive(TP).</p>
+<p>If IoU &lt; threshold: False positive(FP).</p>
+<p>For calculating Recall, we need the count of Negatives. Since every part of the image where we didn’t predict an object is considered a negative, measuring “True” negatives is a bit futile. So we only measure False Negatives(FN) - ie. the objects that our model has missed out.</p>
+<script type="math/tex; mode=display">
+Precision = TP/(TP+FP)\\
+Recall = TP/(TP+FN)</script><h4 id="Calculating-the-Mean-Average-Precision"><a href="#Calculating-the-Mean-Average-Precision" class="headerlink" title="Calculating the Mean Average Precision"></a>Calculating the Mean Average Precision</h4><p>Using the Pascal VOC challenge evaluation metric</p>
+<p>The Mean Average Precision is a term which has different definitions. This metric is commonly used in the domains of Information Retrieval and Object Detection. Both these domains have different ways of calculating mAP. We will talk about the Object Detection relevant mAP today.</p>
+<p>The Object Detection definition of mAP was first formalized in the PASCAL Visual Objects Classes(VOC) challenge, which included various image processing tasks. For the exact paper refer to <a href="http://homepages.inf.ed.ac.uk/ckiw/postscript/ijcv_voc09.pdf" target="_blank" rel="noopener">this.</a> (<a href="https://tarangshah.com/blog/assets/ijcv_voc09.pdf" target="_blank" rel="noopener">backup</a>)</p>
+<p>We use the same approaches for calculation of Precision and Recall as mentioned in the previous section. But, as mentioned, we have at least two other variables which determine the values of Precision and Recall, they are the IOU and the Confidence thresholds.</p>
+<p>The IOU is a simple geometric metric, which we can easily standardize, for example the PASCAL VOC challenge evaluates mAP based on 50% IOU, whereas the COCO Challenge goes a step further and evaluates mAP at various threshold ranging from 5% to 95%. The confidence factor on the other hand varies across models, 50% confidence in my model design might probably be equivalent to an 80% confidence in someone else’s model design, which would vary the precision recall curve shape. Hence the PASCAL VOC organizers came up with a way to account for this variation.</p>
+<p>We now need a metric to evaluate the models in a model agnostic way.</p>
+<p>The paper recommends that we calculate a measure called AP - ie. the Average Precision</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt; For a given task and class, the precision/recall curve is</span><br><span class="line">&gt; computed from a method’s ranked output. Recall is defined</span><br><span class="line">&gt; as the proportion of all positive examples ranked above a</span><br><span class="line">&gt; given rank. Precision is the proportion of all examples above</span><br><span class="line">&gt; that rank which are from the positive class. The AP summarises</span><br><span class="line">&gt; the shape of the precision/recall curve, and is de-</span><br><span class="line">&gt; fined as the mean precision at a set of eleven equally spaced</span><br><span class="line">&gt; recall levels [0,0.1,...,1]:</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<script type="math/tex; mode=display">
+AP = \frac{1}{11} \sum \limits_{r \in\{1, 0.1, 0.2, ... , 1\}}p_{interp}(r)</script><p>This means that we chose 11 different confidence thresholds(which determine the “rank”). The thresholds should be such that the <strong>Recall at those confidence thresholds is 0, 0.1, 0.2, 0.3, … , 0.9 and 1.0</strong>. The AP is now defined as the mean of the <strong>Precision</strong> values at these chosen 11 Recall values. This results in the mAP being an overall view of the whole precision recall curve.</p>
+<p>The paper further gets into detail of calculating the Precision used in the above calculation.</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; The precision at each recall level r is interpolated by taking</span><br><span class="line">&gt; the maximum precision measured for a method for which</span><br><span class="line">&gt; the corresponding recall exceeds r:</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<script type="math/tex; mode=display">
+p_{interp}(r)= \max \limits_{\tilde r:\tilde r \ge r}(r)\\
+where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script><p>Basically we use the maximum precision for a given recall value.</p>
+<p><strong>The mAP hence is the Mean of all the Average Precision values across all your classes as measured above</strong>.</p>
+<p>This is in essence how the Mean Average Precision is calculated for Object Detection evaluation. There might be some variation at times, for example the COCO evaluation is more strict, enforcing various metrics with various IOUs and object sizes(<a href="http://cocodataset.org/#detection-eval" target="_blank" rel="noopener">more details here</a>). If any of you want me to go into details of that, do let me know in the comments.</p>
+<p>Some important points to remember when we compare mAP values</p>
+<ol>
+<li>mAP is always calculated over a dataset.</li>
+<li>Although it is not easy to interpret the absolute quantification of the model output, mAP helps us by bieng a pretty good relative metric. When we calculate this metric over popular public datasets, the metric can be easily used to compare old and new approaches to object detection.</li>
+<li>Depending on how the classes are distributed in the training data, the Average Precision values might vary from very high for some classes(which had good training data) to very low(for classes with less/bad data). So your mAP may be moderate, but your model might be really good for certain classes and really bad for certain classes. Hence it is advisable to have a look at individual class Average Precisions while analysing your model results. These values might also serve as an indicator to add more training samples.</li>
+</ol>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a href="https://tarangshah.com/blog/2018-01-27/what-is-map-understanding-the-statistic-of-choice-for-comparing-object-detection-models/" target="_blank" rel="noopener">Measuring Object Detection models - mAP - What is Mean Average Precision?</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/29/paper_GAN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1738,170 +1970,6 @@ L(\textbf y,\textbf v) = \frac{1}{|D|} \sum_{u\in D} l(\textbf y[u],\textbf v[u]
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/13/ml_loss_function/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mr.M">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="漫卷云舒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/13/ml_loss_function/" itemprop="url">似然函数作为损失函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-13T12:00:00+08:00">
-                2019-05-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="似然函数"><a href="#似然函数" class="headerlink" title="似然函数"></a>似然函数</h2><p>在数理统计学中, 似然函数是一种关于统计模型中的参数的函数, 表示模型参数的似然性. 统计学中似然性和概率有着明确的区分. 概率用于在已知一些参数的情况下, 预测接下来在观测上所得到的结果. 而似然性则是用于在已知某些观测所得到的结果时, 对相关参数进行估值.</p>
-<p>似然函数的<strong>重要性不是它的具体取值</strong>, 而是当参数变化时函数到底是变大还是变小. 对同一个似然函数, 其所代表的模型中, 某项参数值具有多种可能, 但如果存在一个参数值使得它的函数值达到最大的话, 那么这个值就是该项参数最为”合理”的参数值.</p>
-<p>在已知某个参数 $B$ 时, 事件 $A$ 会发生的概率写作:</p>
-<script type="math/tex; mode=display">
-P(A|B) = \frac{P(A,B)}{P(B)}</script><p>由贝叶斯公式, 可知:</p>
-<script type="math/tex; mode=display">
-P(B|A) = \frac{P(A|B)P(B)}{P(A)}</script><p>故而, 我们可以反过来构造表示似然性的方法, 即已知有事件 $A$ 发生, 运用似然函数 $L(B|A)$ 估计参数 $B$ 的可能性.前面我们已经提到, 似然函数的重要性在于相对大小而不要求满足归一化条件. 因此我们将一个似然函数乘以一个正的常数后仍然是似然函数. 而对于特定的问题, $\frac{P(B)}{P(A)}$ 为不变的常数, 则:</p>
-<script type="math/tex; mode=display">
-L(b|A) = \alpha P(A|B=b)</script><p>当令 $\alpha=1$ 时, 关于参数 $B$ 的似然函数与给定参数 $B$ 的值后观测 $A$ 的条件概率等价.</p>
-<h2 id="似然函数作为损失函数"><a href="#似然函数作为损失函数" class="headerlink" title="似然函数作为损失函数"></a>似然函数作为损失函数</h2><p>既然似然函数可以用于在已知观测结果时对模型参数进行估值, 那么自然地可以作为机器学习中的损失函数来指导训练过程.</p>
-<p>考虑判别式模型中的场景, 作为损失函数的似然函数接收 $\textbf{label}$ 与 $\textbf{predict}$ 两部分输入. 其中 $\textbf{label}$ 为训练集的标签也就是一次观测时各类别的确切概率值, 如 $[0,…0,1,0…0]$. 而 $\textbf{predict}$ 为模型在给定输入后输出的各类别预测概率分布. 似然函数的目的就是衡量 $\textbf{predict}$ 背后的模型对于观测值,即 $\textbf{label}​$ 的解释程度.</p>
-<p>那么此时结合之前似然函数的讨论, 我们需要最大化似然函数, 即使得基于预测 $\textbf{predict}$ 时产生观测 $\textbf{label}$ 的概率最大. 单个样本时, 我们计算给定 $\textbf{predict}$ 时产生观测 $\textbf{label}$ 的概率如下:</p>
-<script type="math/tex; mode=display">
-P = \prod_{i=1}^{C}predict(i)^{label(i)}\\
-注:其中C为类别数目</script><p>下面我们对整个样本集(符合独立同分布定理)进行计算分析, 可将似然函数等价为条件概率:</p>
-<script type="math/tex; mode=display">
-L = \prod_{j=1}^{m}\prod_{i=1}^{C}predict(i)^{label(i)}\\
-注:其中m为训练集大小</script><p>由于指数以及累乘的存在, 很自然的我们想到对似然函数进行对数运算. 于是得到了所谓的<strong>对数似然函数</strong>. 由于对数的单调特性, 最大化似然函数等价于最大化对数似然函数.</p>
-<script type="math/tex; mode=display">
-L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script><h2 id="对数似然函数与交叉熵"><a href="#对数似然函数与交叉熵" class="headerlink" title="对数似然函数与交叉熵"></a>对数似然函数与交叉熵</h2><p>对数似然函数的形式与<strong>交叉熵</strong>极其相似, 事实上两者只相差了常系数项. 将上式中的对数似然函数除以m并取负数便得到所谓的<strong>负对数似然函数</strong>, 与交叉熵的形式一模一样. 于是原优化问题转化为最小化负对数似然函数, 即交叉熵.</p>
-<p>参考文献:</p>
-<p>[1]维基百科-似然函数</p>
-<p>[2]机器之心-似然函数与交叉熵</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1956,7 +2024,7 @@ L = \sum\limits_{j=1}^{m}\sum\limits_{i=1}^{C}label(i)*log(predict(i))\\</script
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

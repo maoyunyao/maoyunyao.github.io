@@ -79,17 +79,22 @@
 
 
 
-<meta name="description" content="torch.nn我们可以利用 torch.nn 来搭建神经网络, 其中 nn.Mudule 你可以定义一系列网络层以及一个 forward(input) 方法从输入获取神经网络的输出. 神经网络训练流程 定义带有可训练参数 (权重) 的神经网络结构 训练数据输入神经网络前向传播获得输出 利用数据标签和网络输出计算损失函数 执行反向传播算法, 获得损失函数的输出相对于各参数的梯度值 利用梯度值更新网">
+<meta name="description" content="The object detection problemGiven an image, find the objects in it, locate their position and classify them. Trained on a fixed set of classes, so the model would locate and classify only those classe">
 <meta property="og:type" content="article">
-<meta property="og:title" content="神经网络搭建">
-<meta property="og:url" content="https://maoyunyao.github.io/2019/05/17/pytorch_nn/index.html">
+<meta property="og:title" content="检测模型评估之mAP">
+<meta property="og:url" content="https://maoyunyao.github.io/2019/06/04/measure_mAP/index.html">
 <meta property="og:site_name" content="漫卷云舒">
-<meta property="og:description" content="torch.nn我们可以利用 torch.nn 来搭建神经网络, 其中 nn.Mudule 你可以定义一系列网络层以及一个 forward(input) 方法从输入获取神经网络的输出. 神经网络训练流程 定义带有可训练参数 (权重) 的神经网络结构 训练数据输入神经网络前向传播获得输出 利用数据标签和网络输出计算损失函数 执行反向传播算法, 获得损失函数的输出相对于各参数的梯度值 利用梯度值更新网">
+<meta property="og:description" content="The object detection problemGiven an image, find the objects in it, locate their position and classify them. Trained on a fixed set of classes, so the model would locate and classify only those classe">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-17T09:21:18.140Z">
+<meta property="og:image" content="https://maoyunyao.github.io/img/mAP/example.png">
+<meta property="og:image" content="https://maoyunyao.github.io/img/mAP/example_visual.png">
+<meta property="og:image" content="https://maoyunyao.github.io/img/mAP/iou.png">
+<meta property="og:image" content="https://maoyunyao.github.io/img/mAP/cal_iou.png">
+<meta property="og:updated_time" content="2019-06-04T03:24:27.881Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="神经网络搭建">
-<meta name="twitter:description" content="torch.nn我们可以利用 torch.nn 来搭建神经网络, 其中 nn.Mudule 你可以定义一系列网络层以及一个 forward(input) 方法从输入获取神经网络的输出. 神经网络训练流程 定义带有可训练参数 (权重) 的神经网络结构 训练数据输入神经网络前向传播获得输出 利用数据标签和网络输出计算损失函数 执行反向传播算法, 获得损失函数的输出相对于各参数的梯度值 利用梯度值更新网">
+<meta name="twitter:title" content="检测模型评估之mAP">
+<meta name="twitter:description" content="The object detection problemGiven an image, find the objects in it, locate their position and classify them. Trained on a fixed set of classes, so the model would locate and classify only those classe">
+<meta name="twitter:image" content="https://maoyunyao.github.io/img/mAP/example.png">
 
 
 
@@ -119,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="https://maoyunyao.github.io/2019/05/17/pytorch_nn/"/>
+  <link rel="canonical" href="https://maoyunyao.github.io/2019/06/04/measure_mAP/"/>
 
 
 
 
 
-  <title>神经网络搭建 | 漫卷云舒</title>
+  <title>检测模型评估之mAP | 漫卷云舒</title>
   
 
 
@@ -288,7 +293,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/17/pytorch_nn/">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/06/04/measure_mAP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Mr.M">
@@ -305,7 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">神经网络搭建</h1>
+          <h1 class="post-title" itemprop="name headline">检测模型评估之mAP</h1>
         
 
         <div class="post-meta">
@@ -317,8 +322,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-17T12:00:00+08:00">
-                2019-05-17
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-04T12:00:00+08:00">
+                2019-06-04
               </time>
             
 
@@ -340,8 +345,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Pytorch/" itemprop="url" rel="index">
-                    <span itemprop="name">Pytorch</span>
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
                   </a>
                 </span>
 
@@ -377,33 +382,97 @@
       
 
       
-        <h2 id="torch-nn"><a href="#torch-nn" class="headerlink" title="torch.nn"></a>torch.nn</h2><p>我们可以利用 <code>torch.nn</code> 来搭建神经网络, 其中 <code>nn.Mudule</code> 你可以定义一系列网络层以及一个 <code>forward(input)</code> 方法从输入获取神经网络的输出.</p>
-<h4 id="神经网络训练流程"><a href="#神经网络训练流程" class="headerlink" title="神经网络训练流程"></a>神经网络训练流程</h4><ul>
-<li>定义带有可训练参数 (权重) 的神经网络结构</li>
-<li>训练数据输入神经网络前向传播获得输出</li>
-<li>利用数据标签和网络输出计算损失函数</li>
-<li>执行反向传播算法, 获得损失函数的输出相对于各参数的梯度值</li>
-<li>利用梯度值更新网络的权值</li>
+        <h2 id="The-object-detection-problem"><a href="#The-object-detection-problem" class="headerlink" title="The object detection problem"></a>The object detection problem</h2><p>Given an image, find the objects in it, <strong>locate their position</strong> and <strong>classify</strong> them.</p>
+<p>Trained on a <strong>fixed set of classes</strong>, so the model would locate and classify only those classes in the image.</p>
+<p>The location of the object is generally in the form of <strong>a bounding rectangle</strong>.</p>
+<h4 id="Dataset-example"><a href="#Dataset-example" class="headerlink" title="Dataset example:"></a>Dataset example:</h4><ul>
+<li>Actual image</li>
 </ul>
-<h4 id="定义网络"><a href="#定义网络" class="headerlink" title="定义网络"></a>定义网络</h4><p>在模型中只需到定义 <code>forward()</code> 方法, 而 <code>backward()</code> 方法会自动定义. 在 <code>forward()</code> 方法中可以使用任何的对 Tensor 的操作. 下面的代码是 LeNet 的 Pytorch 实现:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Net</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super(Net, self).__init__()</span><br><span class="line">        <span class="comment"># 1 input image channel, 6 output channels, 5x5 square convolution</span></span><br><span class="line">        <span class="comment"># kernel</span></span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">1</span>, <span class="number">6</span>, <span class="number">5</span>)</span><br><span class="line">        self.conv2 = nn.Conv2d(<span class="number">6</span>, <span class="number">16</span>, <span class="number">5</span>)</span><br><span class="line">        <span class="comment"># an affine operation: y = Wx + b</span></span><br><span class="line">        self.fc1 = nn.Linear(<span class="number">16</span> * <span class="number">5</span> * <span class="number">5</span>, <span class="number">120</span>)</span><br><span class="line">        self.fc2 = nn.Linear(<span class="number">120</span>, <span class="number">84</span>)</span><br><span class="line">        self.fc3 = nn.Linear(<span class="number">84</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        <span class="comment"># Max pooling over a (2, 2) window</span></span><br><span class="line">        x = F.max_pool2d(F.relu(self.conv1(x)), (<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">        <span class="comment"># If the size is a square you can only specify a single number</span></span><br><span class="line">        x = F.max_pool2d(F.relu(self.conv2(x)), <span class="number">2</span>)</span><br><span class="line">        x = x.view(<span class="number">-1</span>, self.num_flat_features(x))</span><br><span class="line">        x = F.relu(self.fc1(x))</span><br><span class="line">        x = F.relu(self.fc2(x))</span><br><span class="line">        x = self.fc3(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">num_flat_features</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        size = x.size()[<span class="number">1</span>:]  <span class="comment"># all dimensions except the batch dimension</span></span><br><span class="line">        num_features = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> s <span class="keyword">in</span> size:</span><br><span class="line">            num_features *= s</span><br><span class="line">        <span class="keyword">return</span> num_features</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>net = Net()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(net)</span><br><span class="line">Net(</span><br><span class="line">  (conv1): Conv2d(<span class="number">1</span>, <span class="number">6</span>, kernel_size=(<span class="number">5</span>, <span class="number">5</span>), stride=(<span class="number">1</span>, <span class="number">1</span>))</span><br><span class="line">  (conv2): Conv2d(<span class="number">6</span>, <span class="number">16</span>, kernel_size=(<span class="number">5</span>, <span class="number">5</span>), stride=(<span class="number">1</span>, <span class="number">1</span>))</span><br><span class="line">  (fc1): Linear(in_features=<span class="number">400</span>, out_features=<span class="number">120</span>, bias=<span class="keyword">True</span>)</span><br><span class="line">  (fc2): Linear(in_features=<span class="number">120</span>, out_features=<span class="number">84</span>, bias=<span class="keyword">True</span>)</span><br><span class="line">  (fc3): Linear(in_features=<span class="number">84</span>, out_features=<span class="number">10</span>, bias=<span class="keyword">True</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>模型中可以学习的参数可以由 <code>net.parameters()</code> 返回, 参数是一个个的 Tensor, <code>requires_grad</code> 标志位为 True.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>params = list(net.parameters())</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(len(params))</span><br><span class="line"><span class="number">10</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(params[<span class="number">0</span>].size())  <span class="comment"># conv1's .weight</span></span><br><span class="line">torch.Size([<span class="number">6</span>, <span class="number">1</span>, <span class="number">5</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure>
-<h4 id="前向传播"><a href="#前向传播" class="headerlink" title="前向传播"></a>前向传播</h4><p>我们可以尝试给如上的网络一个随机的输入, 观察他的输出情况. 注意此处的输入 size 为 (1, 1, 32, 32), 这是因为 <code>torch.nn</code> 只支持 <code>mini-batches</code> 的输入. 例如, 对于 <code>nn.Conv2d</code> , 它所要求的输入是一个 4 维的 Tensor, 即: <code>nSamples * nChannels * Height * Width</code>. 故而如果你的输入是单个样本, 可以利用 <code>input.unsqueeze(0)</code> 来添加一个虚拟维度.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>input = torch.randn(<span class="number">1</span>, <span class="number">1</span>, <span class="number">32</span>, <span class="number">32</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>out = net(input)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(out)</span><br><span class="line">tensor([[<span class="number">-0.1258</span>, <span class="number">-0.0585</span>, <span class="number">-0.0102</span>, <span class="number">-0.0407</span>, <span class="number">-0.0695</span>, <span class="number">-0.0808</span>,  <span class="number">0.0731</span>, <span class="number">-0.1482</span>,</span><br><span class="line">          <span class="number">0.0575</span>, <span class="number">-0.0164</span>]], grad_fn=&lt;AddmmBackward&gt;)</span><br></pre></td></tr></table></figure>
-<h4 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h4><p>损失函数使用 <code>(output, target)</code> 对作为输出, 计算出的值用于度量 output 相对于 target 的距离. <code>porch.nn</code> 中定义了许多现成的损失函数. 一个最简单的例子便是均方误差函数 <code>nn.MSELoss</code> .</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">output = net(input)</span><br><span class="line">target = torch.randn(<span class="number">10</span>)		<span class="comment"># a dummy target, for example</span></span><br><span class="line">target = target.view(<span class="number">1</span>, <span class="number">-1</span>)		<span class="comment"># make it the same shape as output</span></span><br><span class="line">criterion = nn.MSELoss()</span><br><span class="line"></span><br><span class="line">loss = criterion(output, target)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(loss)</span><br><span class="line">tensor(<span class="number">0.5244</span>, grad_fn=&lt;MseLossBackward&gt;)</span><br></pre></td></tr></table></figure>
-<h4 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h4><p>由于多次反向传播的梯度值的累加机制, 我们在进行一次反向传播更新权重之前, 我们需要用 <code>zero_grad()</code> 对所有参数的 <code>grad</code> 清零, 然后对 loss 调用 <code>backward()</code> 方法就可以得到当前损失函数的输出关于各可训练参数的梯度了.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>net.zero_grad()</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(net.conv1.bias.grad)</span><br><span class="line">tensor([<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>loss.backward()</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(net.conv1.bias.grad)</span><br><span class="line">tensor([ <span class="number">0.0185</span>,  <span class="number">0.0110</span>,  <span class="number">0.0038</span>,  <span class="number">0.0098</span>, <span class="number">-0.0105</span>, <span class="number">-0.0002</span>])</span><br></pre></td></tr></table></figure>
-<h4 id="更新网络权重"><a href="#更新网络权重" class="headerlink" title="更新网络权重"></a>更新网络权重</h4><p>一个最简单的权重更新方法是随机梯度下降(SGD), 他的策略是 <code>weight = weight - learning_rate * gradient</code> , 我们可以简单实现如下:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">learning_rate = <span class="number">0.01</span></span><br><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> net.parameters():</span><br><span class="line">    f.data.sub_(f.grad.data * learning_rate)</span><br></pre></td></tr></table></figure>
-<p>不过, 作为一个成熟的深度学习框架, Pytorch 应该学会自己更新权重, 故而 <code>torch.optim</code> 实现了许多权重更新的算法供我们使用, 而且使用方法非常简单:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"></span><br><span class="line"><span class="comment"># create your optimizer</span></span><br><span class="line">optimizer = optim.SGD(net.parameters(), lr=<span class="number">0.01</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># in your training loop:</span></span><br><span class="line">optimizer.zero_grad()   <span class="comment"># zero the gradient buffers</span></span><br><span class="line"></span><br><span class="line">output = net(input)</span><br><span class="line">loss = criterion(output, target)</span><br><span class="line">loss.backward()</span><br><span class="line"></span><br><span class="line">optimizer.step()    	<span class="comment"># Does the update</span></span><br></pre></td></tr></table></figure>
-<p>参考文献:</p>
-<p>[1]Pytorch - Docs</p>
-<p>[2]Pytorch - Tutorials: A 60 Minute Blitz</p>
+<p><img src="/img/mAP/example.png" alt=""></p>
+<ul>
+<li>Notation</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Class</th>
+<th style="text-align:center">X coordinate</th>
+<th style="text-align:center">Y coordinate</th>
+<th style="text-align:center">Box Width</th>
+<th style="text-align:center">Box Height</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Dog</td>
+<td style="text-align:center">100</td>
+<td style="text-align:center">600</td>
+<td style="text-align:center">150</td>
+<td style="text-align:center">100</td>
+</tr>
+<tr>
+<td style="text-align:center">Horse</td>
+<td style="text-align:center">700</td>
+<td style="text-align:center">300</td>
+<td style="text-align:center">200</td>
+<td style="text-align:center">250</td>
+</tr>
+<tr>
+<td style="text-align:center">Person</td>
+<td style="text-align:center">400</td>
+<td style="text-align:center">400</td>
+<td style="text-align:center">100</td>
+<td style="text-align:center">500</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>Bounding box with class(only for visualization)</li>
+</ul>
+<p><img src="/img/mAP/example_visual.png" alt=""></p>
+<h2 id="The-Mean-Average-Precision-aka-the-mAP"><a href="#The-Mean-Average-Precision-aka-the-mAP" class="headerlink" title="The Mean Average Precision aka, the mAP"></a>The Mean Average Precision aka, the mAP</h2><p>Every image in an object detection problem could have <strong>different objects of different classes</strong>. So both the classification and localization of a model need to be evaluated. </p>
+<h4 id="IoU"><a href="#IoU" class="headerlink" title="IoU"></a>IoU</h4><p>We first need to know how to judge the correctness of each of those detections. The metric that tells us the correctness of a given bounding box is the <strong>IoU</strong> - <strong>Intersection over Union</strong>. It is a very simple visual quantity.</p>
+<p><img src="/img/mAP/iou.png" alt=""></p>
+<p>The intersection includes the overlap area(the area colored in Cyan), and the union includes the Orange and Cyan regions both.</p>
+<p>The IoU will then be calculated like this</p>
+<p><img src="/img/mAP/cal_iou.png" alt=""></p>
+<h4 id="Identifying-correct-detections-and-calculating-precision-and-recall"><a href="#Identifying-correct-detections-and-calculating-precision-and-recall" class="headerlink" title="Identifying correct detections and calculating precision and recall"></a>Identifying correct detections and calculating <strong>precision</strong> and <strong>recall</strong></h4><p>For calculating <a href="https://tarangshah.com/blog/2018-01-27/what-is-map-understanding-the-statistic-of-choice-for-comparing-object-detection-models/" target="_blank" rel="noopener">Precision and Recall</a>, as with all machine learning problems, we have to identify <strong>True Positives(TP)</strong>, <strong>False Positives(FP)</strong>, <strong>True Negatives(TN)</strong> and <strong>False Negatives(FN)</strong>.</p>
+<p><strong>TP</strong> and <strong>FP</strong> are indentified with IoU and a threshold <strong>in a specific class</strong>.</p>
+<p>If IoU &gt; threshold: True Positive(TP).</p>
+<p>If IoU &lt; threshold: False positive(FP).</p>
+<p>For calculating Recall, we need the count of Negatives. Since every part of the image where we didn’t predict an object is considered a negative, measuring “True” negatives is a bit futile. So we only measure False Negatives(FN) - ie. the objects that our model has missed out.</p>
+<script type="math/tex; mode=display">
+Precision = TP/(TP+FP)\\
+Recall = TP/(TP+FN)</script><h4 id="Calculating-the-Mean-Average-Precision"><a href="#Calculating-the-Mean-Average-Precision" class="headerlink" title="Calculating the Mean Average Precision"></a>Calculating the Mean Average Precision</h4><p>Using the Pascal VOC challenge evaluation metric</p>
+<p>The Mean Average Precision is a term which has different definitions. This metric is commonly used in the domains of Information Retrieval and Object Detection. Both these domains have different ways of calculating mAP. We will talk about the Object Detection relevant mAP today.</p>
+<p>The Object Detection definition of mAP was first formalized in the PASCAL Visual Objects Classes(VOC) challenge, which included various image processing tasks. For the exact paper refer to <a href="http://homepages.inf.ed.ac.uk/ckiw/postscript/ijcv_voc09.pdf" target="_blank" rel="noopener">this.</a> (<a href="https://tarangshah.com/blog/assets/ijcv_voc09.pdf" target="_blank" rel="noopener">backup</a>)</p>
+<p>We use the same approaches for calculation of Precision and Recall as mentioned in the previous section. But, as mentioned, we have at least two other variables which determine the values of Precision and Recall, they are the IOU and the Confidence thresholds.</p>
+<p>The IOU is a simple geometric metric, which we can easily standardize, for example the PASCAL VOC challenge evaluates mAP based on 50% IOU, whereas the COCO Challenge goes a step further and evaluates mAP at various threshold ranging from 5% to 95%. The confidence factor on the other hand varies across models, 50% confidence in my model design might probably be equivalent to an 80% confidence in someone else’s model design, which would vary the precision recall curve shape. Hence the PASCAL VOC organizers came up with a way to account for this variation.</p>
+<p>We now need a metric to evaluate the models in a model agnostic way.</p>
+<p>The paper recommends that we calculate a measure called AP - ie. the Average Precision</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt; For a given task and class, the precision/recall curve is</span><br><span class="line">&gt; computed from a method’s ranked output. Recall is defined</span><br><span class="line">&gt; as the proportion of all positive examples ranked above a</span><br><span class="line">&gt; given rank. Precision is the proportion of all examples above</span><br><span class="line">&gt; that rank which are from the positive class. The AP summarises</span><br><span class="line">&gt; the shape of the precision/recall curve, and is de-</span><br><span class="line">&gt; fined as the mean precision at a set of eleven equally spaced</span><br><span class="line">&gt; recall levels [0,0.1,...,1]:</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<script type="math/tex; mode=display">
+AP = \frac{1}{11} \sum \limits_{r \in\{1, 0.1, 0.2, ... , 1\}}p_{interp}(r)</script><p>This means that we chose 11 different confidence thresholds(which determine the “rank”). The thresholds should be such that the <strong>Recall at those confidence thresholds is 0, 0.1, 0.2, 0.3, … , 0.9 and 1.0</strong>. The AP is now defined as the mean of the <strong>Precision</strong> values at these chosen 11 Recall values. This results in the mAP being an overall view of the whole precision recall curve.</p>
+<p>The paper further gets into detail of calculating the Precision used in the above calculation.</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; The precision at each recall level r is interpolated by taking</span><br><span class="line">&gt; the maximum precision measured for a method for which</span><br><span class="line">&gt; the corresponding recall exceeds r:</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<script type="math/tex; mode=display">
+p_{interp}(r)= \max \limits_{\tilde r:\tilde r \ge r}(r)\\
+where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script><p>Basically we use the maximum precision for a given recall value.</p>
+<p><strong>The mAP hence is the Mean of all the Average Precision values across all your classes as measured above</strong>.</p>
+<p>This is in essence how the Mean Average Precision is calculated for Object Detection evaluation. There might be some variation at times, for example the COCO evaluation is more strict, enforcing various metrics with various IOUs and object sizes(<a href="http://cocodataset.org/#detection-eval" target="_blank" rel="noopener">more details here</a>). If any of you want me to go into details of that, do let me know in the comments.</p>
+<p>Some important points to remember when we compare mAP values</p>
+<ol>
+<li>mAP is always calculated over a dataset.</li>
+<li>Although it is not easy to interpret the absolute quantification of the model output, mAP helps us by bieng a pretty good relative metric. When we calculate this metric over popular public datasets, the metric can be easily used to compare old and new approaches to object detection.</li>
+<li>Depending on how the classes are distributed in the training data, the Average Precision values might vary from very high for some classes(which had good training data) to very low(for classes with less/bad data). So your mAP may be moderate, but your model might be really good for certain classes and really bad for certain classes. Hence it is advisable to have a look at individual class Average Precisions while analysing your model results. These values might also serve as an indicator to add more training samples.</li>
+</ol>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a href="https://tarangshah.com/blog/2018-01-27/what-is-map-understanding-the-statistic-of-choice-for-comparing-object-detection-models/" target="_blank" rel="noopener">Measuring Object Detection models - mAP - What is Mean Average Precision?</a></p>
 
       
     </div>
@@ -428,8 +497,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/15/pytorch_tensor_create/" rel="next" title="张量的创建">
-                <i class="fa fa-chevron-left"></i> 张量的创建
+              <a href="/2019/05/29/paper_GAN/" rel="next" title="Generative Adversarial Nets">
+                <i class="fa fa-chevron-left"></i> Generative Adversarial Nets
               </a>
             
           </div>
@@ -437,10 +506,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/17/pytorch_train_with_gpu/" rel="prev" title="利用GPU训练">
-                利用GPU训练 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -577,7 +642,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#torch-nn"><span class="nav-number">1.</span> <span class="nav-text">torch.nn</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#神经网络训练流程"><span class="nav-number">1.0.1.</span> <span class="nav-text">神经网络训练流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#定义网络"><span class="nav-number">1.0.2.</span> <span class="nav-text">定义网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#前向传播"><span class="nav-number">1.0.3.</span> <span class="nav-text">前向传播</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#损失函数"><span class="nav-number">1.0.4.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#反向传播"><span class="nav-number">1.0.5.</span> <span class="nav-text">反向传播</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更新网络权重"><span class="nav-number">1.0.6.</span> <span class="nav-text">更新网络权重</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-object-detection-problem"><span class="nav-number">1.</span> <span class="nav-text">The object detection problem</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Dataset-example"><span class="nav-number">1.0.1.</span> <span class="nav-text">Dataset example:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Mean-Average-Precision-aka-the-mAP"><span class="nav-number">2.</span> <span class="nav-text">The Mean Average Precision aka, the mAP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IoU"><span class="nav-number">2.0.1.</span> <span class="nav-text">IoU</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Identifying-correct-detections-and-calculating-precision-and-recall"><span class="nav-number">2.0.2.</span> <span class="nav-text">Identifying correct detections and calculating precision and recall</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Calculating-the-Mean-Average-Precision"><span class="nav-number">2.0.3.</span> <span class="nav-text">Calculating the Mean Average Precision</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
@@ -1101,6 +1166,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
