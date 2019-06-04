@@ -90,7 +90,7 @@
 <meta property="og:image" content="https://maoyunyao.github.io/img/mAP/example_visual.png">
 <meta property="og:image" content="https://maoyunyao.github.io/img/mAP/iou.png">
 <meta property="og:image" content="https://maoyunyao.github.io/img/mAP/cal_iou.png">
-<meta property="og:updated_time" content="2019-06-04T03:24:27.881Z">
+<meta property="og:updated_time" content="2019-06-04T03:32:56.407Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="检测模型评估之mAP">
 <meta name="twitter:description" content="The object detection problemGiven an image, find the objects in it, locate their position and classify them. Trained on a fixed set of classes, so the model would locate and classify only those classe">
@@ -469,7 +469,7 @@ where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script>
 <p>Some important points to remember when we compare mAP values</p>
 <ol>
 <li>mAP is always calculated over a dataset.</li>
-<li>Although it is not easy to interpret the absolute quantification of the model output, mAP helps us by bieng a pretty good relative metric. When we calculate this metric over popular public datasets, the metric can be easily used to compare old and new approaches to object detection.</li>
+<li>Although it is not easy to interpret the absolute quantification of the model output, mAP helps us by being a pretty good relative metric. When we calculate this metric over popular public datasets, the metric can be easily used to compare old and new approaches to object detection.</li>
 <li>Depending on how the classes are distributed in the training data, the Average Precision values might vary from very high for some classes(which had good training data) to very low(for classes with less/bad data). So your mAP may be moderate, but your model might be really good for certain classes and really bad for certain classes. Hence it is advisable to have a look at individual class Average Precisions while analysing your model results. These values might also serve as an indicator to add more training samples.</li>
 </ol>
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a href="https://tarangshah.com/blog/2018-01-27/what-is-map-understanding-the-statistic-of-choice-for-comparing-object-detection-models/" target="_blank" rel="noopener">Measuring Object Detection models - mAP - What is Mean Average Precision?</a></p>
