@@ -81,16 +81,16 @@
 
 <meta name="description" content="1.Model analysis  \frac{-y_1}{f}=\frac{x_1}{x_3}\\ \frac{-y_2}{f}=\frac{x_2}{x_3}\\This can be summarized as:  \left[ \begin{array}{ccc} y_1\\ y_2 \end{array}  \right] = -\frac{f}{x_3} \left[ \begin{a">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Pinhole camera model">
+<meta property="og:title" content="Pinhole Camera Model">
 <meta property="og:url" content="https://maoyunyao.github.io/2019/07/01/3DV_PineholeCameraModel/index.html">
 <meta property="og:site_name" content="漫卷云舒">
 <meta property="og:description" content="1.Model analysis  \frac{-y_1}{f}=\frac{x_1}{x_3}\\ \frac{-y_2}{f}=\frac{x_2}{x_3}\\This can be summarized as:  \left[ \begin{array}{ccc} y_1\\ y_2 \end{array}  \right] = -\frac{f}{x_3} \left[ \begin{a">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://maoyunyao.github.io/img/PinholeCameraModel/PinholeCameraModel.png">
 <meta property="og:image" content="https://maoyunyao.github.io/img/PinholeCameraModel/world2camera.png">
-<meta property="og:updated_time" content="2019-07-01T12:01:29.327Z">
+<meta property="og:updated_time" content="2019-07-01T12:07:41.301Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Pinhole camera model">
+<meta name="twitter:title" content="Pinhole Camera Model">
 <meta name="twitter:description" content="1.Model analysis  \frac{-y_1}{f}=\frac{x_1}{x_3}\\ \frac{-y_2}{f}=\frac{x_2}{x_3}\\This can be summarized as:  \left[ \begin{array}{ccc} y_1\\ y_2 \end{array}  \right] = -\frac{f}{x_3} \left[ \begin{a">
 <meta name="twitter:image" content="https://maoyunyao.github.io/img/PinholeCameraModel/PinholeCameraModel.png">
 
@@ -128,7 +128,7 @@
 
 
 
-  <title>Pinhole camera model | 漫卷云舒</title>
+  <title>Pinhole Camera Model | 漫卷云舒</title>
   
 
 
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Pinhole camera model</h1>
+          <h1 class="post-title" itemprop="name headline">Pinhole Camera Model</h1>
         
 
         <div class="post-meta">
@@ -380,7 +380,7 @@
       
 
       
-        <h4 id="1-Model-analysis"><a href="#1-Model-analysis" class="headerlink" title="1.Model analysis"></a>1.Model analysis</h4><p><img src="/img/PinholeCameraModel/PinholeCameraModel.png" alt=""></p>
+        <h2 id="1-Model-analysis"><a href="#1-Model-analysis" class="headerlink" title="1.Model analysis"></a>1.Model analysis</h2><p><img src="/img/PinholeCameraModel/PinholeCameraModel.png" alt=""></p>
 <script type="math/tex; mode=display">
 \frac{-y_1}{f}=\frac{x_1}{x_3}\\
 \frac{-y_2}{f}=\frac{x_2}{x_3}\\</script><p>This can be summarized as:</p>
@@ -408,7 +408,7 @@ y_2
 x_1\\
 x_2
 \end{array} 
-\right]</script><h4 id="2-Camera-matrix"><a href="#2-Camera-matrix" class="headerlink" title="2.Camera matrix"></a>2.Camera matrix</h4><ul>
+\right]</script><h2 id="2-Camera-matrix"><a href="#2-Camera-matrix" class="headerlink" title="2.Camera matrix"></a>2.Camera matrix</h2><ul>
 <li>Homogeneous coordinates for equation above:<script type="math/tex; mode=display">
 \left[ \begin{array}{ccc}
 y_1\\
@@ -446,7 +446,7 @@ f & 0 & 0 & 0\\
 \end{array} 
 \right]</script></li>
 </ul>
-<h4 id="3-Intrinsic-matrix"><a href="#3-Intrinsic-matrix" class="headerlink" title="3.Intrinsic matrix"></a>3.Intrinsic matrix</h4><ul>
+<h2 id="3-Intrinsic-matrix"><a href="#3-Intrinsic-matrix" class="headerlink" title="3.Intrinsic matrix"></a>3.Intrinsic matrix</h2><ul>
 <li><p>Image coordinates to pixel coordinates:</p>
 <script type="math/tex; mode=display">
 u = \frac{x}{dx} + u_0\\
@@ -531,7 +531,7 @@ I =
 \end{array} 
 \right]</script></li>
 </ul>
-<h4 id="4-Extrinsic-matrix"><a href="#4-Extrinsic-matrix" class="headerlink" title="4.Extrinsic matrix"></a>4.Extrinsic matrix</h4><p>Which denote the coordinate system <strong>transformations from 3D world coordinates to 3D camera coordinates</strong>.</p>
+<h2 id="4-Extrinsic-matrix"><a href="#4-Extrinsic-matrix" class="headerlink" title="4.Extrinsic matrix"></a>4.Extrinsic matrix</h2><p>Which denote the coordinate system <strong>transformations from 3D world coordinates to 3D camera coordinates</strong>.</p>
 <p><img src="/img/PinholeCameraModel/world2camera.png" alt=""></p>
 <ul>
 <li><p>Transformation</p>
@@ -906,7 +906,7 @@ z_w\\
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Model-analysis"><span class="nav-number">1.</span> <span class="nav-text">1.Model analysis</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Camera-matrix"><span class="nav-number">2.</span> <span class="nav-text">2.Camera matrix</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Intrinsic-matrix"><span class="nav-number">3.</span> <span class="nav-text">3.Intrinsic matrix</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Extrinsic-matrix"><span class="nav-number">4.</span> <span class="nav-text">4.Extrinsic matrix</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Model-analysis"><span class="nav-number">1.</span> <span class="nav-text">1.Model analysis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Camera-matrix"><span class="nav-number">2.</span> <span class="nav-text">2.Camera matrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Intrinsic-matrix"><span class="nav-number">3.</span> <span class="nav-text">3.Intrinsic matrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Extrinsic-matrix"><span class="nav-number">4.</span> <span class="nav-text">4.Extrinsic matrix</span></a></li></ol></div>
             
 
           </div>
