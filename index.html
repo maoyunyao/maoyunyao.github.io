@@ -285,6 +285,504 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/07/01/3DV_PineholeCameraModel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.M">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="漫卷云舒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/01/3DV_PineholeCameraModel/" itemprop="url">Pinhole camera model</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-01T12:00:00+08:00">
+                2019-07-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/三维视觉/" itemprop="url" rel="index">
+                    <span itemprop="name">三维视觉</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="1-Model-analysis"><a href="#1-Model-analysis" class="headerlink" title="1.Model analysis"></a>1.Model analysis</h4><p><img src="/img/PinholeCameraModel/PinholeCameraModel.png" alt=""></p>
+<script type="math/tex; mode=display">
+\frac{-y_1}{f}=\frac{x_1}{x_3}\\
+\frac{-y_2}{f}=\frac{x_2}{x_3}\\</script><p>This can be summarized as:</p>
+<script type="math/tex; mode=display">
+\left[ \begin{array}{ccc}
+y_1\\
+y_2
+\end{array} 
+\right]
+= -\frac{f}{x_3}
+\left[ \begin{array}{ccc}
+x_1\\
+x_2
+\end{array} 
+\right]</script><p>Which is an expression that describes the relation between the 3D coordinates $(x_1,x_2,x_3)$ of point <strong>P</strong> and its image coordinates $(y_1,y_2)$ given by point <strong>Q</strong> in the image plane. </p>
+<p>Rotate the coordinate system in the image plane 180°, so the negation is removed:</p>
+<script type="math/tex; mode=display">
+\left[ \begin{array}{ccc}
+y_1\\
+y_2
+\end{array} 
+\right]
+= \frac{f}{x_3}
+\left[ \begin{array}{ccc}
+x_1\\
+x_2
+\end{array} 
+\right]</script><h4 id="2-Camera-matrix"><a href="#2-Camera-matrix" class="headerlink" title="2.Camera matrix"></a>2.Camera matrix</h4><ul>
+<li>Homogeneous coordinates for equation above:<script type="math/tex; mode=display">
+\left[ \begin{array}{ccc}
+y_1\\
+y_2\\
+1
+\end{array} 
+\right]
+= \frac{f}{x_3}
+\left[ \begin{array}{ccc}
+x_1\\
+x_2\\
+\frac{x_3}{f}
+\end{array} 
+\right]
+= \frac{1}{x_3}
+\left[ \begin{array}{ccc}
+f & 0 & 0 & 0\\
+0 & f & 0 & 0\\
+0 & 0 & 1 & 0\\
+\end{array} 
+\right]
+\left[ \begin{array}{ccc}
+x_1\\
+x_2\\
+x_3\\
+1
+\end{array} 
+\right]</script>Matrix $C$ is the camera matrix<script type="math/tex; mode=display">
+C
+= 
+\left[ \begin{array}{ccc}
+f & 0 & 0 & 0\\
+0 & f & 0 & 0\\
+0 & 0 & 1 & 0
+\end{array} 
+\right]</script></li>
+</ul>
+<h4 id="3-Intrinsic-matrix"><a href="#3-Intrinsic-matrix" class="headerlink" title="3.Intrinsic matrix"></a>3.Intrinsic matrix</h4><ul>
+<li><p>Image coordinates to pixel coordinates:</p>
+<script type="math/tex; mode=display">
+u = \frac{x}{dx} + u_0\\
+v = \frac{y}{dy} + v_0</script><p>That is:</p>
+<script type="math/tex; mode=display">
+\left[ \begin{array}{ccc}
+u\\
+v\\
+1
+\end{array} 
+\right]
+=
+\left[ \begin{array}{ccc}
+\frac{1}{dx} & 0 & u_0\\
+0 & \frac{1}{dy} & v_0\\
+0 & 0 & 1
+\end{array} 
+\right]
+\left[ \begin{array}{ccc}
+x\\
+y\\
+1
+\end{array} 
+\right]</script><p>Where dx and dy means the width of the pixel.(1 mm per pixel for example)</p>
+</li>
+<li><p>Camera 3D coordinates to pixel coordinates:</p>
+<script type="math/tex; mode=display">
+\left[ \begin{array}{ccc}
+y_1\\
+y_2\\
+1
+\end{array} 
+\right]
+= \frac{1}{x_3}
+\left[ \begin{array}{ccc}
+\frac{1}{dx} & 0 & u_0\\
+0 &\frac{1}{dy} & v_0\\
+0 & 0 & 1
+\end{array} 
+\right]
+\left[ \begin{array}{ccc}
+f & 0 & 0 & 0\\
+0 & f & 0 & 0\\
+0 & 0 & 1 & 0\\
+\end{array} 
+\right]
+\left[ \begin{array}{ccc}
+x_1\\
+x_2\\
+x_3\\
+1
+\end{array} 
+\right]</script></li>
+<li><p>Combination of the two matrix:</p>
+<script type="math/tex; mode=display">
+\left[ \begin{array}{ccc}
+y_1\\
+y_2\\
+1
+\end{array} 
+\right]
+= \frac{1}{x_3}
+\left[ \begin{array}{ccc}
+\frac{f}{dx} & 0 & u_0 & 0\\
+0 & \frac{f}{dy} & v_0 & 0\\
+0 & 0 & 1 & 0\\
+\end{array} 
+\right]
+\left[ \begin{array}{ccc}
+x_1\\
+x_2\\
+x_3\\
+1
+\end{array} 
+\right]</script><p>Matrix $I$ is the intrinsic matrix</p>
+<script type="math/tex; mode=display">
+I =
+\left[ \begin{array}{ccc}
+\frac{f}{dx} & 0 & u_0 & 0\\
+0 & \frac{f}{dy} & v_0 & 0\\
+0 & 0 & 1 & 0\\
+\end{array} 
+\right]</script></li>
+</ul>
+<h4 id="4-Extrinsic-matrix"><a href="#4-Extrinsic-matrix" class="headerlink" title="4.Extrinsic matrix"></a>4.Extrinsic matrix</h4><p>Which denote the coordinate system <strong>transformations from 3D world coordinates to 3D camera coordinates</strong>.</p>
+<p><img src="/img/PinholeCameraModel/world2camera.png" alt=""></p>
+<ul>
+<li><p>Transformation</p>
+<script type="math/tex; mode=display">
+\left[ \begin{array}{ccc}
+x_c\\
+y_c\\
+z_c\\
+1
+\end{array} 
+\right]
+=
+\left[ \begin{array}{ccc}
+\textbf{R} & \textbf{T}\\
+\textbf{0}^T & 1\\
+\end{array} 
+\right]
+
+\left[ \begin{array}{ccc}
+x_w\\
+y_w\\
+z_w\\
+1
+\end{array} 
+\right]</script></li>
+<li><p>R matrix:</p>
+<p>For a point $p$ in world coordinates, we can represent it as:</p>
+<script type="math/tex; mode=display">
+p = x_w \cdot \vec{x} +y_w \cdot \vec{y} +z_w \cdot \vec{z}</script><p>Where $\vec{x},\vec{y}$ and $\vec{z}$ are the unit vector of world coordinates. Now we only consider the rotation transformation between the two coordinates. For unit vectors in camera coordinates, we can represent them in world coordinates as:</p>
+<script type="math/tex; mode=display">
+\vec{u} = r_{11} \cdot \vec{x} + r_{12} \cdot \vec{y} + r_{13} \cdot \vec{z}\\
+\vec{v} = r_{21} \cdot \vec{x} + r_{22} \cdot \vec{y} + r_{23} \cdot \vec{z}\\
+\vec{w} = r_{31} \cdot \vec{x} + r_{32} \cdot \vec{y} + r_{33} \cdot \vec{z}</script><p>Where $\vec{u},\vec{v}$ and $\vec{w}$ are the unit vector of camera coordinates. And also we can rewrite the equation in matrix:</p>
+<script type="math/tex; mode=display">
+\left[ \begin{array}{ccc}
+\vec{u}\\
+\vec{v}\\
+\vec{w}
+\end{array} 
+\right]
+=
+\left[ \begin{array}{ccc}
+r_{11} & r_{12} & r_{13}\\
+r_{21} & r_{22} & r_{23}\\
+r_{31} & r_{32} & r_{23}\\
+\end{array} 
+\right]
+\left[ \begin{array}{ccc}
+\vec{x}\\
+\vec{y}\\
+\vec{z}
+\end{array} 
+\right]</script><p>So the point $p$ can be represented in camera coordinates as:</p>
+<script type="math/tex; mode=display">
+p = x_w \cdot \vec{x} +y_w \cdot \vec{y} +z_w \cdot \vec{z}\\
+= 
+\left[ \begin{array}{ccc}
+x_w & y_w & z_w
+\end{array} 
+\right]
+\left[ \begin{array}{ccc}
+\vec{x}\\
+\vec{y}\\
+\vec{z}
+\end{array} 
+\right]
+=
+\left[ \begin{array}{ccc}
+x_w & y_w & z_w
+\end{array} 
+\right]
+\left[ \begin{array}{ccc}
+r_{11} & r_{12} & r_{13}\\
+r_{21} & r_{22} & r_{23}\\
+r_{31} & r_{32} & r_{23}\\
+\end{array} 
+\right]^{-1}
+\left[ \begin{array}{ccc}
+\vec{u}\\
+\vec{v}\\
+\vec{w}
+\end{array} 
+\right]</script><p>And thus the relationship between $x_c, \, y_c, \, z_c$ and $x_w, \, y_w, \, z_w$ is:</p>
+<script type="math/tex; mode=display">
+p
+= 
+\left[ \begin{array}{ccc}
+x_c & y_c & z_c
+\end{array} 
+\right]
+\left[ \begin{array}{ccc}
+\vec{u}\\
+\vec{v}\\
+\vec{w}
+\end{array} 
+\right]
+=
+\left[ \begin{array}{ccc}
+x_w & y_w & z_w
+\end{array} 
+\right]
+\left[ \begin{array}{ccc}
+r_{11} & r_{12} & r_{13}\\
+r_{21} & r_{22} & r_{23}\\
+r_{31} & r_{32} & r_{23}\\
+\end{array} 
+\right]^{-1}
+\left[ \begin{array}{ccc}
+\vec{u}\\
+\vec{v}\\
+\vec{w}
+\end{array} 
+\right]</script><p>We can get the equation as follows:</p>
+<script type="math/tex; mode=display">
+\left[ \begin{array}{ccc}
+x_c\\
+y_c\\
+z_c
+\end{array} 
+\right]
+
+=
+\Bigg(
+\left[ \begin{array}{ccc}
+r_{11} & r_{12} & r_{13}\\
+r_{21} & r_{22} & r_{23}\\
+r_{31} & r_{32} & r_{33}
+\end{array} 
+\right]^{-1}
+\Bigg)^T
+\left[ \begin{array}{ccc}
+x_w\\
+y_w\\
+z_w
+\end{array} 
+\right]</script><p>Here the R matrix is just what we want:</p>
+<script type="math/tex; mode=display">
+R
+=
+\Bigg(
+\left[ \begin{array}{ccc}
+r_{11} & r_{12} & r_{13}\\
+r_{21} & r_{22} & r_{23}\\
+r_{31} & r_{32} & r_{33}
+\end{array} 
+\right]^{-1}
+\Bigg)^T</script></li>
+<li><p>T matrix:</p>
+<p>Then we can consider the translation. Of course it’s quite simple compared with the rotation situation.</p>
+<p>Assume that the position of the camera hole in the world coordinates is $(t_1, t_2, t_3)$, we have:</p>
+<script type="math/tex; mode=display">
+\left[ \begin{array}{ccc}
+x_c\\
+y_c\\
+z_c
+\end{array} 
+\right]
+
+=
+\left[ \begin{array}{ccc}
+x_w\\
+y_w\\
+z_w
+\end{array} 
+\right]
+-
+\left[ \begin{array}{ccc}
+t_1\\
+t_2\\
+t_3
+\end{array} 
+\right]</script><p>Here the T matrix is just what we want:</p>
+<script type="math/tex; mode=display">
+T =
+\left[ \begin{array}{ccc}
+-t_1\\
+-t_2\\
+-t_3
+\end{array} 
+\right]</script></li>
+<li><p>Combination of rotation and translation:</p>
+<p>In homogeneous coordinates presentation, we can combine these two transformation together as:</p>
+<script type="math/tex; mode=display">
+\left[ \begin{array}{ccc}
+x_c\\
+y_c\\
+z_c\\
+1
+\end{array} 
+\right]
+=
+\left[ \begin{array}{ccc}
+\textbf{R} & \textbf{T}\\
+\textbf{0}^T & 1\\
+\end{array} 
+\right]
+
+\left[ \begin{array}{ccc}
+x_w\\
+y_w\\
+z_w\\
+1
+\end{array} 
+\right]</script></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/06/04/measure_mAP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1665,164 +2163,6 @@ L(\textbf y,\textbf v) = \frac{1}{|D|} \sum_{u\in D} l(\textbf y[u],\textbf v[u]
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/14/pytorch_cuda/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mr.M">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="漫卷云舒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/14/pytorch_cuda/" itemprop="url">CUDA支持</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-14T12:00:00+08:00">
-                2019-05-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Pytorch/" itemprop="url" rel="index">
-                    <span itemprop="name">Pytorch</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="torch-cuda"><a href="#torch-cuda" class="headerlink" title="torch.cuda"></a>torch.cuda</h2><p>Pytorch 提供了 CUDA 的支持, <code>torch.cuda</code> 模块用于设置和运行 CUDA 上的操作, 它会记住所指定的 GPU, 你后续所新建的 CUDA 上的 Tensor 都将被默认在该 GPU 上创建. 当然你也可以用<code>torch.cuda.device</code>修改 CUDA 默认指定的 GPU 或者为 Tensor 单独指定 GPU. 模块不支持跨 GPU 的操作, 除非使用类似拷贝的函数功能将变量转换到同一设备上, 如<code>to()</code>和<code>cuda()</code>等．</p>
-<h4 id="为cuda上的Tensor指定设备"><a href="#为cuda上的Tensor指定设备" class="headerlink" title="　为cuda上的Tensor指定设备"></a>　为cuda上的Tensor指定设备</h4><ul>
-<li>为每个Tensor单独指定/转换到一个设备</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> torch</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cuda = torch.device(<span class="string">'cuda'</span>)		<span class="comment"># 使用cuda默认的设备GPU0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cuda1 = torch.device(<span class="string">'cuda:1'</span>)	<span class="comment"># 指定GPU1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cuda2 = torch.device(<span class="string">'cuda:2'</span>)	<span class="comment"># 指定GPU2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>], device = cuda)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">0</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.device</span><br><span class="line">device(type=<span class="string">'cpu'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = y.cuda(cuda1)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>])</span><br><span class="line">device(type=<span class="string">'cpu'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = z.to(cuda2)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>设置上下文默认设备</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 指定cuda的GPU为GPU1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">with</span> torch.cuda.device(<span class="number">1</span>):</span><br><span class="line"><span class="meta">... </span>	a = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>], device = cuda)</span><br><span class="line"><span class="meta">... </span>	b = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>]).cuda()</span><br><span class="line"><span class="meta">... </span>	c = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>]).to(device = cuda)</span><br><span class="line"><span class="meta">... </span>	d = a + b + c</span><br><span class="line"><span class="meta">... </span>	<span class="comment"># 指定上下文后还是可以为每个tensor单独指定设备</span></span><br><span class="line"><span class="meta">... </span>	s = torch.tensor([<span class="number">1.</span>, <span class="number">2.</span>]).to(device = cuda2)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.device</span><br><span class="line">device(type=<span class="string">'cuda'</span>, index=<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">"Outside device is 0"</span>)		<span class="comment"># On device 0 (default in most scenarios)</span></span><br><span class="line"><span class="keyword">with</span> torch.cuda.device(<span class="number">1</span>):</span><br><span class="line">    print(<span class="string">"Inside device is 1"</span>)		<span class="comment"># On device 1</span></span><br><span class="line">print(<span class="string">"Outside device is still 0"</span>)  <span class="comment"># On device 0</span></span><br></pre></td></tr></table></figure>
-<h4 id="Pytorch中CUDA使用的一个范例"><a href="#Pytorch中CUDA使用的一个范例" class="headerlink" title="Pytorch中CUDA使用的一个范例"></a>Pytorch中CUDA使用的一个范例</h4><p>由参数和主机的 CUDA 是否可用共同决定是使用 CPU 还是 CUDA</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">'PyTorch Example'</span>)</span><br><span class="line">parser.add_argument(<span class="string">'--disable-cuda'</span>, action=<span class="string">'store_true'</span>,</span><br><span class="line">                    help=<span class="string">'Disable CUDA'</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line">args.device = <span class="keyword">None</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> args.disable_cuda <span class="keyword">and</span> torch.cuda.is_available():</span><br><span class="line">    args.device = torch.device(<span class="string">'cuda'</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    args.device = torch.device(<span class="string">'cpu'</span>)</span><br></pre></td></tr></table></figure>
-<p>有了制定了设备后就可以进行 Tensor 或者 model 的部署了</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = torch.empty((<span class="number">8</span>, <span class="number">42</span>), device=args.device)</span><br><span class="line">net = Network().to(device=args.device)</span><br></pre></td></tr></table></figure>
-<p>参考文献:</p>
-<p>[1]Pytorch - Docs</p>
-<p>[2]Pytorch - Tutorials: A 60 Minute Blitz</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/14/pytorch_autograd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2024,7 +2364,7 @@ L(\textbf y,\textbf v) = \frac{1}{|D|} \sum_{u\in D} l(\textbf y[u],\textbf v[u]
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2035,7 +2375,7 @@ L(\textbf y,\textbf v) = \frac{1}{|D|} \sum_{u\in D} l(\textbf y[u],\textbf v[u]
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
