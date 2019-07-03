@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="1.Model analysis  \frac{-y_1}{f}=\frac{x_1}{x_3}\\ \frac{-y_2}{f}=\frac{x_2}{x_3}\\This can be summarized as:  \left[ \begin{array}{ccc} y_1\\ y_2 \end{array}  \right] = -\frac{f}{x_3} \left[ \begin{a">
+<meta name="description" content="Pinhole Camera ModelThe pinhole camera model describes the mathematical relationship between the coordinates of a point in three-dimensional space and its projection onto the image plane of an ideal p">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Pinhole Camera Model">
 <meta property="og:url" content="https://maoyunyao.github.io/2019/07/01/3DV_PineholeCameraModel/index.html">
 <meta property="og:site_name" content="漫卷云舒">
-<meta property="og:description" content="1.Model analysis  \frac{-y_1}{f}=\frac{x_1}{x_3}\\ \frac{-y_2}{f}=\frac{x_2}{x_3}\\This can be summarized as:  \left[ \begin{array}{ccc} y_1\\ y_2 \end{array}  \right] = -\frac{f}{x_3} \left[ \begin{a">
+<meta property="og:description" content="Pinhole Camera ModelThe pinhole camera model describes the mathematical relationship between the coordinates of a point in three-dimensional space and its projection onto the image plane of an ideal p">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://maoyunyao.github.io/img/PinholeCameraModel/PinholeCameraModel.png">
 <meta property="og:image" content="https://maoyunyao.github.io/img/PinholeCameraModel/world2camera.png">
-<meta property="og:updated_time" content="2019-07-01T13:39:38.540Z">
+<meta property="og:updated_time" content="2019-07-03T04:08:10.795Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Pinhole Camera Model">
-<meta name="twitter:description" content="1.Model analysis  \frac{-y_1}{f}=\frac{x_1}{x_3}\\ \frac{-y_2}{f}=\frac{x_2}{x_3}\\This can be summarized as:  \left[ \begin{array}{ccc} y_1\\ y_2 \end{array}  \right] = -\frac{f}{x_3} \left[ \begin{a">
+<meta name="twitter:description" content="Pinhole Camera ModelThe pinhole camera model describes the mathematical relationship between the coordinates of a point in three-dimensional space and its projection onto the image plane of an ideal p">
 <meta name="twitter:image" content="https://maoyunyao.github.io/img/PinholeCameraModel/PinholeCameraModel.png">
 
 
@@ -380,7 +380,8 @@
       
 
       
-        <h2 id="1-Model-analysis"><a href="#1-Model-analysis" class="headerlink" title="1.Model analysis"></a>1.Model analysis</h2><p><img src="/img/PinholeCameraModel/PinholeCameraModel.png" alt=""></p>
+        <h2 id="Pinhole-Camera-Model"><a href="#Pinhole-Camera-Model" class="headerlink" title="Pinhole Camera Model"></a>Pinhole Camera Model</h2><p>The <strong>pinhole camera model</strong> describes the mathematical relationship between the coordinates of a point in three-dimensional space and its projection onto the image plane of an ideal pinhole camera, where the camera aperture is described as a point and no lenses are used to focus light. </p>
+<h4 id="Model-analysis"><a href="#Model-analysis" class="headerlink" title="Model analysis"></a>Model analysis</h4><p><img src="/img/PinholeCameraModel/PinholeCameraModel.png" alt=""></p>
 <script type="math/tex; mode=display">
 \frac{-y_1}{f}=\frac{x_1}{x_3}\\
 \frac{-y_2}{f}=\frac{x_2}{x_3}\\</script><p>This can be summarized as:</p>
@@ -408,8 +409,8 @@ y_2
 x_1\\
 x_2
 \end{array} 
-\right]</script><h2 id="2-Camera-matrix"><a href="#2-Camera-matrix" class="headerlink" title="2.Camera matrix"></a>2.Camera matrix</h2><ul>
-<li>Homogeneous coordinates for equation above:<script type="math/tex; mode=display">
+\right]</script><h4 id="Camera-matrix"><a href="#Camera-matrix" class="headerlink" title="Camera matrix"></a>Camera matrix</h4><ul>
+<li><strong>Homogeneous coordinates for equation above:</strong><script type="math/tex; mode=display">
 \left[ \begin{array}{ccc}
 y_1\\
 y_2\\
@@ -446,8 +447,8 @@ f & 0 & 0 & 0\\
 \end{array} 
 \right]</script></li>
 </ul>
-<h2 id="3-Intrinsic-matrix"><a href="#3-Intrinsic-matrix" class="headerlink" title="3.Intrinsic matrix"></a>3.Intrinsic matrix</h2><ul>
-<li><p>Image coordinates to pixel coordinates:</p>
+<h4 id="Intrinsic-matrix"><a href="#Intrinsic-matrix" class="headerlink" title="Intrinsic matrix"></a>Intrinsic matrix</h4><ul>
+<li><p><strong>Image coordinates to pixel coordinates:</strong></p>
 <script type="math/tex; mode=display">
 u = \frac{x}{dx} + u_0\\
 v = \frac{y}{dy} + v_0</script><p>That is:</p>
@@ -472,7 +473,7 @@ y\\
 \end{array} 
 \right]</script><p>Where dx and dy means the width of the pixel.(1 mm per pixel for example)</p>
 </li>
-<li><p>Camera 3D coordinates to pixel coordinates:</p>
+<li><p><strong>Camera 3D coordinates to pixel coordinates:</strong></p>
 <script type="math/tex; mode=display">
 \left[ \begin{array}{ccc}
 y_1\\
@@ -500,7 +501,7 @@ x_3\\
 1
 \end{array} 
 \right]</script></li>
-<li><p>Combination of the two matrix:</p>
+<li><p><strong>Combination of the two matrix:</strong></p>
 <script type="math/tex; mode=display">
 \left[ \begin{array}{ccc}
 y_1\\
@@ -531,10 +532,10 @@ I =
 \end{array} 
 \right]</script></li>
 </ul>
-<h2 id="4-Extrinsic-matrix"><a href="#4-Extrinsic-matrix" class="headerlink" title="4.Extrinsic matrix"></a>4.Extrinsic matrix</h2><p>Which denote the coordinate system <strong>transformations from 3D world coordinates to 3D camera coordinates</strong>.</p>
+<h4 id="Extrinsic-matrix"><a href="#Extrinsic-matrix" class="headerlink" title="Extrinsic matrix"></a>Extrinsic matrix</h4><p>Which denote the coordinate system <strong>transformations from 3D world coordinates to 3D camera coordinates</strong>.</p>
 <p><img src="/img/PinholeCameraModel/world2camera.png" alt=""></p>
 <ul>
-<li><p>Transformation</p>
+<li><p><strong>Transformation:</strong></p>
 <script type="math/tex; mode=display">
 \left[ \begin{array}{ccc}
 x_c\\
@@ -557,7 +558,7 @@ z_w\\
 1
 \end{array} 
 \right]</script></li>
-<li><p>R matrix:</p>
+<li><p><strong>R matrix:</strong></p>
 <p>For a point $p$ in world coordinates, we can represent it as:</p>
 <script type="math/tex; mode=display">
 p = x_w \cdot \vec{x} +y_w \cdot \vec{y} +z_w \cdot \vec{z}</script><p>Where $\vec{x},\vec{y}$ and $\vec{z}$ are the unit vector of world coordinates. Now we only consider the rotation transformation between the two coordinates. For unit vectors in camera coordinates, we can represent them in world coordinates as:</p>
@@ -679,7 +680,7 @@ r_{31} & r_{32} & r_{33}
 \end{array} 
 \right]^{-1}
 \Bigg)^T</script></li>
-<li><p>T matrix:</p>
+<li><p><strong>T matrix:</strong></p>
 <p>Then we can consider the translation. Of course it’s quite simple compared with the rotation situation.</p>
 <p>Assume that the position of the camera hole in the world coordinates is $(t_1, t_2, t_3)$, we have:</p>
 <script type="math/tex; mode=display">
@@ -712,7 +713,7 @@ T =
 -t_3
 \end{array} 
 \right]</script></li>
-<li><p>Combination of rotation and translation:</p>
+<li><p><strong>Combination of rotation and translation:</strong></p>
 <p>In homogeneous coordinates presentation, we can combine these two transformation together as:</p>
 <script type="math/tex; mode=display">
 \left[ \begin{array}{ccc}
@@ -772,6 +773,10 @@ z_w\\
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/03/algorithm_ransac/" rel="prev" title="RANSAC">
+                RANSAC <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -852,7 +857,7 @@ z_w\\
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -908,7 +913,7 @@ z_w\\
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Model-analysis"><span class="nav-number">1.</span> <span class="nav-text">1.Model analysis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Camera-matrix"><span class="nav-number">2.</span> <span class="nav-text">2.Camera matrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Intrinsic-matrix"><span class="nav-number">3.</span> <span class="nav-text">3.Intrinsic matrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Extrinsic-matrix"><span class="nav-number">4.</span> <span class="nav-text">4.Extrinsic matrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Pinhole-Camera-Model"><span class="nav-number">1.</span> <span class="nav-text">Pinhole Camera Model</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Model-analysis"><span class="nav-number">1.0.1.</span> <span class="nav-text">Model analysis</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Camera-matrix"><span class="nav-number">1.0.2.</span> <span class="nav-text">Camera matrix</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Intrinsic-matrix"><span class="nav-number">1.0.3.</span> <span class="nav-text">Intrinsic matrix</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Extrinsic-matrix"><span class="nav-number">1.0.4.</span> <span class="nav-text">Extrinsic matrix</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
