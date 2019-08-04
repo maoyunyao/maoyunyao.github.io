@@ -285,6 +285,343 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/08/04/algorithm_hungarian/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.M">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="漫卷云舒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/04/algorithm_hungarian/" itemprop="url">Hungarian Algorithm</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-04T12:00:00+10:00">
+                2019-08-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Hungarian-Algorithm"><a href="#Hungarian-Algorithm" class="headerlink" title="Hungarian Algorithm"></a>Hungarian Algorithm</h2><h4 id="Brief-introduction"><a href="#Brief-introduction" class="headerlink" title="Brief introduction:"></a>Brief introduction:</h4><p>A combinatorial optimization algorithm that solves the assignment problem in polynomial time.</p>
+<p>It was developed and published in 1955 by <a href="https://en.wikipedia.org/wiki/Harold_Kuhn" target="_blank" rel="noopener">Harold Kuhn</a>, who gave the name “Hungarian method” because the algorithm was largely based on the earlier works of two <a href="https://en.wikipedia.org/wiki/Hungary" target="_blank" rel="noopener">Hungarian</a> mathematicians: <a href="https://en.wikipedia.org/wiki/D%C3%A9nes_K%C5%91nig" target="_blank" rel="noopener">Dénes Kőnig</a> and <a href="https://en.wikipedia.org/wiki/Jen%C5%91_Egerv%C3%A1ry" target="_blank" rel="noopener">Jenő Egerváry</a>.</p>
+<p>There are two ways to formulate the problem: as a matrix or as a bipartite graph.</p>
+<h4 id="Matrix-Formulation"><a href="#Matrix-Formulation" class="headerlink" title="Matrix Formulation:"></a>Matrix Formulation:</h4><p>In the matrix formulation, we are given a nonnegative <em>n×n</em> matrix, where the element in the <em>i</em>-th row and <em>j</em>-th column represents the cost of assigning the <em>j</em>-th job to the <em>i</em>-th worker. We have to find an assignment of the jobs to the workers, such that each job is assigned to one worker and each worker is assigned one job, such that the total cost of assignment is minimum.</p>
+<h4 id="Bigraph-Formulation"><a href="#Bigraph-Formulation" class="headerlink" title="Bigraph Formulation:"></a>Bigraph Formulation:</h4><p>In the matrix formulation, we have a complete bipartite graph $G=(S,T;E)​$ with <em>n</em> worker vertices ($S​$) and <em>n</em> job vertices ($T​$), and each edge has a nonnegative cost $c(i,j)​$. We want to find a perfect matching with a minimum total cost.</p>
+<h4 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm:"></a>Algorithm:</h4><p>Here we describe the algorithm in terms of matrix graphs.</p>
+<p><strong>Theorem:</strong> If a number is added to or subtracted from all of the entries of any one row or column of a cost matrix, then on optimal assignment for the resulting cost matrix is also an optimal assignment for the original cost matrix.</p>
+<p>The following algorithm applies the above theorem to a given n × n cost matrix to find an optimal assignment:</p>
+<p><strong>Step 1.</strong> Subtract the smallest entry in each row from all the entries of its row.</p>
+<p><strong>Step 2.</strong> Subtract the smallest entry in each column from all the entries of its column.</p>
+<p><strong>Step 3.</strong> Draw lines through appropriate rows and columns so that all the zero entries of the cost matrix are covered and the minimum number of such lines is used.</p>
+<p><strong>Step 4.</strong> Test for Optimality:</p>
+<ul>
+<li>If the minimum number of covering lines is n, an optimal assignment of zeros is possible and we are finished.</li>
+<li>If the minimum number of covering lines is less than n, an optimal assignment of zeros is not yet possible. In that case, proceed to <strong>Step 5.</strong></li>
+</ul>
+<p><strong>Step 5.</strong> Determine the smallest entry not covered by any line. Subtract this entry from each uncovered row, and then add it to each covered column. Return to <strong>Step 3.</strong></p>
+<h4 id="An-example"><a href="#An-example" class="headerlink" title="An example:"></a>An example:</h4><p><strong>Problem:</strong></p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+   90 & 75 & 75 & 80\\
+   35 & 85 & 55 & 65 \\
+   125 & 95 & 90 & 105 \\
+   45 & 110 & 95 & 115
+  \end{matrix}
+  \right]</script><p><strong>Step 1:</strong> Subtract 75 from Row 1, 35 from Row 2, 90 from Row 3, and 45 from Row 4.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+   90 & 75 & 75 & 80\\
+   35 & 85 & 55 & 65 \\
+   125 & 95 & 90 & 105 \\
+   45 & 110 & 95 & 115
+  \end{matrix}
+  \right]
+  \to
+\left[
+ \begin{matrix}
+    15 & 0 & 0 & 5 \\
+    0 & 50 & 20 & 30 \\
+    35 & 5 & 0 & 15 \\
+    0 & 65 & 50 & 70 \\
+  \end{matrix}
+  \right]</script><p><strong>Step 2:</strong> Subtract 0 from Column 1, 0 from Column 2, 0 from Column 3, and 5 from Column 4.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    15 & 0 & 0 & 5 \\
+    0 & 50 & 20 & 30 \\
+    35 & 5 & 0 & 15 \\
+    0 & 65 & 50 & 70 \\
+  \end{matrix}
+  \right]
+  \to
+  \left[
+ \begin{matrix}
+    15 & 0 & 0 & 0 \\
+    0 & 50 & 20 & 25 \\
+    35 & 5 & 0 & 10 \\
+    0 & 65 & 50 & 65 \\
+  \end{matrix}
+  \right]</script><p><strong>Step 3:</strong> Cover all the zeros of the matrix with the minimum number of horizontal or vertical lines.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    15 & 0 & 0 & 0 \\
+    0 & 50 & 20 & 25 \\
+    35 & 5 & 0 & 10 \\
+    0 & 65 & 50 & 65 \\
+  \end{matrix}
+  \right]
+  \to
+  \left[
+ \begin{matrix}
+    \color{red}{15} & \color{red}0 & \color{red}0 & \color{red}0 \\
+    \color{red}0 & 50 & \color{red}{20} & 25 \\
+    \color{red}{35} & 5 & \color{red}0 & 10 \\
+    \color{red}0 & 65 & \color{red}{50} & 65 \\
+  \end{matrix}
+  \right]</script><p><strong>Step 4:</strong> Since the minimal number of lines is less than 4, we have to proceed to Step 5.</p>
+<p><strong>Step 5:</strong> Note that 5 is the smallest entry not covered by any line. Subtract 5 from each uncovered row.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    15 & 0 & 0 & 0 \\
+    0 & 50 & 20 & 25 \\
+    35 & 5 & 0 & 10 \\
+    0 & 65 & 50 & 65 \\
+  \end{matrix}
+  \right]
+  \to
+\left[
+ \begin{matrix}
+    15 & 0 & 0 & 0 \\
+    -5 & 45 & 15 & 20 \\
+    30 & 0 & -5 & 5 \\
+    -5 & 60 & 45 & 60 \\
+  \end{matrix}
+  \right]</script><p>Now add 5 to each covered column:</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    15 & 0 & 0 & 0 \\
+    -5 & 45 & 15 & 20 \\
+    30 & 0 & -5 & 5 \\
+    -5 & 60 & 45 & 60 \\
+  \end{matrix}
+  \right]
+  \to
+\left[
+ \begin{matrix}
+    20 & 0 & 5 & 0 \\
+    0 & 45 & 20 & 20 \\
+    35 & 0 & 0 & 5 \\
+    0 & 60 & 50 & 60 \\
+  \end{matrix}
+  \right]</script><p>Now return to Step 3.</p>
+<p><strong>Step 3:</strong> Cover all the zeros of the matrix with the minimum number of horizontal or vertical lines.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    20 & 0 & 5 & 0 \\
+    0 & 45 & 20 & 20 \\
+    35 & 0 & 0 & 5 \\
+    0 & 60 & 50 & 60 \\
+  \end{matrix}
+  \right]
+  \to
+  \left[
+ \begin{matrix}
+    \color{red}{20} & \color{red}0 & \color{red}5 & \color{red}0 \\
+    \color{red}0 & 45 & 20 & 20 \\
+    \color{red}{35} & \color{red}0 & \color{red}0 & \color{red}5 \\
+    \color{red}0 & 60 & 50 & 60 \\
+  \end{matrix}
+  \right]</script><p><strong>Step 4:</strong> Since the minimal number of lines is still less than 4, we have to return to Step 5.</p>
+<p><strong>Step 5:</strong> Note that 20 is the smallest entry not covered by a line. Subtract 20 from each uncovered row.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    20 & 0 & 5 & 0 \\
+    0 & 45 & 20 & 20 \\
+    35 & 0 & 0 & 5 \\
+    0 & 60 & 50 & 60 \\
+  \end{matrix}
+  \right]
+  \to
+  \left[
+ \begin{matrix}
+    20 & 0 & 5 & 0 \\
+    -20 & 25 & 0 & 0 \\
+    35 & 0 & 0 & 5 \\
+    -20 & 40 & 30 & 40 \\
+  \end{matrix}
+  \right]</script><p>Then add 20 to each covered column.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    20 & 0 & 5 & 0 \\
+    -20 & 25 & 0 & 0 \\
+    35 & 0 & 0 & 5 \\
+    -20 & 40 & 30 & 40 \\
+  \end{matrix}
+  \right]
+  \to
+    \left[
+ \begin{matrix}
+    40 & 0 & 5 & 0 \\
+    0 & 25 & 0 & 0 \\
+    55 & 0 & 0 & 5 \\
+    0 & 40 & 30 & 40 \\
+  \end{matrix}
+  \right]</script><p>Now return to Step 3.</p>
+<p><strong>Step 3:</strong> Cover all the zeros of the matrix with the minimum number of horizontal or vertical lines.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    \color{red}{40} & \color{red}0 & \color{red}5 & \color{red}0 \\
+    \color{red}0 & \color{red}{25} & \color{red}0 & \color{red}0 \\
+    \color{red}{55} & \color{red}0 & \color{red}0 & \color{red}5 \\
+    \color{red}0 & \color{red}{40} & \color{red}{30} & \color{red}{40} \\
+  \end{matrix}
+  \right]</script><p><strong>Step 4:</strong> Since the minimal number of lines is 4, an optimal assignment of zeros is possible and we are finished.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    40 & 0 & 5 & \boxed0 \\
+    0 & 25 & \boxed0 & 0 \\
+    55 & \boxed0 & 0 & 5 \\
+    \boxed0 & 40 & 30 & 40 \\
+  \end{matrix}
+  \right]</script><p>Since the total cost for this assignment is 0, it must be an optimal assignment.</p>
+<p>Here is the same assignment made to the original cost matrix.</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] Hungarian algorithm, Wikipedia</p>
+<p>[2] The Assignment Problem and the Hungarian Method, Bruff, Derek,</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/07/03/algorithm_ransac/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2162,166 +2499,6 @@ L(\textbf y,\textbf v) = \frac{1}{|D|} \sum_{u\in D} l(\textbf y[u],\textbf v[u]
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/14/pytorch_autograd/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mr.M">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="漫卷云舒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/14/pytorch_autograd/" itemprop="url">自动求导机制</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-14T12:00:00+10:00">
-                2019-05-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Pytorch/" itemprop="url" rel="index">
-                    <span itemprop="name">Pytorch</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="自动求导"><a href="#自动求导" class="headerlink" title="自动求导"></a>自动求导</h2><h4 id="requires-grad-标志位"><a href="#requires-grad-标志位" class="headerlink" title="requires_grad 标志位"></a><code>requires_grad</code> 标志位</h4><p>Pytorch 允许我们利用每个 Tensor 的 <code>requires_grad</code> 标志位来在计算图中排除一些不需要进行梯度计算的子图.</p>
-<p>一个操作的输入中只要有一个Tensor的 <code>requires_grad</code> 为True, 则该操作的输出的 <code>requires_grad</code> 为True.相反只有输入中所有的Tensor的 <code>requires_grad</code> 为False时该操作的输出的 <code>requires_grad</code> 才为False.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.randn(<span class="number">5</span>, <span class="number">5</span>) <span class="comment"># requires_grad = False by default</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.randn(<span class="number">5</span>, <span class="number">5</span>) <span class="comment"># requires_grad = False by default</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = torch.randn((<span class="number">5</span>, <span class="number">5</span>), requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = x + y</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.requires_grad</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a + z</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.requires_grad</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<p>在 <code>model</code> 中我们可以通过如下的操作改变其参数的 <code>requires_grad</code> 标志位以实现特定的需求, 如通过设置标志位为False来进行参数微调、跑测试集等.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">model = torchvision.models.resnet18(pretrained = <span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">for</span> param <span class="keyword">in</span> model.parameters():</span><br><span class="line">    param.requires_grad = <span class="keyword">False</span>;</span><br></pre></td></tr></table></figure>
-<p>当然我们也可以用如下的方法禁用梯度计算</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> torch</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.randn((<span class="number">5</span>, <span class="number">5</span>), requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">with</span> torch.no_grad():</span><br><span class="line"><span class="meta">... </span>	y = x + <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.requires_grad</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
-<h4 id="反向传播求导"><a href="#反向传播求导" class="headerlink" title="反向传播求导"></a>反向传播求导</h4><p>如果你想要求输出 Tensor 关于各参数的偏导数, 可对输出的 Tensor 调用 <code>backward()</code> 方法 . 如果输出的 Tensor 是一个标量, 则无需对 <code>backward()</code> 指定任何参数. 而如果输出的 Tensor 不是一个标量, 则需为该方法指定一个参数, 该参数为一个 Tensor, 其形状与输出的 Tensor 相同, 其值作为计算梯度时输出 Tensor 各元素乘上的系数.</p>
-<p>输出为标量的例子:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.ones(<span class="number">2</span>, <span class="number">2</span>, requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = x + <span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = y * y * <span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>out = z.mean()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>out</span><br><span class="line">tensor(<span class="number">27.</span>, grad_fn=&lt;MeanBackward0&gt;)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>out.backward()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad	<span class="comment">#输出为out对x各元素的偏导数</span></span><br><span class="line">tensor([[<span class="number">4.5000</span>, <span class="number">4.5000</span>],</span><br><span class="line">        [<span class="number">4.5000</span>, <span class="number">4.5000</span>]])</span><br></pre></td></tr></table></figure>
-<p>输出为向量的例子:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.tensor([[<span class="number">1.</span>, <span class="number">1.</span>], [<span class="number">2.</span>, <span class="number">2.</span>]], requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.tensor([[<span class="number">3.</span>, <span class="number">3.</span>], [<span class="number">4.</span>, <span class="number">4.</span>]], requires_grad = <span class="keyword">True</span>) </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = x.mm(y)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z.backward(torch.ones(<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad</span><br><span class="line">tensor([[<span class="number">6.</span>, <span class="number">8.</span>],</span><br><span class="line">        [<span class="number">6.</span>, <span class="number">8.</span>]])</span><br></pre></td></tr></table></figure>
-<p>可以发现当输出不是标量时, 如果传给 <code>backward()</code> 的参数为一个全一的 Tensor (正如我们上面所做), 则反向传播求得的对输入的梯度值是输出 Tensor 中各个元素对输入的梯度的累加值. 若想单独得到输出 Tensor 的某一个元素对输入的梯度值, 则可以通过给 <code>backward()</code> 提供特定的参数实现, 比如下面的例子就展示了矩阵乘法情况下输出Tensor z 的左上角元素对输入的梯度求解过程.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.tensor([[<span class="number">1.</span>, <span class="number">1.</span>], [<span class="number">2.</span>, <span class="number">2.</span>]], requires_grad = <span class="keyword">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = torch.tensor([[<span class="number">3.</span>, <span class="number">3.</span>], [<span class="number">4.</span>, <span class="number">4.</span>]], requires_grad = <span class="keyword">True</span>) </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = x.mm(y)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = torch.tensor([[<span class="number">1.</span>, <span class="number">0.</span>], [<span class="number">0.</span>, <span class="number">0.</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>z.backward(a)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad</span><br><span class="line">tensor([[<span class="number">3.</span>, <span class="number">4.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>]])</span><br></pre></td></tr></table></figure>
-<p>如果调用 <code>backward()</code> 方法时没有设置参数 <code>retain_graph</code> = True, 则在完成一次 <code>backward()</code> 后计算图会被释放, 无法进行第二次反向传播. 设置 <code>retain_graph</code> = True 的作用是保持计算图不释放, 每次反向传播的梯度累加. 而若需要将 Tensor 的梯度清零, 则可调用 <code>zero_()</code> 函数:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad</span><br><span class="line">tensor([[<span class="number">6.</span>, <span class="number">8.</span>],</span><br><span class="line">        [<span class="number">6.</span>, <span class="number">8.</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad.zero_()</span><br><span class="line">tensor([[<span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.grad</span><br><span class="line">tensor([[<span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">0.</span>, <span class="number">0.</span>]])</span><br></pre></td></tr></table></figure>
-<p>参考文献:</p>
-<p>[1]Pytorch - Docs</p>
-<p>[2]Pytorch - Tutorials: A 60 Minute Blitz</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2376,7 +2553,7 @@ L(\textbf y,\textbf v) = \frac{1}{|D|} \sum_{u\in D} l(\textbf y[u],\textbf v[u]
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

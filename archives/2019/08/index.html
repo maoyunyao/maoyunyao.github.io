@@ -79,22 +79,13 @@
 
 
 
-<meta name="description" content="The object detection problemGiven an image, find the objects in it, locate their position and classify them. Trained on a fixed set of classes, so the model would locate and classify only those classe">
-<meta property="og:type" content="article">
-<meta property="og:title" content="检测模型评估之mAP">
-<meta property="og:url" content="https://maoyunyao.github.io/2019/06/04/measure_mAP/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="漫卷云舒">
+<meta property="og:url" content="https://maoyunyao.github.io/archives/2019/08/index.html">
 <meta property="og:site_name" content="漫卷云舒">
-<meta property="og:description" content="The object detection problemGiven an image, find the objects in it, locate their position and classify them. Trained on a fixed set of classes, so the model would locate and classify only those classe">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://maoyunyao.github.io/img/mAP/example.png">
-<meta property="og:image" content="https://maoyunyao.github.io/img/mAP/example_visual.png">
-<meta property="og:image" content="https://maoyunyao.github.io/img/mAP/iou.png">
-<meta property="og:image" content="https://maoyunyao.github.io/img/mAP/cal_iou.png">
-<meta property="og:updated_time" content="2019-06-04T07:51:53.404Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="检测模型评估之mAP">
-<meta name="twitter:description" content="The object detection problemGiven an image, find the objects in it, locate their position and classify them. Trained on a fixed set of classes, so the model would locate and classify only those classe">
-<meta name="twitter:image" content="https://maoyunyao.github.io/img/mAP/example.png">
+<meta name="twitter:title" content="漫卷云舒">
 
 
 
@@ -124,13 +115,13 @@
 
 
 
-  <link rel="canonical" href="https://maoyunyao.github.io/2019/06/04/measure_mAP/"/>
+  <link rel="canonical" href="https://maoyunyao.github.io/archives/2019/08/"/>
 
 
 
 
 
-  <title>检测模型评估之mAP | 漫卷云舒</title>
+  <title>Archive | 漫卷云舒</title>
   
 
 
@@ -149,7 +140,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left page-archive">
     <div class="headband"></div>
   <!--Fork me on github-->
   <a href="https://github.com/maoyunyao" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
@@ -279,257 +270,74 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block archive">
+    <div id="posts" class="posts-collapse">
+      <span class="archive-move-on"></span>
 
-  
+      <span class="archive-page-counter">
+        
+        
+        
+          
+        
+        Um..! 18 posts in total. Keep on posting.
+      </span>
 
-  
-  
-  
+      
+
+        
+        
+        
+
+        
+          
+          <div class="collection-title">
+            <h1 class="archive-year" id="archive-year-2019">2019</h1>
+          </div>
+        
+        
+
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/06/04/measure_mAP/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mr.M">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="漫卷云舒">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
+            <a class="post-title-link" href="/2019/08/04/algorithm_hungarian/" itemprop="url">
+              
+                <span itemprop="name">Hungarian Algorithm</span>
+              
+            </a>
         
-          <h1 class="post-title" itemprop="name headline">检测模型评估之mAP</h1>
-        
+      </h2>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-04T12:00:00+10:00">
-                2019-06-04
-              </time>
-            
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2019-08-04T12:00:00+10:00"
+              content="2019-08-04" >
+          08-04
+        </time>
+      </div>
 
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h2 id="The-object-detection-problem"><a href="#The-object-detection-problem" class="headerlink" title="The object detection problem"></a>The object detection problem</h2><p>Given an image, find the objects in it, <strong>locate their position</strong> and <strong>classify</strong> them.</p>
-<p>Trained on a <strong>fixed set of classes</strong>, so the model would locate and classify only those classes in the image.</p>
-<p>The location of the object is generally in the form of <strong>a bounding rectangle</strong>.</p>
-<h4 id="Dataset-example"><a href="#Dataset-example" class="headerlink" title="Dataset example:"></a>Dataset example:</h4><ul>
-<li>Actual image</li>
-</ul>
-<p><img src="/img/mAP/example.png" alt=""></p>
-<ul>
-<li>Notation</li>
-</ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">Class</th>
-<th style="text-align:center">X coordinate</th>
-<th style="text-align:center">Y coordinate</th>
-<th style="text-align:center">Box Width</th>
-<th style="text-align:center">Box Height</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">Dog</td>
-<td style="text-align:center">100</td>
-<td style="text-align:center">600</td>
-<td style="text-align:center">150</td>
-<td style="text-align:center">100</td>
-</tr>
-<tr>
-<td style="text-align:center">Horse</td>
-<td style="text-align:center">700</td>
-<td style="text-align:center">300</td>
-<td style="text-align:center">200</td>
-<td style="text-align:center">250</td>
-</tr>
-<tr>
-<td style="text-align:center">Person</td>
-<td style="text-align:center">400</td>
-<td style="text-align:center">400</td>
-<td style="text-align:center">100</td>
-<td style="text-align:center">500</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ul>
-<li>Bounding box with class(only for visualization)</li>
-</ul>
-<p><img src="/img/mAP/example_visual.png" alt=""></p>
-<h2 id="The-Mean-Average-Precision-aka-the-mAP"><a href="#The-Mean-Average-Precision-aka-the-mAP" class="headerlink" title="The Mean Average Precision aka, the mAP"></a>The Mean Average Precision aka, the mAP</h2><p>Every image in an object detection problem could have <strong>different objects of different classes</strong>. So both the classification and localization of a model need to be evaluated. </p>
-<h4 id="IoU"><a href="#IoU" class="headerlink" title="IoU"></a>IoU</h4><p>We first need to know how to judge the correctness of each of those detections. The metric that tells us the correctness of a given bounding box is the <strong>IoU</strong> - <strong>Intersection over Union</strong>. It is a very simple visual quantity.</p>
-<p><img src="/img/mAP/iou.png" alt=""></p>
-<p>The intersection includes the overlap area(the area colored in Cyan), and the union includes the Orange and Cyan regions both.</p>
-<p>The IoU will then be calculated like this</p>
-<p><img src="/img/mAP/cal_iou.png" alt=""></p>
-<h4 id="Identifying-correct-detections-and-calculating-precision-and-recall"><a href="#Identifying-correct-detections-and-calculating-precision-and-recall" class="headerlink" title="Identifying correct detections and calculating precision and recall"></a>Identifying correct detections and calculating <strong>precision</strong> and <strong>recall</strong></h4><p>For calculating <a href="https://tarangshah.com/blog/2018-01-27/what-is-map-understanding-the-statistic-of-choice-for-comparing-object-detection-models/" target="_blank" rel="noopener">Precision and Recall</a>, as with all machine learning problems, we have to identify <strong>True Positives(TP)</strong>, <strong>False Positives(FP)</strong>, <strong>True Negatives(TN)</strong> and <strong>False Negatives(FN)</strong>.</p>
-<p><strong>TP</strong> and <strong>FP</strong> are indentified with IoU and a threshold <strong>in a specific class</strong>.</p>
-<p>If IoU &gt; threshold: True Positive(TP).</p>
-<p>If IoU &lt; threshold: False positive(FP).</p>
-<p>For calculating Recall, we need the count of Negatives. Since every part of the image where we didn’t predict an object is considered a negative, measuring “True” negatives is a bit futile. So we only measure False Negatives(FN) - ie. the objects that our model has missed out.</p>
-<script type="math/tex; mode=display">
-Precision = \frac{TP}{(TP+FP)}\\
-Recall = \frac{TP}{(TP+FN)}</script><h4 id="Calculating-the-Mean-Average-Precision"><a href="#Calculating-the-Mean-Average-Precision" class="headerlink" title="Calculating the Mean Average Precision"></a>Calculating the Mean Average Precision</h4><p>Using the Pascal VOC challenge evaluation metric</p>
-<p>The Mean Average Precision is a term which has different definitions. This metric is commonly used in the domains of Information Retrieval and Object Detection. Both these domains have different ways of calculating mAP. We will talk about the Object Detection relevant mAP today.</p>
-<p>The Object Detection definition of mAP was first formalized in the PASCAL Visual Objects Classes(VOC) challenge, which included various image processing tasks. For the exact paper refer to <a href="http://homepages.inf.ed.ac.uk/ckiw/postscript/ijcv_voc09.pdf" target="_blank" rel="noopener">this.</a> (<a href="https://tarangshah.com/blog/assets/ijcv_voc09.pdf" target="_blank" rel="noopener">backup</a>)</p>
-<p>We use the same approaches for calculation of Precision and Recall as mentioned in the previous section. But, as mentioned, we have at least two other variables which determine the values of Precision and Recall, they are the IOU and the Confidence thresholds.</p>
-<p>The IOU is a simple geometric metric, which we can easily standardize, for example the PASCAL VOC challenge evaluates mAP based on 50% IOU, whereas the COCO Challenge goes a step further and evaluates mAP at various threshold ranging from 5% to 95%. The confidence factor on the other hand varies across models, 50% confidence in my model design might probably be equivalent to an 80% confidence in someone else’s model design, which would vary the precision recall curve shape. Hence the PASCAL VOC organizers came up with a way to account for this variation.</p>
-<p>We now need a metric to evaluate the models in a model agnostic way.</p>
-<p>The paper recommends that we calculate a measure called AP - ie. the Average Precision</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt; For a given task and class, the precision/recall curve is</span><br><span class="line">&gt; computed from a method’s ranked output. Recall is defined</span><br><span class="line">&gt; as the proportion of all positive examples ranked above a</span><br><span class="line">&gt; given rank. Precision is the proportion of all examples above</span><br><span class="line">&gt; that rank which are from the positive class. The AP summarises</span><br><span class="line">&gt; the shape of the precision/recall curve, and is de-</span><br><span class="line">&gt; fined as the mean precision at a set of eleven equally spaced</span><br><span class="line">&gt; recall levels [0,0.1,...,1]:</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<script type="math/tex; mode=display">
-AP = \frac{1}{11} \sum \limits_{r \in\{0, 0.1, 0.2, ... , 1\}}p_{interp}(r)</script><p>This means that we chose 11 different confidence thresholds(which determine the “rank”). The thresholds should be such that the <strong>Recall at those confidence thresholds is 0, 0.1, 0.2, 0.3, … , 0.9 and 1.0</strong>. The AP is now defined as the <strong>mean of the Precision</strong> values at these chosen 11 Recall values. This results in the mAP being an overall view of the whole precision recall curve.</p>
-<p>The paper further gets into detail of calculating the Precision used in the above calculation.</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; The precision at each recall level r is interpolated by taking</span><br><span class="line">&gt; the maximum precision measured for a method for which</span><br><span class="line">&gt; the corresponding recall exceeds r:</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<script type="math/tex; mode=display">
-p_{interp}(r)= \max \limits_{\tilde r:\tilde r \ge r}p(\tilde r)\\
-where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script><p>Basically we use the maximum precision for a given recall value.</p>
-<p><strong>The mAP hence is the Mean of all the Average Precision values across all your classes as measured above</strong>.</p>
-<p>This is in essence how the Mean Average Precision is calculated for Object Detection evaluation. There might be some variation at times, for example the COCO evaluation is more strict, enforcing various metrics with various IOUs and object sizes(<a href="http://cocodataset.org/#detection-eval" target="_blank" rel="noopener">more details here</a>). If any of you want me to go into details of that, do let me know in the comments.</p>
-<p>Some important points to remember when we compare mAP values</p>
-<ol>
-<li>mAP is always calculated over a dataset.</li>
-<li>Although it is not easy to interpret the absolute quantification of the model output, mAP helps us by being a pretty good relative metric. When we calculate this metric over popular public datasets, the metric can be easily used to compare old and new approaches to object detection.</li>
-<li>Depending on how the classes are distributed in the training data, the Average Precision values might vary from very high for some classes(which had good training data) to very low(for classes with less/bad data). So your mAP may be moderate, but your model might be really good for certain classes and really bad for certain classes. Hence it is advisable to have a look at individual class Average Precisions while analysing your model results. These values might also serve as an indicator to add more training samples.</li>
-</ol>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a href="https://tarangshah.com/blog/2018-01-27/what-is-map-understanding-the-statistic-of-choice-for-comparing-object-detection-models/" target="_blank" rel="noopener">Measuring Object Detection models - mAP - What is Mean Average Precision?</a></p>
-
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/05/29/paper_GAN/" rel="next" title="Generative Adversarial Nets">
-                <i class="fa fa-chevron-left"></i> Generative Adversarial Nets
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/07/01/3DV_PineholeCameraModel/" rel="prev" title="Pinhole Camera Model">
-                Pinhole Camera Model <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
 
-    <div class="post-spread">
       
+
     </div>
   </div>
+  
+  
+  
+
+  
+
 
 
           </div>
@@ -537,10 +345,6 @@ where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script>
 
 
           
-
-  
-
-
 
         </div>
         
@@ -561,17 +365,8 @@ where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script>
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -636,22 +431,6 @@ where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script>
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-object-detection-problem"><span class="nav-number">1.</span> <span class="nav-text">The object detection problem</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Dataset-example"><span class="nav-number">1.0.1.</span> <span class="nav-text">Dataset example:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Mean-Average-Precision-aka-the-mAP"><span class="nav-number">2.</span> <span class="nav-text">The Mean Average Precision aka, the mAP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IoU"><span class="nav-number">2.0.1.</span> <span class="nav-text">IoU</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Identifying-correct-detections-and-calculating-precision-and-recall"><span class="nav-number">2.0.2.</span> <span class="nav-text">Identifying correct detections and calculating precision and recall</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Calculating-the-Mean-Average-Precision"><span class="nav-number">2.0.3.</span> <span class="nav-text">Calculating the Mean Average Precision</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -792,10 +571,6 @@ where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script>
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 

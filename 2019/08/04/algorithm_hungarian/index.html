@@ -79,22 +79,17 @@
 
 
 
-<meta name="description" content="The object detection problemGiven an image, find the objects in it, locate their position and classify them. Trained on a fixed set of classes, so the model would locate and classify only those classe">
+<meta name="description" content="Hungarian AlgorithmBrief introduction:A combinatorial optimization algorithm that solves the assignment problem in polynomial time. It was developed and published in 1955 by Harold Kuhn, who gave the">
 <meta property="og:type" content="article">
-<meta property="og:title" content="检测模型评估之mAP">
-<meta property="og:url" content="https://maoyunyao.github.io/2019/06/04/measure_mAP/index.html">
+<meta property="og:title" content="Hungarian Algorithm">
+<meta property="og:url" content="https://maoyunyao.github.io/2019/08/04/algorithm_hungarian/index.html">
 <meta property="og:site_name" content="漫卷云舒">
-<meta property="og:description" content="The object detection problemGiven an image, find the objects in it, locate their position and classify them. Trained on a fixed set of classes, so the model would locate and classify only those classe">
+<meta property="og:description" content="Hungarian AlgorithmBrief introduction:A combinatorial optimization algorithm that solves the assignment problem in polynomial time. It was developed and published in 1955 by Harold Kuhn, who gave the">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://maoyunyao.github.io/img/mAP/example.png">
-<meta property="og:image" content="https://maoyunyao.github.io/img/mAP/example_visual.png">
-<meta property="og:image" content="https://maoyunyao.github.io/img/mAP/iou.png">
-<meta property="og:image" content="https://maoyunyao.github.io/img/mAP/cal_iou.png">
-<meta property="og:updated_time" content="2019-06-04T07:51:53.404Z">
+<meta property="og:updated_time" content="2019-08-04T12:46:36.227Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="检测模型评估之mAP">
-<meta name="twitter:description" content="The object detection problemGiven an image, find the objects in it, locate their position and classify them. Trained on a fixed set of classes, so the model would locate and classify only those classe">
-<meta name="twitter:image" content="https://maoyunyao.github.io/img/mAP/example.png">
+<meta name="twitter:title" content="Hungarian Algorithm">
+<meta name="twitter:description" content="Hungarian AlgorithmBrief introduction:A combinatorial optimization algorithm that solves the assignment problem in polynomial time. It was developed and published in 1955 by Harold Kuhn, who gave the">
 
 
 
@@ -124,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://maoyunyao.github.io/2019/06/04/measure_mAP/"/>
+  <link rel="canonical" href="https://maoyunyao.github.io/2019/08/04/algorithm_hungarian/"/>
 
 
 
 
 
-  <title>检测模型评估之mAP | 漫卷云舒</title>
+  <title>Hungarian Algorithm | 漫卷云舒</title>
   
 
 
@@ -293,7 +288,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/06/04/measure_mAP/">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/08/04/algorithm_hungarian/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Mr.M">
@@ -310,7 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">检测模型评估之mAP</h1>
+          <h1 class="post-title" itemprop="name headline">Hungarian Algorithm</h1>
         
 
         <div class="post-meta">
@@ -322,8 +317,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-04T12:00:00+10:00">
-                2019-06-04
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-04T12:00:00+10:00">
+                2019-08-04
               </time>
             
 
@@ -345,8 +340,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/机器学习/" itemprop="url" rel="index">
-                    <span itemprop="name">机器学习</span>
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
                   </a>
                 </span>
 
@@ -382,97 +377,202 @@
       
 
       
-        <h2 id="The-object-detection-problem"><a href="#The-object-detection-problem" class="headerlink" title="The object detection problem"></a>The object detection problem</h2><p>Given an image, find the objects in it, <strong>locate their position</strong> and <strong>classify</strong> them.</p>
-<p>Trained on a <strong>fixed set of classes</strong>, so the model would locate and classify only those classes in the image.</p>
-<p>The location of the object is generally in the form of <strong>a bounding rectangle</strong>.</p>
-<h4 id="Dataset-example"><a href="#Dataset-example" class="headerlink" title="Dataset example:"></a>Dataset example:</h4><ul>
-<li>Actual image</li>
-</ul>
-<p><img src="/img/mAP/example.png" alt=""></p>
+        <h2 id="Hungarian-Algorithm"><a href="#Hungarian-Algorithm" class="headerlink" title="Hungarian Algorithm"></a>Hungarian Algorithm</h2><h4 id="Brief-introduction"><a href="#Brief-introduction" class="headerlink" title="Brief introduction:"></a>Brief introduction:</h4><p>A combinatorial optimization algorithm that solves the assignment problem in polynomial time.</p>
+<p>It was developed and published in 1955 by <a href="https://en.wikipedia.org/wiki/Harold_Kuhn" target="_blank" rel="noopener">Harold Kuhn</a>, who gave the name “Hungarian method” because the algorithm was largely based on the earlier works of two <a href="https://en.wikipedia.org/wiki/Hungary" target="_blank" rel="noopener">Hungarian</a> mathematicians: <a href="https://en.wikipedia.org/wiki/D%C3%A9nes_K%C5%91nig" target="_blank" rel="noopener">Dénes Kőnig</a> and <a href="https://en.wikipedia.org/wiki/Jen%C5%91_Egerv%C3%A1ry" target="_blank" rel="noopener">Jenő Egerváry</a>.</p>
+<p>There are two ways to formulate the problem: as a matrix or as a bipartite graph.</p>
+<h4 id="Matrix-Formulation"><a href="#Matrix-Formulation" class="headerlink" title="Matrix Formulation:"></a>Matrix Formulation:</h4><p>In the matrix formulation, we are given a nonnegative <em>n×n</em> matrix, where the element in the <em>i</em>-th row and <em>j</em>-th column represents the cost of assigning the <em>j</em>-th job to the <em>i</em>-th worker. We have to find an assignment of the jobs to the workers, such that each job is assigned to one worker and each worker is assigned one job, such that the total cost of assignment is minimum.</p>
+<h4 id="Bigraph-Formulation"><a href="#Bigraph-Formulation" class="headerlink" title="Bigraph Formulation:"></a>Bigraph Formulation:</h4><p>In the matrix formulation, we have a complete bipartite graph $G=(S,T;E)​$ with <em>n</em> worker vertices ($S​$) and <em>n</em> job vertices ($T​$), and each edge has a nonnegative cost $c(i,j)​$. We want to find a perfect matching with a minimum total cost.</p>
+<h4 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm:"></a>Algorithm:</h4><p>Here we describe the algorithm in terms of matrix graphs.</p>
+<p><strong>Theorem:</strong> If a number is added to or subtracted from all of the entries of any one row or column of a cost matrix, then on optimal assignment for the resulting cost matrix is also an optimal assignment for the original cost matrix.</p>
+<p>The following algorithm applies the above theorem to a given n × n cost matrix to find an optimal assignment:</p>
+<p><strong>Step 1.</strong> Subtract the smallest entry in each row from all the entries of its row.</p>
+<p><strong>Step 2.</strong> Subtract the smallest entry in each column from all the entries of its column.</p>
+<p><strong>Step 3.</strong> Draw lines through appropriate rows and columns so that all the zero entries of the cost matrix are covered and the minimum number of such lines is used.</p>
+<p><strong>Step 4.</strong> Test for Optimality:</p>
 <ul>
-<li>Notation</li>
+<li>If the minimum number of covering lines is n, an optimal assignment of zeros is possible and we are finished.</li>
+<li>If the minimum number of covering lines is less than n, an optimal assignment of zeros is not yet possible. In that case, proceed to <strong>Step 5.</strong></li>
 </ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">Class</th>
-<th style="text-align:center">X coordinate</th>
-<th style="text-align:center">Y coordinate</th>
-<th style="text-align:center">Box Width</th>
-<th style="text-align:center">Box Height</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">Dog</td>
-<td style="text-align:center">100</td>
-<td style="text-align:center">600</td>
-<td style="text-align:center">150</td>
-<td style="text-align:center">100</td>
-</tr>
-<tr>
-<td style="text-align:center">Horse</td>
-<td style="text-align:center">700</td>
-<td style="text-align:center">300</td>
-<td style="text-align:center">200</td>
-<td style="text-align:center">250</td>
-</tr>
-<tr>
-<td style="text-align:center">Person</td>
-<td style="text-align:center">400</td>
-<td style="text-align:center">400</td>
-<td style="text-align:center">100</td>
-<td style="text-align:center">500</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ul>
-<li>Bounding box with class(only for visualization)</li>
-</ul>
-<p><img src="/img/mAP/example_visual.png" alt=""></p>
-<h2 id="The-Mean-Average-Precision-aka-the-mAP"><a href="#The-Mean-Average-Precision-aka-the-mAP" class="headerlink" title="The Mean Average Precision aka, the mAP"></a>The Mean Average Precision aka, the mAP</h2><p>Every image in an object detection problem could have <strong>different objects of different classes</strong>. So both the classification and localization of a model need to be evaluated. </p>
-<h4 id="IoU"><a href="#IoU" class="headerlink" title="IoU"></a>IoU</h4><p>We first need to know how to judge the correctness of each of those detections. The metric that tells us the correctness of a given bounding box is the <strong>IoU</strong> - <strong>Intersection over Union</strong>. It is a very simple visual quantity.</p>
-<p><img src="/img/mAP/iou.png" alt=""></p>
-<p>The intersection includes the overlap area(the area colored in Cyan), and the union includes the Orange and Cyan regions both.</p>
-<p>The IoU will then be calculated like this</p>
-<p><img src="/img/mAP/cal_iou.png" alt=""></p>
-<h4 id="Identifying-correct-detections-and-calculating-precision-and-recall"><a href="#Identifying-correct-detections-and-calculating-precision-and-recall" class="headerlink" title="Identifying correct detections and calculating precision and recall"></a>Identifying correct detections and calculating <strong>precision</strong> and <strong>recall</strong></h4><p>For calculating <a href="https://tarangshah.com/blog/2018-01-27/what-is-map-understanding-the-statistic-of-choice-for-comparing-object-detection-models/" target="_blank" rel="noopener">Precision and Recall</a>, as with all machine learning problems, we have to identify <strong>True Positives(TP)</strong>, <strong>False Positives(FP)</strong>, <strong>True Negatives(TN)</strong> and <strong>False Negatives(FN)</strong>.</p>
-<p><strong>TP</strong> and <strong>FP</strong> are indentified with IoU and a threshold <strong>in a specific class</strong>.</p>
-<p>If IoU &gt; threshold: True Positive(TP).</p>
-<p>If IoU &lt; threshold: False positive(FP).</p>
-<p>For calculating Recall, we need the count of Negatives. Since every part of the image where we didn’t predict an object is considered a negative, measuring “True” negatives is a bit futile. So we only measure False Negatives(FN) - ie. the objects that our model has missed out.</p>
+<p><strong>Step 5.</strong> Determine the smallest entry not covered by any line. Subtract this entry from each uncovered row, and then add it to each covered column. Return to <strong>Step 3.</strong></p>
+<h4 id="An-example"><a href="#An-example" class="headerlink" title="An example:"></a>An example:</h4><p><strong>Problem:</strong></p>
 <script type="math/tex; mode=display">
-Precision = \frac{TP}{(TP+FP)}\\
-Recall = \frac{TP}{(TP+FN)}</script><h4 id="Calculating-the-Mean-Average-Precision"><a href="#Calculating-the-Mean-Average-Precision" class="headerlink" title="Calculating the Mean Average Precision"></a>Calculating the Mean Average Precision</h4><p>Using the Pascal VOC challenge evaluation metric</p>
-<p>The Mean Average Precision is a term which has different definitions. This metric is commonly used in the domains of Information Retrieval and Object Detection. Both these domains have different ways of calculating mAP. We will talk about the Object Detection relevant mAP today.</p>
-<p>The Object Detection definition of mAP was first formalized in the PASCAL Visual Objects Classes(VOC) challenge, which included various image processing tasks. For the exact paper refer to <a href="http://homepages.inf.ed.ac.uk/ckiw/postscript/ijcv_voc09.pdf" target="_blank" rel="noopener">this.</a> (<a href="https://tarangshah.com/blog/assets/ijcv_voc09.pdf" target="_blank" rel="noopener">backup</a>)</p>
-<p>We use the same approaches for calculation of Precision and Recall as mentioned in the previous section. But, as mentioned, we have at least two other variables which determine the values of Precision and Recall, they are the IOU and the Confidence thresholds.</p>
-<p>The IOU is a simple geometric metric, which we can easily standardize, for example the PASCAL VOC challenge evaluates mAP based on 50% IOU, whereas the COCO Challenge goes a step further and evaluates mAP at various threshold ranging from 5% to 95%. The confidence factor on the other hand varies across models, 50% confidence in my model design might probably be equivalent to an 80% confidence in someone else’s model design, which would vary the precision recall curve shape. Hence the PASCAL VOC organizers came up with a way to account for this variation.</p>
-<p>We now need a metric to evaluate the models in a model agnostic way.</p>
-<p>The paper recommends that we calculate a measure called AP - ie. the Average Precision</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt; For a given task and class, the precision/recall curve is</span><br><span class="line">&gt; computed from a method’s ranked output. Recall is defined</span><br><span class="line">&gt; as the proportion of all positive examples ranked above a</span><br><span class="line">&gt; given rank. Precision is the proportion of all examples above</span><br><span class="line">&gt; that rank which are from the positive class. The AP summarises</span><br><span class="line">&gt; the shape of the precision/recall curve, and is de-</span><br><span class="line">&gt; fined as the mean precision at a set of eleven equally spaced</span><br><span class="line">&gt; recall levels [0,0.1,...,1]:</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</blockquote>
+\left[
+ \begin{matrix}
+   90 & 75 & 75 & 80\\
+   35 & 85 & 55 & 65 \\
+   125 & 95 & 90 & 105 \\
+   45 & 110 & 95 & 115
+  \end{matrix}
+  \right]</script><p><strong>Step 1:</strong> Subtract 75 from Row 1, 35 from Row 2, 90 from Row 3, and 45 from Row 4.</p>
 <script type="math/tex; mode=display">
-AP = \frac{1}{11} \sum \limits_{r \in\{0, 0.1, 0.2, ... , 1\}}p_{interp}(r)</script><p>This means that we chose 11 different confidence thresholds(which determine the “rank”). The thresholds should be such that the <strong>Recall at those confidence thresholds is 0, 0.1, 0.2, 0.3, … , 0.9 and 1.0</strong>. The AP is now defined as the <strong>mean of the Precision</strong> values at these chosen 11 Recall values. This results in the mAP being an overall view of the whole precision recall curve.</p>
-<p>The paper further gets into detail of calculating the Precision used in the above calculation.</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; The precision at each recall level r is interpolated by taking</span><br><span class="line">&gt; the maximum precision measured for a method for which</span><br><span class="line">&gt; the corresponding recall exceeds r:</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</blockquote>
+\left[
+ \begin{matrix}
+   90 & 75 & 75 & 80\\
+   35 & 85 & 55 & 65 \\
+   125 & 95 & 90 & 105 \\
+   45 & 110 & 95 & 115
+  \end{matrix}
+  \right]
+  \to
+\left[
+ \begin{matrix}
+    15 & 0 & 0 & 5 \\
+    0 & 50 & 20 & 30 \\
+    35 & 5 & 0 & 15 \\
+    0 & 65 & 50 & 70 \\
+  \end{matrix}
+  \right]</script><p><strong>Step 2:</strong> Subtract 0 from Column 1, 0 from Column 2, 0 from Column 3, and 5 from Column 4.</p>
 <script type="math/tex; mode=display">
-p_{interp}(r)= \max \limits_{\tilde r:\tilde r \ge r}p(\tilde r)\\
-where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script><p>Basically we use the maximum precision for a given recall value.</p>
-<p><strong>The mAP hence is the Mean of all the Average Precision values across all your classes as measured above</strong>.</p>
-<p>This is in essence how the Mean Average Precision is calculated for Object Detection evaluation. There might be some variation at times, for example the COCO evaluation is more strict, enforcing various metrics with various IOUs and object sizes(<a href="http://cocodataset.org/#detection-eval" target="_blank" rel="noopener">more details here</a>). If any of you want me to go into details of that, do let me know in the comments.</p>
-<p>Some important points to remember when we compare mAP values</p>
-<ol>
-<li>mAP is always calculated over a dataset.</li>
-<li>Although it is not easy to interpret the absolute quantification of the model output, mAP helps us by being a pretty good relative metric. When we calculate this metric over popular public datasets, the metric can be easily used to compare old and new approaches to object detection.</li>
-<li>Depending on how the classes are distributed in the training data, the Average Precision values might vary from very high for some classes(which had good training data) to very low(for classes with less/bad data). So your mAP may be moderate, but your model might be really good for certain classes and really bad for certain classes. Hence it is advisable to have a look at individual class Average Precisions while analysing your model results. These values might also serve as an indicator to add more training samples.</li>
-</ol>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a href="https://tarangshah.com/blog/2018-01-27/what-is-map-understanding-the-statistic-of-choice-for-comparing-object-detection-models/" target="_blank" rel="noopener">Measuring Object Detection models - mAP - What is Mean Average Precision?</a></p>
+\left[
+ \begin{matrix}
+    15 & 0 & 0 & 5 \\
+    0 & 50 & 20 & 30 \\
+    35 & 5 & 0 & 15 \\
+    0 & 65 & 50 & 70 \\
+  \end{matrix}
+  \right]
+  \to
+  \left[
+ \begin{matrix}
+    15 & 0 & 0 & 0 \\
+    0 & 50 & 20 & 25 \\
+    35 & 5 & 0 & 10 \\
+    0 & 65 & 50 & 65 \\
+  \end{matrix}
+  \right]</script><p><strong>Step 3:</strong> Cover all the zeros of the matrix with the minimum number of horizontal or vertical lines.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    15 & 0 & 0 & 0 \\
+    0 & 50 & 20 & 25 \\
+    35 & 5 & 0 & 10 \\
+    0 & 65 & 50 & 65 \\
+  \end{matrix}
+  \right]
+  \to
+  \left[
+ \begin{matrix}
+    \color{red}{15} & \color{red}0 & \color{red}0 & \color{red}0 \\
+    \color{red}0 & 50 & \color{red}{20} & 25 \\
+    \color{red}{35} & 5 & \color{red}0 & 10 \\
+    \color{red}0 & 65 & \color{red}{50} & 65 \\
+  \end{matrix}
+  \right]</script><p><strong>Step 4:</strong> Since the minimal number of lines is less than 4, we have to proceed to Step 5.</p>
+<p><strong>Step 5:</strong> Note that 5 is the smallest entry not covered by any line. Subtract 5 from each uncovered row.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    15 & 0 & 0 & 0 \\
+    0 & 50 & 20 & 25 \\
+    35 & 5 & 0 & 10 \\
+    0 & 65 & 50 & 65 \\
+  \end{matrix}
+  \right]
+  \to
+\left[
+ \begin{matrix}
+    15 & 0 & 0 & 0 \\
+    -5 & 45 & 15 & 20 \\
+    30 & 0 & -5 & 5 \\
+    -5 & 60 & 45 & 60 \\
+  \end{matrix}
+  \right]</script><p>Now add 5 to each covered column:</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    15 & 0 & 0 & 0 \\
+    -5 & 45 & 15 & 20 \\
+    30 & 0 & -5 & 5 \\
+    -5 & 60 & 45 & 60 \\
+  \end{matrix}
+  \right]
+  \to
+\left[
+ \begin{matrix}
+    20 & 0 & 5 & 0 \\
+    0 & 45 & 20 & 20 \\
+    35 & 0 & 0 & 5 \\
+    0 & 60 & 50 & 60 \\
+  \end{matrix}
+  \right]</script><p>Now return to Step 3.</p>
+<p><strong>Step 3:</strong> Cover all the zeros of the matrix with the minimum number of horizontal or vertical lines.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    20 & 0 & 5 & 0 \\
+    0 & 45 & 20 & 20 \\
+    35 & 0 & 0 & 5 \\
+    0 & 60 & 50 & 60 \\
+  \end{matrix}
+  \right]
+  \to
+  \left[
+ \begin{matrix}
+    \color{red}{20} & \color{red}0 & \color{red}5 & \color{red}0 \\
+    \color{red}0 & 45 & 20 & 20 \\
+    \color{red}{35} & \color{red}0 & \color{red}0 & \color{red}5 \\
+    \color{red}0 & 60 & 50 & 60 \\
+  \end{matrix}
+  \right]</script><p><strong>Step 4:</strong> Since the minimal number of lines is still less than 4, we have to return to Step 5.</p>
+<p><strong>Step 5:</strong> Note that 20 is the smallest entry not covered by a line. Subtract 20 from each uncovered row.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    20 & 0 & 5 & 0 \\
+    0 & 45 & 20 & 20 \\
+    35 & 0 & 0 & 5 \\
+    0 & 60 & 50 & 60 \\
+  \end{matrix}
+  \right]
+  \to
+  \left[
+ \begin{matrix}
+    20 & 0 & 5 & 0 \\
+    -20 & 25 & 0 & 0 \\
+    35 & 0 & 0 & 5 \\
+    -20 & 40 & 30 & 40 \\
+  \end{matrix}
+  \right]</script><p>Then add 20 to each covered column.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    20 & 0 & 5 & 0 \\
+    -20 & 25 & 0 & 0 \\
+    35 & 0 & 0 & 5 \\
+    -20 & 40 & 30 & 40 \\
+  \end{matrix}
+  \right]
+  \to
+    \left[
+ \begin{matrix}
+    40 & 0 & 5 & 0 \\
+    0 & 25 & 0 & 0 \\
+    55 & 0 & 0 & 5 \\
+    0 & 40 & 30 & 40 \\
+  \end{matrix}
+  \right]</script><p>Now return to Step 3.</p>
+<p><strong>Step 3:</strong> Cover all the zeros of the matrix with the minimum number of horizontal or vertical lines.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    \color{red}{40} & \color{red}0 & \color{red}5 & \color{red}0 \\
+    \color{red}0 & \color{red}{25} & \color{red}0 & \color{red}0 \\
+    \color{red}{55} & \color{red}0 & \color{red}0 & \color{red}5 \\
+    \color{red}0 & \color{red}{40} & \color{red}{30} & \color{red}{40} \\
+  \end{matrix}
+  \right]</script><p><strong>Step 4:</strong> Since the minimal number of lines is 4, an optimal assignment of zeros is possible and we are finished.</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+    40 & 0 & 5 & \boxed0 \\
+    0 & 25 & \boxed0 & 0 \\
+    55 & \boxed0 & 0 & 5 \\
+    \boxed0 & 40 & 30 & 40 \\
+  \end{matrix}
+  \right]</script><p>Since the total cost for this assignment is 0, it must be an optimal assignment.</p>
+<p>Here is the same assignment made to the original cost matrix.</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] Hungarian algorithm, Wikipedia</p>
+<p>[2] The Assignment Problem and the Hungarian Method, Bruff, Derek,</p>
 
       
     </div>
@@ -497,8 +597,8 @@ where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/29/paper_GAN/" rel="next" title="Generative Adversarial Nets">
-                <i class="fa fa-chevron-left"></i> Generative Adversarial Nets
+              <a href="/2019/07/03/algorithm_ransac/" rel="next" title="RANSAC">
+                <i class="fa fa-chevron-left"></i> RANSAC
               </a>
             
           </div>
@@ -506,10 +606,6 @@ where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script>
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/07/01/3DV_PineholeCameraModel/" rel="prev" title="Pinhole Camera Model">
-                Pinhole Camera Model <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -646,7 +742,7 @@ where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-object-detection-problem"><span class="nav-number">1.</span> <span class="nav-text">The object detection problem</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Dataset-example"><span class="nav-number">1.0.1.</span> <span class="nav-text">Dataset example:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Mean-Average-Precision-aka-the-mAP"><span class="nav-number">2.</span> <span class="nav-text">The Mean Average Precision aka, the mAP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IoU"><span class="nav-number">2.0.1.</span> <span class="nav-text">IoU</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Identifying-correct-detections-and-calculating-precision-and-recall"><span class="nav-number">2.0.2.</span> <span class="nav-text">Identifying correct detections and calculating precision and recall</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Calculating-the-Mean-Average-Precision"><span class="nav-number">2.0.3.</span> <span class="nav-text">Calculating the Mean Average Precision</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hungarian-Algorithm"><span class="nav-number">1.</span> <span class="nav-text">Hungarian Algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Brief-introduction"><span class="nav-number">1.0.1.</span> <span class="nav-text">Brief introduction:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Matrix-Formulation"><span class="nav-number">1.0.2.</span> <span class="nav-text">Matrix Formulation:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bigraph-Formulation"><span class="nav-number">1.0.3.</span> <span class="nav-text">Bigraph Formulation:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Algorithm"><span class="nav-number">1.0.4.</span> <span class="nav-text">Algorithm:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#An-example"><span class="nav-number">1.0.5.</span> <span class="nav-text">An example:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
