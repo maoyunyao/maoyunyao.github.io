@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="Random sample consensusBrief introduction:An iterative method to estimate parameters of a mathematical model from a set of observed data that contains outliers, when outliers are to be accorded no inf">
+<meta name="description" content="Multiple Object TrackingAn investigation of real time multiple object tracking. Mainly focused on Tracking-by-detection paradigm IntroductionMost recent approaches follow the popular “tracking-by-dete">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RANSAC">
-<meta property="og:url" content="https://maoyunyao.github.io/2019/07/03/algorithm_ransac/index.html">
+<meta property="og:title" content="MOT">
+<meta property="og:url" content="https://maoyunyao.github.io/2019/08/06/paper_MOT_survey/index.html">
 <meta property="og:site_name" content="漫卷云舒">
-<meta property="og:description" content="Random sample consensusBrief introduction:An iterative method to estimate parameters of a mathematical model from a set of observed data that contains outliers, when outliers are to be accorded no inf">
+<meta property="og:description" content="Multiple Object TrackingAn investigation of real time multiple object tracking. Mainly focused on Tracking-by-detection paradigm IntroductionMost recent approaches follow the popular “tracking-by-dete">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-03T04:13:11.683Z">
+<meta property="og:updated_time" content="2019-08-07T13:24:24.454Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RANSAC">
-<meta name="twitter:description" content="Random sample consensusBrief introduction:An iterative method to estimate parameters of a mathematical model from a set of observed data that contains outliers, when outliers are to be accorded no inf">
+<meta name="twitter:title" content="MOT">
+<meta name="twitter:description" content="Multiple Object TrackingAn investigation of real time multiple object tracking. Mainly focused on Tracking-by-detection paradigm IntroductionMost recent approaches follow the popular “tracking-by-dete">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://maoyunyao.github.io/2019/07/03/algorithm_ransac/"/>
+  <link rel="canonical" href="https://maoyunyao.github.io/2019/08/06/paper_MOT_survey/"/>
 
 
 
 
 
-  <title>RANSAC | 漫卷云舒</title>
+  <title>MOT | 漫卷云舒</title>
   
 
 
@@ -288,7 +288,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/07/03/algorithm_ransac/">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/08/06/paper_MOT_survey/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Mr.M">
@@ -305,7 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">RANSAC</h1>
+          <h1 class="post-title" itemprop="name headline">MOT</h1>
         
 
         <div class="post-meta">
@@ -317,8 +317,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-03T12:00:00+10:00">
-                2019-07-03
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-06T12:00:00+10:00">
+                2019-08-06
               </time>
             
 
@@ -340,8 +340,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
+                  <a href="/categories/论文阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">论文阅读</span>
                   </a>
                 </span>
 
@@ -377,15 +377,22 @@
       
 
       
-        <h2 id="Random-sample-consensus"><a href="#Random-sample-consensus" class="headerlink" title="Random sample consensus"></a>Random sample consensus</h2><h4 id="Brief-introduction"><a href="#Brief-introduction" class="headerlink" title="Brief introduction:"></a>Brief introduction:</h4><p>An iterative method to estimate parameters of a mathematical model from a set of observed data that contains outliers, when outliers are to be accorded no influence on the values of the estimates.</p>
-<p>The algorithm was first published by Fischler and Bolles at SRI International in 1981. They used RANSAC to solve the Location Determination Problem (LDP), where the goal is to determine the points in the space that project onto an image into a set of landmarks with known locations.</p>
-<h4 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm:"></a>Algorithm:</h4><p>The RANSAC algorithm is essentially composed of two steps that are iteratively repeated:</p>
+        <h2 id="Multiple-Object-Tracking"><a href="#Multiple-Object-Tracking" class="headerlink" title="Multiple Object Tracking"></a>Multiple Object Tracking</h2><p>An investigation of real time multiple object tracking. Mainly focused on Tracking-by-detection paradigm</p>
+<h4 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h4><p>Most recent approaches follow the popular “tracking-by-detection” paradigm. The overall steps are roughly as follows:</p>
 <ol>
-<li>In the first step, a sample subset containing minimal data items is randomly selected from the input dataset. A fitting model and the corresponding model parameters are computed using only the elements of this sample subset. <strong>The cardinality of the sample subset is the smallest sufficient to determine the model parameters</strong>.</li>
-<li>In the second step, the algorithm checks which elements of the entire dataset are consistent with the model instantiated by the estimated model parameters obtained from the first step. A data element will be considered as an outlier if it does not fit the fitting model instantiated by the set of estimated model parameters within some error threshold that defines the maximum deviation attributable to the effect of noise.</li>
+<li>Objects to be tracked are firstly detected with bounding boxes in each frame.</li>
+<li>When a new frame come with its detected bounding boxes, the target is to associate those detections with existing tracklets. This kind of association is based on the similarities between newly detected objects and existing tracklets.</li>
 </ol>
-<p>The set of inliers obtained for the fitting model is called consensus set. The RANSAC algorithm will iteratively repeat the above two steps until the obtained consensus set in certain iteration has enough inliers.</p>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] RANSAC, Wikipedia</p>
+<h4 id="Similarity-Metrics"><a href="#Similarity-Metrics" class="headerlink" title="Similarity Metrics"></a>Similarity Metrics</h4><p>A robust similarity score is key to the success of trackers. And a good similarity score is expected to reflect multiple cues. The commonly considered similarity metrics are as follows:</p>
+<ul>
+<li>Appearance</li>
+<li>Location/Motion</li>
+<li>Topological</li>
+</ul>
+<h4 id="Association-algorithm"><a href="#Association-algorithm" class="headerlink" title="Association algorithm"></a>Association algorithm</h4><p>The most commonly used data association algorithm in MOT problem is the Hungarian algorithm. A brief introduction can be found <a href="https://blog.maoyunyao.cn/2019/08/04/algorithm_hungarian/" target="_blank" rel="noopener">here</a>.</p>
+<p>Denote the $i^{th}$ tracklet before frame $t-1$  as $\textbf{T}_i^{t-1}=\{\textbf{b}_i^1,\textbf{b}_i^2,…,\textbf{b}_i^{t-1}\}$ and the detected objects at current frame $t$ as $\textbf{D}_t = \{\textbf{b}_j^t\}_{j=1}^{N_t}$. Each pair $(\textbf{T}_i^{t-1},\textbf{b}_j^t)$ is assigned a similarity score $s_{ij}^t$. Considering all existing tracklets before frame $t-1$, we can get a bipartite graph.</p>
+<p>Now the Hungarian algorithm can be  adopted on the bipartite graph to get the optimal assignments.</p>
+<h4 id="Related-paper"><a href="#Related-paper" class="headerlink" title="Related paper"></a>Related paper</h4><p>Keep Updating…..</p>
 
       
     </div>
@@ -410,8 +417,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/01/3DV_PineholeCameraModel/" rel="next" title="Pinhole Camera Model">
-                <i class="fa fa-chevron-left"></i> Pinhole Camera Model
+              <a href="/2019/08/04/algorithm_hungarian/" rel="next" title="Hungarian Algorithm">
+                <i class="fa fa-chevron-left"></i> Hungarian Algorithm
               </a>
             
           </div>
@@ -419,10 +426,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/08/04/algorithm_hungarian/" rel="prev" title="Hungarian Algorithm">
-                Hungarian Algorithm <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -559,7 +562,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Random-sample-consensus"><span class="nav-number">1.</span> <span class="nav-text">Random sample consensus</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Brief-introduction"><span class="nav-number">1.0.1.</span> <span class="nav-text">Brief introduction:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Algorithm"><span class="nav-number">1.0.2.</span> <span class="nav-text">Algorithm:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Multiple-Object-Tracking"><span class="nav-number">1.</span> <span class="nav-text">Multiple Object Tracking</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Introduction"><span class="nav-number">1.0.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Similarity-Metrics"><span class="nav-number">1.0.2.</span> <span class="nav-text">Similarity Metrics</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Association-algorithm"><span class="nav-number">1.0.3.</span> <span class="nav-text">Association algorithm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Related-paper"><span class="nav-number">1.0.4.</span> <span class="nav-text">Related paper</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -1083,6 +1086,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
