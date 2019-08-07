@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="漫卷云舒">
 <meta property="og:description" content="Multiple Object TrackingAn investigation of real time multiple object tracking. Mainly focused on Tracking-by-detection paradigm IntroductionMost recent approaches follow the popular “tracking-by-dete">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-07T13:24:24.454Z">
+<meta property="og:updated_time" content="2019-08-07T13:32:22.344Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MOT">
 <meta name="twitter:description" content="Multiple Object TrackingAn investigation of real time multiple object tracking. Mainly focused on Tracking-by-detection paradigm IntroductionMost recent approaches follow the popular “tracking-by-dete">
@@ -381,7 +381,9 @@
 <h4 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h4><p>Most recent approaches follow the popular “tracking-by-detection” paradigm. The overall steps are roughly as follows:</p>
 <ol>
 <li>Objects to be tracked are firstly detected with bounding boxes in each frame.</li>
-<li>When a new frame come with its detected bounding boxes, the target is to associate those detections with existing tracklets. This kind of association is based on the similarities between newly detected objects and existing tracklets.</li>
+<li>When a new frame come with its detected bounding boxes, we calculate similarities between newly detected objects and existing tracklets before this frame.</li>
+<li>Associating the newly detected objects with existing tracklets based on the  similarities we calculated in step 2.</li>
+<li>Do some dirty details like tracklets deletion/creation etc.</li>
 </ol>
 <h4 id="Similarity-Metrics"><a href="#Similarity-Metrics" class="headerlink" title="Similarity Metrics"></a>Similarity Metrics</h4><p>A robust similarity score is key to the success of trackers. And a good similarity score is expected to reflect multiple cues. The commonly considered similarity metrics are as follows:</p>
 <ul>
