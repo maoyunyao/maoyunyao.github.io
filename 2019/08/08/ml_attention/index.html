@@ -90,7 +90,10 @@
 <meta property="og:image" content="https://maoyunyao.github.io/img/Attention/encoder-decoder.png">
 <meta property="og:image" content="https://maoyunyao.github.io/img/Attention/E_D_attention.png">
 <meta property="og:image" content="https://maoyunyao.github.io/img/Attention/attention_example.png">
-<meta property="og:updated_time" content="2019-08-08T05:33:05.159Z">
+<meta property="og:image" content="https://maoyunyao.github.io/img/Attention/RNN.png">
+<meta property="og:image" content="https://maoyunyao.github.io/img/Attention/compute_attention_prob_val.png">
+<meta property="og:image" content="https://maoyunyao.github.io/img/Attention/attention_calculate.png">
+<meta property="og:updated_time" content="2019-08-08T10:02:04.922Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Attention Mechanisms">
 <meta name="twitter:description" content="Attention MechanismsIn recent years, attention model has been broadly applied to natural language processing, image classification, speech Recognition and other different kinds of deep learning tasks.">
@@ -404,7 +407,29 @@ Target = <\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_n>\\</script><p><img src="/im
 \textbf{C}_{i}=\sum_{j=1}^{\mathbf{L}_{x}} \textbf{a}_{i j} \textbf{h}_{j}</script><p>Where $L_x$ represents the length of Source sentence, $a_{ij}$ represents the attention distribution probability of the word $\textbf{x}_j$ in Source sentence with respect to word $\textbf{y}_i$ in Target sentence. And $h_j$ is the semantic</p>
 <p><img src="/img/Attention/attention_example.png" alt=""></p>
 <p>So, here comes the problem. How do we get the attention distribution probability of the Source sentence for every Target word?</p>
-<p>Keep updating…</p>
+<p>For convenience, we take RNN as an example of the Encoder-Decoder:</p>
+<p><img src="/img/Attention/RNN.png" alt=""></p>
+<p>Now we can compute the attention distribution probability as follows:</p>
+<p><img src="/img/Attention/compute_attention_prob_val.png" alt=""></p>
+<p>To generate word $\textbf{y}_i$, we can get the value of hidden node in Decoder at $i-1$,denote as  $H_{i-1}$. Then we compare the value $H_{i-1}$ to each value of hidden node in Encoder, denote as $h_j$. We do this by calculating the value of the function $F(h_j,H_{i-1})$ which indicates the probability of alignment between target word $j$ and every Source word.</p>
+<h5 id="Attention-Essence"><a href="#Attention-Essence" class="headerlink" title="Attention Essence"></a>Attention Essence</h5><p>Assuming that Source consists of a series of $&lt;\text{Key}, \text{Value}&gt;$ pair. Then given a Query from Target, our mission is to get the weight of each Value in $&lt;\text{Key}, \text{Value}&gt;$ by calculating the similarity between Query and Key. Then we add up the Value by weight to get the final Attention.</p>
+<p><img src="/img/Attention/attention_calculate.png" alt=""></p>
+<p>In stage one, the most commonly used similarity metric are:</p>
+<ul>
+<li>Dot:</li>
+</ul>
+<script type="math/tex; mode=display">
+Similarity(Query,Key_i)=Query \cdot Key_i</script><ul>
+<li>Cosine:</li>
+</ul>
+<script type="math/tex; mode=display">
+Similarity(Query,Key_i)=\frac{Query \cdot Key_{i}}{\|Query\| \cdot\left\|Key_{i}\right\|}</script><ul>
+<li>MLP Network:</li>
+</ul>
+<script type="math/tex; mode=display">
+Similarity(Query,Key_i)=MLP(Query,Key_i)</script><p>In stage two, a Softmax function is applied to get normalized weight from the similarity. And in stage three, Values are added up by its weight.</p>
+<script type="math/tex; mode=display">
+Attention(Query, Source)=\sum_{i=1}^{L_x}a_i*Value_i</script><h5 id="Self-Attention"><a href="#Self-Attention" class="headerlink" title="Self Attention"></a>Self Attention</h5><p>Keep Updating…</p>
 <h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h4><p>[1] <a href="https://blog.csdn.net/tg229dvt5i93mxaq5a6u/article/details/78422216" target="_blank" rel="noopener">https://blog.csdn.net/tg229dvt5i93mxaq5a6u/article/details/78422216</a></p>
 <p>[2] <a href="https://blog.csdn.net/malefactor/article/details/50550211" target="_blank" rel="noopener">https://blog.csdn.net/malefactor/article/details/50550211</a></p>
 <p>[3] <a href="https://medium.com/syncedreview/a-brief-overview-of-attention-mechanism-13c578ba9129" target="_blank" rel="noopener">https://medium.com/syncedreview/a-brief-overview-of-attention-mechanism-13c578ba9129</a></p>
@@ -577,7 +602,7 @@ Target = <\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_n>\\</script><p><img src="/im
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Attention-Mechanisms"><span class="nav-number">1.</span> <span class="nav-text">Attention Mechanisms</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Human’s-attention"><span class="nav-number">1.0.1.</span> <span class="nav-text">Human’s attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Encoder-Decoder-Framework"><span class="nav-number">1.0.2.</span> <span class="nav-text">Encoder-Decoder Framework</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Encoder"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">Encoder:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Decoder"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">Decoder:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention-Model"><span class="nav-number">1.0.3.</span> <span class="nav-text">Attention Model</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Soft-Attention"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">Soft Attention:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Reference"><span class="nav-number">1.0.4.</span> <span class="nav-text">Reference:</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Attention-Mechanisms"><span class="nav-number">1.</span> <span class="nav-text">Attention Mechanisms</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Human’s-attention"><span class="nav-number">1.0.1.</span> <span class="nav-text">Human’s attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Encoder-Decoder-Framework"><span class="nav-number">1.0.2.</span> <span class="nav-text">Encoder-Decoder Framework</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Encoder"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">Encoder:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Decoder"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">Decoder:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention-Model"><span class="nav-number">1.0.3.</span> <span class="nav-text">Attention Model</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Soft-Attention"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">Soft Attention:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Attention-Essence"><span class="nav-number">1.0.3.2.</span> <span class="nav-text">Attention Essence</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Self-Attention"><span class="nav-number">1.0.3.3.</span> <span class="nav-text">Self Attention</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Reference"><span class="nav-number">1.0.4.</span> <span class="nav-text">Reference:</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
