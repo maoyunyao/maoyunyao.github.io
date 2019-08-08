@@ -397,7 +397,7 @@ Target = <\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_n>\\</script><p><img src="/im
 ...</script><p><img src="/img/Attention/E_D_attention.png" alt=""></p>
 <p>Every $\textbf{C}_i​$ may corresponding to different attention distribution probability of the source words:</p>
 <script type="math/tex; mode=display">
-\boldsymbol{C}_{\boldsymbol{i}}=\sum_{\boldsymbol{j}=\mathbf{1}}^{\mathbf{L}_{x}} \boldsymbol{a}_{i j} \boldsymbol{h}_{\boldsymbol{j}}</script><p>Where $L_x$ represents the length of Source sentence, $a_{ij}$ represents the attention distribution probability of the word $\textbf{x}_j$ in Source sentence with respect to word $\textbf{y}_i$ in Target sentence. And $h_j$ is the semantic</p>
+\textbf{C}_{i}=\sum_{j=1}^{\mathbf{L}_{x}} \textbf{a}_{i j} \textbf{h}_{j}</script><p>Where $L_x$ represents the length of Source sentence, $a_{ij}$ represents the attention distribution probability of the word $\textbf{x}_j$ in Source sentence with respect to word $\textbf{y}_i$ in Target sentence. And $h_j$ is the semantic</p>
 <p><img src="/img/Attention/attention_example.png" alt=""></p>
 <p>So, here comes the problem. How do we get the attention distribution probability of the Source sentence for every Target word?</p>
 <p>Keep updating…</p>
