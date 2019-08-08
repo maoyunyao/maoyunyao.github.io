@@ -93,7 +93,7 @@
 <meta property="og:image" content="https://maoyunyao.github.io/img/Attention/RNN.png">
 <meta property="og:image" content="https://maoyunyao.github.io/img/Attention/compute_attention_prob_val.png">
 <meta property="og:image" content="https://maoyunyao.github.io/img/Attention/attention_calculate.png">
-<meta property="og:updated_time" content="2019-08-08T11:10:23.969Z">
+<meta property="og:updated_time" content="2019-08-08T11:37:47.660Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Attention Mechanisms">
 <meta name="twitter:description" content="Attention MechanismsIn recent years, attention model has been broadly applied to natural language processing, image classification, speech recognition and other different kinds of deep learning tasks.">
@@ -411,7 +411,7 @@ Target = <\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_n>\\</script><p><img src="/im
 <p><img src="/img/Attention/RNN.png" alt=""></p>
 <p>Now we can compute the attention distribution probability as follows:</p>
 <p><img src="/img/Attention/compute_attention_prob_val.png" alt=""></p>
-<p>To generate word $\textbf{y}_i$, we can get the value of hidden node in Decoder at $i-1$, let’s denote as  $H_{i-1}$. Then we compare the value $H_{i-1}$ with each value of hidden node in Encoder, denote as $h_j$. We do this by calculating the value of the function $F(h_j,H_{i-1})$ which indicates similarity between targe $\textbf{y}_j​$ and every Source word.</p>
+<p>To generate word $\textbf{y}_i$, we can get the value of hidden node in Decoder at $i-1$, let’s denote as  $H_{i-1}$. Then we compare the value $H_{i-1}$ with each value of hidden node in Encoder, denote as $h_j$. We do this by calculating the value of the function $F(h_j,H_{i-1})$ which indicates alignment between targe $\textbf{y}_j$ and every Source word.</p>
 <h5 id="Attention-Essence"><a href="#Attention-Essence" class="headerlink" title="Attention Essence"></a>Attention Essence</h5><p>Assuming that Source consists of a series of $&lt;\text{Key}, \text{Value}&gt;​$ pair. Then given a Query from Target, our mission is to get the weight of each Value in $&lt;\text{Key}, \text{Value}&gt;​$ by calculating the similarity between Query and Key. Then we add up the Value by weight to get the final Attention.</p>
 <p><img src="/img/Attention/attention_calculate.png" alt=""></p>
 <p>In stage one, the most commonly used similarity metric are:</p>
@@ -429,7 +429,10 @@ Similarity(Query,Key_i)=\frac{Query \cdot Key_{i}}{\|Query\| \cdot\left\|Key_{i}
 <script type="math/tex; mode=display">
 Similarity(Query,Key_i)=MLP(Query,Key_i)</script><p>In stage two, a Softmax function is applied to get normalized weight from the similarity. And in stage three, Values are added up by its weight.</p>
 <script type="math/tex; mode=display">
-Attention(Query, Source)=\sum_{i=1}^{L_x}a_i*Value_i</script><h5 id="Self-Attention"><a href="#Self-Attention" class="headerlink" title="Self Attention"></a>Self Attention</h5><p>Keep Updating…</p>
+Attention(Query, Source)=\sum_{i=1}^{L_x}a_i*Value_i</script><h5 id="Self-Attention"><a href="#Self-Attention" class="headerlink" title="Self Attention"></a>Self Attention</h5><p>For normal attention mechanism application in Encoder-Decoder framework, The Source and Target are different. For example, in machine translation task, Source and Target indicate the Chinese and English sentence respectively.</p>
+<p>But for self attention, as is like its name, whose attention mechanism happens inside the Source or the Target. Or you can just understand it as Source == Target.</p>
+<p>Now the question is: What did self attention learn or what features did self attention extract from “Self”?.</p>
+<p>Keep updating…</p>
 <h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h4><p>[1] <a href="https://blog.csdn.net/tg229dvt5i93mxaq5a6u/article/details/78422216" target="_blank" rel="noopener">https://blog.csdn.net/tg229dvt5i93mxaq5a6u/article/details/78422216</a></p>
 <p>[2] <a href="https://blog.csdn.net/malefactor/article/details/50550211" target="_blank" rel="noopener">https://blog.csdn.net/malefactor/article/details/50550211</a></p>
 <p>[3] <a href="https://medium.com/syncedreview/a-brief-overview-of-attention-mechanism-13c578ba9129" target="_blank" rel="noopener">https://medium.com/syncedreview/a-brief-overview-of-attention-mechanism-13c578ba9129</a></p>
