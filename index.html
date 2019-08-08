@@ -380,10 +380,10 @@
           
             <h2 id="Attention-Mechanisms"><a href="#Attention-Mechanisms" class="headerlink" title="Attention Mechanisms"></a>Attention Mechanisms</h2><p>In recent years, attention model has been broadly applied to natural language processing, image classification, speech Recognition and other different kinds of deep learning tasks.</p>
 <h4 id="Human’s-attention"><a href="#Human’s-attention" class="headerlink" title="Human’s attention"></a>Human’s attention</h4><p>From the naming of attention model, it is obvious that it draws on the attention mechanism of human beings. The visual attention mechanism is a brain signal processing mechanism unique to human vision. By quickly scanning the global image, human vision obtains the target area that needs to be focused on, which is the focus of attention, and then invests more attention resources in this area to obtain more detailed information about the target. Other useless information are thus suppressed.</p>
-<p><img src="/home/myy/Desktop/Before_Public/human_attention.png" alt=""></p>
+<p><img src="/img/Attention/human_attention.jpg" alt=""></p>
 <h4 id="Encoder-Decoder-Framework"><a href="#Encoder-Decoder-Framework" class="headerlink" title="Encoder-Decoder Framework"></a>Encoder-Decoder Framework</h4><script type="math/tex; mode=display">
 Source = <\textbf{x}_1,\textbf{x}_2,...,\textbf{x}_m>\\
-Target = <\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_n>\\</script><p><img src="/home/myy/Desktop/Before_Public/encoder-decoder.png" alt=""></p>
+Target = <\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_n>\\</script><p><img src="/img/Attention/encoder-decoder.png" alt=""></p>
 <h5 id="Encoder"><a href="#Encoder" class="headerlink" title="Encoder:"></a>Encoder:</h5><script type="math/tex; mode=display">
 \textbf{C} = \textbf{F}(\textbf{x}_1,\textbf{x}_2,...,\textbf{x}_m)</script><h5 id="Decoder"><a href="#Decoder" class="headerlink" title="Decoder:"></a>Decoder:</h5><script type="math/tex; mode=display">
 \textbf{y}_i = \textbf{g}(\textbf{C},\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_{i-1})</script><h4 id="Attention-Model"><a href="#Attention-Model" class="headerlink" title="Attention Model"></a>Attention Model</h4><p>Let’s take machine translation as an example to explain the basic principles of the most common Soft Attention model. After that we leave the Encoder-Decoder framework to abstract the essence of the attention mechanism. Finally, we give a brief introduction of the recently widely used Self Attention model.</p>
@@ -394,15 +394,14 @@ Target = <\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_n>\\</script><p><img src="/ho
 <p>But if we introduce attention mechanism into the translation task, the original intermediate semantic representation $\textbf{C}$ will be replaced with $\textbf{C}_i$ when generating the word $\textbf{y}_i$.</p>
 <script type="math/tex; mode=display">
 \begin{array}{l}{\mathbf{y}_{1}=\mathbf{f}(\mathbf{C_1})} \\ {\mathbf{y}_{2}=\mathbf{f}\left(\mathbf{C_2}, \mathbf{y}_{1}\right)} \\ {\mathbf{y}_{3}=\mathbf{f}\left(\mathbf{C_3}, \mathbf{y}_{1}, \mathbf{y}_{2}\right)}\end{array}\\
-...</script><p><img src="/home/myy/Desktop/Before_Public/E_D_attention.png" alt=""></p>
+...</script><p><img src="/img/Attention/E_D_attention.png" alt=""></p>
 <p>Every $\textbf{C}_i​$ may corresponding to different attention distribution probability of the source words:</p>
 <script type="math/tex; mode=display">
 \boldsymbol{C}_{\boldsymbol{i}}=\sum_{\boldsymbol{j}=\mathbf{1}}^{\mathbf{L}_{x}} \boldsymbol{a}_{i j} \boldsymbol{h}_{\boldsymbol{j}}</script><p>Where $L_x$ represents the length of Source sentence, $a_{ij}$ represents the attention distribution probability of the word $\textbf{x}_j$ in Source sentence with respect to word $\textbf{y}_i$ in Target sentence. And $h_j$ is the semantic</p>
-<p><img src="/home/myy/Desktop/Before_Public/attention_example.png" alt=""></p>
+<p><img src="/img/Attention/attention_example.png" alt=""></p>
 <p>So, here comes the problem. How do we get the attention distribution probability of the Source sentence for every Target word?</p>
 <p>Keep updating…</p>
-<p>Reference:</p>
-<p>[1] <a href="https://blog.csdn.net/tg229dvt5i93mxaq5a6u/article/details/78422216" target="_blank" rel="noopener">https://blog.csdn.net/tg229dvt5i93mxaq5a6u/article/details/78422216</a></p>
+<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h4><p>[1] <a href="https://blog.csdn.net/tg229dvt5i93mxaq5a6u/article/details/78422216" target="_blank" rel="noopener">https://blog.csdn.net/tg229dvt5i93mxaq5a6u/article/details/78422216</a></p>
 <p>[2] <a href="https://blog.csdn.net/malefactor/article/details/50550211" target="_blank" rel="noopener">https://blog.csdn.net/malefactor/article/details/50550211</a></p>
 <p>[3] <a href="https://medium.com/syncedreview/a-brief-overview-of-attention-mechanism-13c578ba9129" target="_blank" rel="noopener">https://medium.com/syncedreview/a-brief-overview-of-attention-mechanism-13c578ba9129</a></p>
 
