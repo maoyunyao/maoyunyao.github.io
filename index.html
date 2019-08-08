@@ -378,7 +378,7 @@
       
         
           
-            <h2 id="Attention-Mechanisms"><a href="#Attention-Mechanisms" class="headerlink" title="Attention Mechanisms"></a>Attention Mechanisms</h2><p>In recent years, attention model has been broadly applied to natural language processing, image classification, speech Recognition and other different kinds of deep learning tasks.</p>
+            <h2 id="Attention-Mechanisms"><a href="#Attention-Mechanisms" class="headerlink" title="Attention Mechanisms"></a>Attention Mechanisms</h2><p>In recent years, attention model has been broadly applied to natural language processing, image classification, speech recognition and other different kinds of deep learning tasks.</p>
 <h4 id="Human’s-attention"><a href="#Human’s-attention" class="headerlink" title="Human’s attention"></a>Human’s attention</h4><p>From the naming of attention model, it is obvious that it draws on the attention mechanism of human beings. The visual attention mechanism is a brain signal processing mechanism unique to human vision. By quickly scanning the global image, human vision obtains the target area that needs to be focused on, which is the focus of attention, and then invests more attention resources in this area to obtain more detailed information about the target. Other useless information are thus suppressed.</p>
 <p><img src="/img/Attention/human_attention.jpg" alt=""></p>
 <h4 id="Encoder-Decoder-Framework"><a href="#Encoder-Decoder-Framework" class="headerlink" title="Encoder-Decoder Framework"></a>Encoder-Decoder Framework</h4><script type="math/tex; mode=display">
@@ -386,26 +386,26 @@ Source = <\textbf{x}_1,\textbf{x}_2,...,\textbf{x}_m>\\
 Target = <\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_n>\\</script><p><img src="/img/Attention/encoder-decoder.png" alt=""></p>
 <h5 id="Encoder"><a href="#Encoder" class="headerlink" title="Encoder:"></a>Encoder:</h5><script type="math/tex; mode=display">
 \textbf{C} = \textbf{F}(\textbf{x}_1,\textbf{x}_2,...,\textbf{x}_m)</script><h5 id="Decoder"><a href="#Decoder" class="headerlink" title="Decoder:"></a>Decoder:</h5><script type="math/tex; mode=display">
-\textbf{y}_i = \textbf{g}(\textbf{C},\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_{i-1})</script><h4 id="Attention-Model"><a href="#Attention-Model" class="headerlink" title="Attention Model"></a>Attention Model</h4><p>Let’s take machine translation as an example to explain the basic principles of the most common Soft Attention model. After that we leave the Encoder-Decoder framework to abstract the essence of the attention mechanism. Finally, we give a brief introduction of the recently widely used Self Attention model.</p>
+\textbf{y}_i = \textbf{g}(\textbf{C},\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_{i-1})</script><h4 id="Attention-Model"><a href="#Attention-Model" class="headerlink" title="Attention Model"></a>Attention Model</h4><p>Let’s take machine translation as an example to explain the basic principles of the most common Soft Attention model. After that we try to abstract the essence of the attention mechanism which is not necessarily restricted to the Encoder-Decoder framework. Finally, we give a brief introduction to the recently widely used Self Attention model.</p>
 <h5 id="Soft-Attention"><a href="#Soft-Attention" class="headerlink" title="Soft Attention:"></a>Soft Attention:</h5><p>When applying Encoder-Decoder framework to machine translation task without the attention model. It’s easy to discover that all words in the  target are generated from the same semantic representation $\textbf{C}$.</p>
 <script type="math/tex; mode=display">
 \begin{array}{l}{\mathbf{y}_{1}=\mathbf{f}\left(\mathbf{C}\right)} \\ {\mathbf{y}_{2}=\mathbf{f}\left(\mathbf{C}, \mathbf{y}_{1}\right)} \\ {\mathbf{y}_{3}=\mathbf{f}\left(\mathbf{C}, \mathbf{y}_{1}, \mathbf{y}_{2}\right)}\end{array}\\
-...</script><p>If the $Source$ sentence is long, all the semantics are completely represented by an intermediate semantic vector $\textbf{C}$, the information of the word itself will disappear.</p>
+...</script><p>If the $Source$ sentence is quite long, all the semantic information are completely represented by an intermediate semantic vector $\textbf{C}$, the information of the word itself will be ignored to some extent.</p>
 <p>But if we introduce attention mechanism into the translation task, the original intermediate semantic representation $\textbf{C}$ will be replaced with $\textbf{C}_i$ when generating the word $\textbf{y}_i$.</p>
 <script type="math/tex; mode=display">
 \begin{array}{l}{\mathbf{y}_{1}=\mathbf{f}\left(\mathbf{C_1}\right)} \\ {\mathbf{y}_{2}=\mathbf{f}\left(\mathbf{C_2}, \mathbf{y}_{1}\right)} \\ {\mathbf{y}_{3}=\mathbf{f}\left(\mathbf{C_3}, \mathbf{y}_{1}, \mathbf{y}_{2}\right)}\end{array}\\
 ...</script><p><img src="/img/Attention/E_D_attention.png" alt=""></p>
-<p>Every $\textbf{C}_i​$ may corresponding to different attention distribution probability of the source words:</p>
+<p>Different $\textbf{C}_i$ may have various attention distribution probability of the Source words:</p>
 <script type="math/tex; mode=display">
-\textbf{C}_{i}=\sum_{j=1}^{\mathbf{L}_{x}} \textbf{a}_{i j} \textbf{h}_{j}</script><p>Where $L_x$ represents the length of Source sentence, $a_{ij}$ represents the attention distribution probability of the word $\textbf{x}_j$ in Source sentence with respect to word $\textbf{y}_i$ in Target sentence. And $h_j$ is the semantic</p>
+\textbf{C}_{i}=\sum_{j=1}^{\mathbf{L}_{x}} \textbf{a}_{i j} \textbf{h}_{j}</script><p>Where $L_x$ represents the length of Source sentence, $a_{ij}$ represents the attention distribution probability of the word $\textbf{x}_j$ in Source sentence. And $h_j$ is the semantic representation of word $\textbf{x}_j$.</p>
 <p><img src="/img/Attention/attention_example.png" alt=""></p>
 <p>So, here comes the problem. How do we get the attention distribution probability of the Source sentence for every Target word?</p>
 <p>For convenience, we take RNN as an example of the Encoder-Decoder:</p>
 <p><img src="/img/Attention/RNN.png" alt=""></p>
 <p>Now we can compute the attention distribution probability as follows:</p>
 <p><img src="/img/Attention/compute_attention_prob_val.png" alt=""></p>
-<p>To generate word $\textbf{y}_i$, we can get the value of hidden node in Decoder at $i-1$,denote as  $H_{i-1}$. Then we compare the value $H_{i-1}$ to each value of hidden node in Encoder, denote as $h_j$. We do this by calculating the value of the function $F(h_j,H_{i-1})$ which indicates the probability of alignment between target word $j$ and every Source word.</p>
-<h5 id="Attention-Essence"><a href="#Attention-Essence" class="headerlink" title="Attention Essence"></a>Attention Essence</h5><p>Assuming that Source consists of a series of $&lt;\text{Key}, \text{Value}&gt;$ pair. Then given a Query from Target, our mission is to get the weight of each Value in $&lt;\text{Key}, \text{Value}&gt;$ by calculating the similarity between Query and Key. Then we add up the Value by weight to get the final Attention.</p>
+<p>To generate word $\textbf{y}_i$, we can get the value of hidden node in Decoder at $i-1$, let’s denote as  $H_{i-1}$. Then we compare the value $H_{i-1}$ with each value of hidden node in Encoder, denote as $h_j$. We do this by calculating the value of the function $F(h_j,H_{i-1})$ which indicates similarity between targe $\textbf{y}_j​$ and every Source word.</p>
+<h5 id="Attention-Essence"><a href="#Attention-Essence" class="headerlink" title="Attention Essence"></a>Attention Essence</h5><p>Assuming that Source consists of a series of $&lt;\text{Key}, \text{Value}&gt;​$ pair. Then given a Query from Target, our mission is to get the weight of each Value in $&lt;\text{Key}, \text{Value}&gt;​$ by calculating the similarity between Query and Key. Then we add up the Value by weight to get the final Attention.</p>
 <p><img src="/img/Attention/attention_calculate.png" alt=""></p>
 <p>In stage one, the most commonly used similarity metric are:</p>
 <ul>
