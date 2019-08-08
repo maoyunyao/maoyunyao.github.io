@@ -90,7 +90,7 @@
 <meta property="og:image" content="https://maoyunyao.github.io/img/Attention/encoder-decoder.png">
 <meta property="og:image" content="https://maoyunyao.github.io/img/Attention/E_D_attention.png">
 <meta property="og:image" content="https://maoyunyao.github.io/img/Attention/attention_example.png">
-<meta property="og:updated_time" content="2019-08-08T05:19:58.597Z">
+<meta property="og:updated_time" content="2019-08-08T05:33:05.159Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Attention Mechanisms">
 <meta name="twitter:description" content="Attention MechanismsIn recent years, attention model has been broadly applied to natural language processing, image classification, speech Recognition and other different kinds of deep learning tasks.">
@@ -393,11 +393,11 @@ Target = <\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_n>\\</script><p><img src="/im
 \textbf{y}_i = \textbf{g}(\textbf{C},\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_{i-1})</script><h4 id="Attention-Model"><a href="#Attention-Model" class="headerlink" title="Attention Model"></a>Attention Model</h4><p>Let’s take machine translation as an example to explain the basic principles of the most common Soft Attention model. After that we leave the Encoder-Decoder framework to abstract the essence of the attention mechanism. Finally, we give a brief introduction of the recently widely used Self Attention model.</p>
 <h5 id="Soft-Attention"><a href="#Soft-Attention" class="headerlink" title="Soft Attention:"></a>Soft Attention:</h5><p>When applying Encoder-Decoder framework to machine translation task without the attention model. It’s easy to discover that all words in the  target are generated from the same semantic representation $\textbf{C}$.</p>
 <script type="math/tex; mode=display">
-\begin{array}{l}{\mathbf{y}_{1}=\mathbf{f}(\mathbf{C})} \\ {\mathbf{y}_{2}=\mathbf{f}\left(\mathbf{C}, \mathbf{y}_{1}\right)} \\ {\mathbf{y}_{3}=\mathbf{f}\left(\mathbf{C}, \mathbf{y}_{1}, \mathbf{y}_{2}\right)}\end{array}\\
+\begin{array}{l}{\mathbf{y}_{1}=\mathbf{f}\left(\mathbf{C}\right)} \\ {\mathbf{y}_{2}=\mathbf{f}\left(\mathbf{C}, \mathbf{y}_{1}\right)} \\ {\mathbf{y}_{3}=\mathbf{f}\left(\mathbf{C}, \mathbf{y}_{1}, \mathbf{y}_{2}\right)}\end{array}\\
 ...</script><p>If the $Source$ sentence is long, all the semantics are completely represented by an intermediate semantic vector $\textbf{C}$, the information of the word itself will disappear.</p>
 <p>But if we introduce attention mechanism into the translation task, the original intermediate semantic representation $\textbf{C}$ will be replaced with $\textbf{C}_i$ when generating the word $\textbf{y}_i$.</p>
 <script type="math/tex; mode=display">
-\begin{array}{l}{\mathbf{y}_{1}=\mathbf{f}(\mathbf{C_1})} \\ {\mathbf{y}_{2}=\mathbf{f}\left(\mathbf{C_2}, \mathbf{y}_{1}\right)} \\ {\mathbf{y}_{3}=\mathbf{f}\left(\mathbf{C_3}, \mathbf{y}_{1}, \mathbf{y}_{2}\right)}\end{array}\\
+\begin{array}{l}{\mathbf{y}_{1}=\mathbf{f}\left(\mathbf{C_1}\right)} \\ {\mathbf{y}_{2}=\mathbf{f}\left(\mathbf{C_2}, \mathbf{y}_{1}\right)} \\ {\mathbf{y}_{3}=\mathbf{f}\left(\mathbf{C_3}, \mathbf{y}_{1}, \mathbf{y}_{2}\right)}\end{array}\\
 ...</script><p><img src="/img/Attention/E_D_attention.png" alt=""></p>
 <p>Every $\textbf{C}_i​$ may corresponding to different attention distribution probability of the source words:</p>
 <script type="math/tex; mode=display">
