@@ -285,6 +285,178 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/08/14/pytorch_dataloading/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.M">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="漫卷云舒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/14/pytorch_dataloading/" itemprop="url">Data Loading</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-14T12:00:00+10:00">
+                2019-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Pytorch/" itemprop="url" rel="index">
+                    <span itemprop="name">Pytorch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Dataset-class"><a href="#Dataset-class" class="headerlink" title="Dataset class"></a>Dataset class</h2><p><code>torch.utils.data.Dataset</code> 是一个表示数据集的抽象类. 自定义的数据集应该继承这一个类并修改其中的下列方法:</p>
+<ul>
+<li><code>__len__</code> : so that <code>len(dataset)</code> returns the size of the dataset.</li>
+<li><code>__getitem__</code> : to support the indexing such that <code>dataset[i]</code> can be used to get $i^{th}$ sample.</li>
+</ul>
+<h4 id="定义数据集子类"><a href="#定义数据集子类" class="headerlink" title="定义数据集子类:"></a>定义数据集子类:</h4><p>在该类的<code>__init__</code> 函数中我们定义了一个<code>transform</code> 变量, 我们将在下一节讲述它的用处. 我们可以自己定义 <code>__getitem__</code> 方法返回的数据格式, 比如下面的例子中我们返回的数据是包含图片及其特征点序列.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FaceLandmarksDataset</span><span class="params">(Dataset)</span>:</span></span><br><span class="line">    <span class="string">"""Face Landmarks dataset."""</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, csv_file, root_dir, transform=None)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            csv_file (string): Path to the csv file with annotations.</span></span><br><span class="line"><span class="string">            root_dir (string): Directory with all the images.</span></span><br><span class="line"><span class="string">            transform (callable, optional): Optional transform to be applied</span></span><br><span class="line"><span class="string">                on a sample.</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self.landmarks_frame = pd.read_csv(csv_file)</span><br><span class="line">        self.root_dir = root_dir</span><br><span class="line">        self.transform = transform</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__len__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> len(self.landmarks_frame)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getitem__</span><span class="params">(self, idx)</span>:</span></span><br><span class="line">        img_name = os.path.join(self.root_dir,</span><br><span class="line">                                self.landmarks_frame.iloc[idx, <span class="number">0</span>])</span><br><span class="line">        image = io.imread(img_name)</span><br><span class="line">        landmarks = self.landmarks_frame.iloc[idx, <span class="number">1</span>:]</span><br><span class="line">        landmarks = np.array([landmarks])</span><br><span class="line">        landmarks = landmarks.astype(<span class="string">'float'</span>).reshape(<span class="number">-1</span>, <span class="number">2</span>)</span><br><span class="line">        sample = &#123;<span class="string">'image'</span>: image, <span class="string">'landmarks'</span>: landmarks&#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.transform:</span><br><span class="line">            sample = self.transform(sample)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> sample</span><br></pre></td></tr></table></figure>
+<h4 id="创建数据集实例"><a href="#创建数据集实例" class="headerlink" title="创建数据集实例:"></a>创建数据集实例:</h4><p>实例化上面定义的数据集类之后, 我们就可以实现诸如通过 <code>dataset[index]</code> 来访问数据集中的第 $i​$ 个数据之类的操作了.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">face_dataset = FaceLandmarksDataset(csv_file=<span class="string">'data/faces/face_landmarks.csv'</span>,</span><br><span class="line">                                    root_dir=<span class="string">'data/faces/'</span>)</span><br><span class="line"></span><br><span class="line">fig = plt.figure()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(face_dataset)):</span><br><span class="line">    sample = face_dataset[i]</span><br><span class="line"></span><br><span class="line">    print(i, sample[<span class="string">'image'</span>].shape, sample[<span class="string">'landmarks'</span>].shape)</span><br><span class="line"></span><br><span class="line">    ax = plt.subplot(<span class="number">1</span>, <span class="number">4</span>, i + <span class="number">1</span>)</span><br><span class="line">    plt.tight_layout()</span><br><span class="line">    ax.set_title(<span class="string">'Sample #&#123;&#125;'</span>.format(i))</span><br><span class="line">    ax.axis(<span class="string">'off'</span>)</span><br><span class="line">    show_landmarks(**sample)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> i == <span class="number">3</span>:</span><br><span class="line">        plt.show()</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<h2 id="Transforms"><a href="#Transforms" class="headerlink" title="Transforms"></a>Transforms</h2><p>有时候在使用数据集之前我们需要对数据进行一些处理, 比如 <code>rescale</code>, <code>RandomCrop</code>, <code>ToTensor</code> 等操作. 下面就以这三个处理为例并以可调用类的方式 (以函数的方式需要频繁输入参数) 编写三个 <code>transforms</code>.</p>
+<p>三个分别实现三种 <code>transform</code> 功能的可执行类的定义如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rescale</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">"""Rescale the image in a sample to a given size.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        output_size (tuple or int): Desired output size. If tuple, output is</span></span><br><span class="line"><span class="string">            matched to output_size. If int, smaller of image edges is matched</span></span><br><span class="line"><span class="string">            to output_size keeping aspect ratio the same.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, output_size)</span>:</span></span><br><span class="line">        <span class="keyword">assert</span> isinstance(output_size, (int, tuple))</span><br><span class="line">        self.output_size = output_size</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, sample)</span>:</span></span><br><span class="line">        image, landmarks = sample[<span class="string">'image'</span>], sample[<span class="string">'landmarks'</span>]</span><br><span class="line"></span><br><span class="line">        h, w = image.shape[:<span class="number">2</span>]</span><br><span class="line">        <span class="keyword">if</span> isinstance(self.output_size, int):</span><br><span class="line">            <span class="keyword">if</span> h &gt; w:</span><br><span class="line">                new_h, new_w = self.output_size * h / w, self.output_size</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                new_h, new_w = self.output_size, self.output_size * w / h</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            new_h, new_w = self.output_size</span><br><span class="line"></span><br><span class="line">        new_h, new_w = int(new_h), int(new_w)</span><br><span class="line"></span><br><span class="line">        img = transform.resize(image, (new_h, new_w))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># h and w are swapped for landmarks because for images,</span></span><br><span class="line">        <span class="comment"># x and y axes are axis 1 and 0 respectively</span></span><br><span class="line">        landmarks = landmarks * [new_w / w, new_h / h]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">'image'</span>: img, <span class="string">'landmarks'</span>: landmarks&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RandomCrop</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">"""Crop randomly the image in a sample.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        output_size (tuple or int): Desired output size. If int, square crop</span></span><br><span class="line"><span class="string">            is made.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, output_size)</span>:</span></span><br><span class="line">        <span class="keyword">assert</span> isinstance(output_size, (int, tuple))</span><br><span class="line">        <span class="keyword">if</span> isinstance(output_size, int):</span><br><span class="line">            self.output_size = (output_size, output_size)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">assert</span> len(output_size) == <span class="number">2</span></span><br><span class="line">            self.output_size = output_size</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, sample)</span>:</span></span><br><span class="line">        image, landmarks = sample[<span class="string">'image'</span>], sample[<span class="string">'landmarks'</span>]</span><br><span class="line"></span><br><span class="line">        h, w = image.shape[:<span class="number">2</span>]</span><br><span class="line">        new_h, new_w = self.output_size</span><br><span class="line"></span><br><span class="line">        top = np.random.randint(<span class="number">0</span>, h - new_h)</span><br><span class="line">        left = np.random.randint(<span class="number">0</span>, w - new_w)</span><br><span class="line"></span><br><span class="line">        image = image[top: top + new_h,</span><br><span class="line">                      left: left + new_w]</span><br><span class="line"></span><br><span class="line">        landmarks = landmarks - [left, top]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">'image'</span>: image, <span class="string">'landmarks'</span>: landmarks&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ToTensor</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">"""Convert ndarrays in sample to Tensors."""</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, sample)</span>:</span></span><br><span class="line">        image, landmarks = sample[<span class="string">'image'</span>], sample[<span class="string">'landmarks'</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># swap color axis because</span></span><br><span class="line">        <span class="comment"># numpy image: H x W x C</span></span><br><span class="line">        <span class="comment"># torch image: C X H X W</span></span><br><span class="line">        image = image.transpose((<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">'image'</span>: torch.from_numpy(image),</span><br><span class="line">                <span class="string">'landmarks'</span>: torch.from_numpy(landmarks)&#125;</span><br></pre></td></tr></table></figure>
+<p>简单的使用例子, 其中第三个 <code>transform</code> 的构造中使用了 <code>torchvision</code> 中的 <code>transforms</code> 类的 <code>Compose</code> 方法, 它能够组合多个 <code>transform</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">scale = Rescale(<span class="number">256</span>)</span><br><span class="line">crop = RandomCrop(<span class="number">128</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># To combine more than one transform</span></span><br><span class="line">composed = transforms.Compose([Rescale(<span class="number">256</span>),</span><br><span class="line">                               RandomCrop(<span class="number">224</span>)])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Apply each of the above transforms on sample.</span></span><br><span class="line">sample = face_dataset[<span class="number">65</span>]</span><br><span class="line"><span class="keyword">for</span> i, tsfrm <span class="keyword">in</span> enumerate([scale, crop, composed]):</span><br><span class="line">    transformed_sample = tsfrm(sample)</span><br></pre></td></tr></table></figure>
+<h2 id="Iterating-through-the-dataset"><a href="#Iterating-through-the-dataset" class="headerlink" title="Iterating through the dataset"></a>Iterating through the dataset</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">transformed_dataset = FaceLandmarksDataset(csv_file=<span class="string">'data/faces/face_landmarks.csv'</span>,</span><br><span class="line">                                           root_dir=<span class="string">'data/faces/'</span>,</span><br><span class="line">                                           transform=transforms.Compose([</span><br><span class="line">                                               Rescale(<span class="number">256</span>),</span><br><span class="line">                                               RandomCrop(<span class="number">224</span>),</span><br><span class="line">                                               ToTensor()</span><br><span class="line">                                           ]))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(transformed_dataset)):</span><br><span class="line">    sample = transformed_dataset[i]</span><br><span class="line"></span><br><span class="line">    print(i, sample[<span class="string">'image'</span>].size(), sample[<span class="string">'landmarks'</span>].size())</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> i == <span class="number">3</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<p>尽管我们实现了数据集的相对基础的功能, 但是我们还有一些进阶功能尚未实现:</p>
+<ul>
+<li>Batching the data</li>
+<li>Shuffling the data</li>
+<li>Load the data in parallel using multiprocessing workers.</li>
+</ul>
+<h2 id="DataLoader"><a href="#DataLoader" class="headerlink" title="DataLoader"></a>DataLoader</h2><p><code>torch.utils.data.DataLoader</code> 是一个能够实现上述进阶功能的迭代器. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dataloader = DataLoader(transformed_dataset, batch_size=<span class="number">4</span>,</span><br><span class="line">                        shuffle=<span class="keyword">True</span>, num_workers=<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="Afterword-torchvision"><a href="#Afterword-torchvision" class="headerlink" title="Afterword: torchvision"></a>Afterword: torchvision</h2><p><code>torchvision</code> 包提供了一些常用的 <code>datasets</code>, <code>transforms</code>. </p>
+<p>它有一个更加通用的数据集 <code>ImageFolder</code>. 它假设图像已经被按如下的形式组织:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">root/ants/xxx.png</span><br><span class="line">root/ants/xxy.jpeg</span><br><span class="line">root/ants/xxz.png</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">root/bees/123.jpg</span><br><span class="line">root/bees/nsdf3.png</span><br><span class="line">root/bees/asd932_.png</span><br></pre></td></tr></table></figure>
+<p>其中的 <code>ants</code> 和 <code>bees</code> 等是类别标签. 相似地它也针对 <code>PIL.Image</code> 有些预定义的 <code>transforms</code>. 如: <code>RandomHorizontalFlip</code>, <code>Scale</code> 等. 我们可以使用 <code>torchvision</code> 的这些预定义特性编写一个 <code>dataloader</code> :</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torchvision <span class="keyword">import</span> transforms, datasets</span><br><span class="line"></span><br><span class="line">data_transform = transforms.Compose([</span><br><span class="line">        transforms.RandomSizedCrop(<span class="number">224</span>),</span><br><span class="line">        transforms.RandomHorizontalFlip(),</span><br><span class="line">        transforms.ToTensor(),</span><br><span class="line">        transforms.Normalize(mean=[<span class="number">0.485</span>, <span class="number">0.456</span>, <span class="number">0.406</span>],</span><br><span class="line">                             std=[<span class="number">0.229</span>, <span class="number">0.224</span>, <span class="number">0.225</span>])</span><br><span class="line">    ])</span><br><span class="line">hymenoptera_dataset = datasets.ImageFolder(root=<span class="string">'hymenoptera_data/train'</span>,</span><br><span class="line">                                           transform=data_transform)</span><br><span class="line">dataset_loader = torch.utils.data.DataLoader(hymenoptera_dataset,</span><br><span class="line">                                             batch_size=<span class="number">4</span>, shuffle=<span class="keyword">True</span>,</span><br><span class="line">                                             num_workers=<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+<p>参考文献:</p>
+<p>[1]Pytorch - Docs</p>
+<p>[2]Pytorch - Tutorials: A 60 Minute Blitz</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/08/08/ml_attention/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2364,169 +2536,11 @@ L(\textbf y,\textbf v) = \frac{1}{|D|} \sum_{u\in D} l(\textbf y[u],\textbf v[u]
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://maoyunyao.github.io/2019/05/17/pytorch_train_with_gpu/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mr.M">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="漫卷云舒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/17/pytorch_train_with_gpu/" itemprop="url">利用GPU训练</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-17T18:00:00+10:00">
-                2019-05-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Pytorch/" itemprop="url" rel="index">
-                    <span itemprop="name">Pytorch</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Train-with-GPU"><a href="#Train-with-GPU" class="headerlink" title="Train with GPU"></a>Train with GPU</h2><p>之前我们已经讨论过 Pytorch 对与 CUDA 的良好支持, 那么自然地我们可以使用强悍的 GPU 设备来训练搭建好的神经网络, 以此来达到加速训练的效果. 毕竟炼丹还是需要良好的硬件支持的是吧.</p>
-<h4 id="单GPU训练"><a href="#单GPU训练" class="headerlink" title="单GPU训练"></a>单GPU训练</h4><p>使用单个 GPU 训练的方法非常简单, 我们只需要将网络部署到 CUDA 的 GPU 设备上并且将数据也部署到相同的设备上即可. 部署的方式与我们之前讨论过的 Tensor 的部署方法相同.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>device = torch.device(<span class="string">"cuda:0"</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">"cpu"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>net.to(device)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>inputs, labels = inputs.to(device), labels.to(device)</span><br></pre></td></tr></table></figure>
-<p>注意此处 <code>tensor.to(device)</code> 仅仅将原 Tensor 在 GPU 上作一个拷贝并返回拷贝的 Tensor, 并不对原 Tensor 有任何修改.</p>
-<h4 id="多GPU训练"><a href="#多GPU训练" class="headerlink" title="多GPU训练"></a>多GPU训练</h4><p>默认情况下 Pytorch 只会使用单个 GPU 进行模型的训练, 你可以使用 <code>DataParallel</code> 来实现多 GPU 的模型计算, 其原型为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.nn.DataParallel(module, device_ids=None, output_device=None, dim=0)</span><br></pre></td></tr></table></figure>
-<p>参数解释如下:</p>
-<ul>
-<li><code>module</code>: 需要多 GPU 并行计算的模型</li>
-<li><code>device_ids</code>: CUDA 设备的 ID, 默认为全部可用设备</li>
-<li><code>output_device</code>: 输出所在设备, 默认为 <code>device_ids[0]</code></li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> torch.cuda.device_count() == <span class="number">3</span>:</span><br><span class="line">  print(<span class="string">"Let's use"</span>, torch.cuda.device_count(), <span class="string">"GPUs!"</span>)</span><br><span class="line">  model = nn.DataParallel(model, device_ids=[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">model.to(device)</span><br></pre></td></tr></table></figure>
-<p>没错就是这么简单, 结束了.</p>
-<p>参考文献:</p>
-<p>[1]Pytorch - Docs</p>
-<p>[2]Pytorch - Tutorials: A 60 Minute Blitz</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2576,7 +2590,7 @@ L(\textbf y,\textbf v) = \frac{1}{|D|} \sum_{u\in D} l(\textbf y[u],\textbf v[u]
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
