@@ -378,39 +378,18 @@
       
         
           
-            <h2 id="Dataset-class"><a href="#Dataset-class" class="headerlink" title="Dataset class"></a>Dataset class</h2><p><code>torch.utils.data.Dataset</code> 是一个表示数据集的抽象类. 自定义的数据集应该继承这一个类并修改其中的下列方法:</p>
-<ul>
-<li><code>__len__</code> : so that <code>len(dataset)</code> returns the size of the dataset.</li>
-<li><code>__getitem__</code> : to support the indexing such that <code>dataset[i]</code> can be used to get $i^{th}$ sample.</li>
-</ul>
-<h4 id="定义数据集子类"><a href="#定义数据集子类" class="headerlink" title="定义数据集子类:"></a>定义数据集子类:</h4><p>在该类的<code>__init__</code> 函数中我们定义了一个<code>transform</code> 变量, 我们将在下一节讲述它的用处. 我们可以自己定义 <code>__getitem__</code> 方法返回的数据格式, 比如下面的例子中我们返回的数据是包含图片及其特征点序列的字典.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FaceLandmarksDataset</span><span class="params">(Dataset)</span>:</span></span><br><span class="line">    <span class="string">"""Face Landmarks dataset."""</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, csv_file, root_dir, transform=None)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            csv_file (string): Path to the csv file with annotations.</span></span><br><span class="line"><span class="string">            root_dir (string): Directory with all the images.</span></span><br><span class="line"><span class="string">            transform (callable, optional): Optional transform to be applied</span></span><br><span class="line"><span class="string">                on a sample.</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self.landmarks_frame = pd.read_csv(csv_file)</span><br><span class="line">        self.root_dir = root_dir</span><br><span class="line">        self.transform = transform</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__len__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> len(self.landmarks_frame)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getitem__</span><span class="params">(self, idx)</span>:</span></span><br><span class="line">        img_name = os.path.join(self.root_dir,</span><br><span class="line">                                self.landmarks_frame.iloc[idx, <span class="number">0</span>])</span><br><span class="line">        image = io.imread(img_name)</span><br><span class="line">        landmarks = self.landmarks_frame.iloc[idx, <span class="number">1</span>:]</span><br><span class="line">        landmarks = np.array([landmarks])</span><br><span class="line">        landmarks = landmarks.astype(<span class="string">'float'</span>).reshape(<span class="number">-1</span>, <span class="number">2</span>)</span><br><span class="line">        sample = &#123;<span class="string">'image'</span>: image, <span class="string">'landmarks'</span>: landmarks&#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.transform:</span><br><span class="line">            sample = self.transform(sample)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> sample</span><br></pre></td></tr></table></figure>
-<h4 id="创建数据集实例"><a href="#创建数据集实例" class="headerlink" title="创建数据集实例:"></a>创建数据集实例:</h4><p>实例化上面定义的数据集类之后, 我们就可以实现诸如通过 <code>dataset[index]</code> 来访问数据集中的第 $i​$ 个数据之类的操作了.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">face_dataset = FaceLandmarksDataset(csv_file=<span class="string">'data/faces/face_landmarks.csv'</span>,</span><br><span class="line">                                    root_dir=<span class="string">'data/faces/'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(face_dataset)):</span><br><span class="line">    sample = face_dataset[i]</span><br><span class="line"></span><br><span class="line">    print(i, sample[<span class="string">'image'</span>].shape, sample[<span class="string">'landmarks'</span>].shape)</span><br></pre></td></tr></table></figure>
-<h2 id="Transforms"><a href="#Transforms" class="headerlink" title="Transforms"></a>Transforms</h2><p>有时候在使用数据集之前我们需要对数据进行一些处理, 比如 <code>rescale</code>, <code>RandomCrop</code>, <code>ToTensor</code> 等操作. 下面就以这三个处理为例并以可调用类的方式 (以函数的方式需要频繁输入参数) 编写三个 <code>transforms</code>.</p>
-<p>三个分别实现三种 <code>transform</code> 功能的可执行类的定义如下:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rescale</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">"""Rescale the image in a sample to a given size.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        output_size (tuple or int): Desired output size. If tuple, output is</span></span><br><span class="line"><span class="string">            matched to output_size. If int, smaller of image edges is matched</span></span><br><span class="line"><span class="string">            to output_size keeping aspect ratio the same.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, output_size)</span>:</span></span><br><span class="line">        <span class="keyword">assert</span> isinstance(output_size, (int, tuple))</span><br><span class="line">        self.output_size = output_size</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, sample)</span>:</span></span><br><span class="line">        image, landmarks = sample[<span class="string">'image'</span>], sample[<span class="string">'landmarks'</span>]</span><br><span class="line"></span><br><span class="line">        h, w = image.shape[:<span class="number">2</span>]</span><br><span class="line">        <span class="keyword">if</span> isinstance(self.output_size, int):</span><br><span class="line">            <span class="keyword">if</span> h &gt; w:</span><br><span class="line">                new_h, new_w = self.output_size * h / w, self.output_size</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                new_h, new_w = self.output_size, self.output_size * w / h</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            new_h, new_w = self.output_size</span><br><span class="line"></span><br><span class="line">        new_h, new_w = int(new_h), int(new_w)</span><br><span class="line"></span><br><span class="line">        img = transform.resize(image, (new_h, new_w))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># h and w are swapped for landmarks because for images,</span></span><br><span class="line">        <span class="comment"># x and y axes are axis 1 and 0 respectively</span></span><br><span class="line">        landmarks = landmarks * [new_w / w, new_h / h]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">'image'</span>: img, <span class="string">'landmarks'</span>: landmarks&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RandomCrop</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">"""Crop randomly the image in a sample.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        output_size (tuple or int): Desired output size. If int, square crop</span></span><br><span class="line"><span class="string">            is made.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, output_size)</span>:</span></span><br><span class="line">        <span class="keyword">assert</span> isinstance(output_size, (int, tuple))</span><br><span class="line">        <span class="keyword">if</span> isinstance(output_size, int):</span><br><span class="line">            self.output_size = (output_size, output_size)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">assert</span> len(output_size) == <span class="number">2</span></span><br><span class="line">            self.output_size = output_size</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, sample)</span>:</span></span><br><span class="line">        image, landmarks = sample[<span class="string">'image'</span>], sample[<span class="string">'landmarks'</span>]</span><br><span class="line"></span><br><span class="line">        h, w = image.shape[:<span class="number">2</span>]</span><br><span class="line">        new_h, new_w = self.output_size</span><br><span class="line"></span><br><span class="line">        top = np.random.randint(<span class="number">0</span>, h - new_h)</span><br><span class="line">        left = np.random.randint(<span class="number">0</span>, w - new_w)</span><br><span class="line"></span><br><span class="line">        image = image[top: top + new_h,</span><br><span class="line">                      left: left + new_w]</span><br><span class="line"></span><br><span class="line">        landmarks = landmarks - [left, top]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">'image'</span>: image, <span class="string">'landmarks'</span>: landmarks&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ToTensor</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">"""Convert ndarrays in sample to Tensors."""</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, sample)</span>:</span></span><br><span class="line">        image, landmarks = sample[<span class="string">'image'</span>], sample[<span class="string">'landmarks'</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># swap color axis because</span></span><br><span class="line">        <span class="comment"># numpy image: H x W x C</span></span><br><span class="line">        <span class="comment"># torch image: C X H X W</span></span><br><span class="line">        image = image.transpose((<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">'image'</span>: torch.from_numpy(image),</span><br><span class="line">                <span class="string">'landmarks'</span>: torch.from_numpy(landmarks)&#125;</span><br></pre></td></tr></table></figure>
-<p>简单的使用例子, 其中第三个 <code>transform</code> 的构造中使用了 <code>torchvision</code> 中的 <code>transforms</code> 类的 <code>Compose</code> 方法, 它能够组合多个 <code>transform</code>.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">scale = Rescale(<span class="number">256</span>)</span><br><span class="line">crop = RandomCrop(<span class="number">128</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># To combine more than one transform</span></span><br><span class="line">composed = transforms.Compose([Rescale(<span class="number">256</span>),</span><br><span class="line">                               RandomCrop(<span class="number">224</span>)])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Apply each of the above transforms on sample.</span></span><br><span class="line">sample = face_dataset[<span class="number">65</span>]</span><br><span class="line"><span class="keyword">for</span> i, tsfrm <span class="keyword">in</span> enumerate([scale, crop, composed]):</span><br><span class="line">    transformed_sample = tsfrm(sample)</span><br></pre></td></tr></table></figure>
-<h2 id="Iterating-through-the-dataset"><a href="#Iterating-through-the-dataset" class="headerlink" title="Iterating through the dataset"></a>Iterating through the dataset</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">transformed_dataset = FaceLandmarksDataset(csv_file=<span class="string">'data/faces/face_landmarks.csv'</span>,</span><br><span class="line">                                           root_dir=<span class="string">'data/faces/'</span>,</span><br><span class="line">                                           transform=transforms.Compose([</span><br><span class="line">                                               Rescale(<span class="number">256</span>),</span><br><span class="line">                                               RandomCrop(<span class="number">224</span>),</span><br><span class="line">                                               ToTensor()</span><br><span class="line">                                           ]))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(transformed_dataset)):</span><br><span class="line">    sample = transformed_dataset[i]</span><br><span class="line">    print(i, sample[<span class="string">'image'</span>].size(), sample[<span class="string">'landmarks'</span>].size())</span><br></pre></td></tr></table></figure>
-<p>尽管我们实现了数据集的相对基础的功能, 但是我们还有一些进阶功能尚未实现:</p>
-<ul>
-<li>Batching the data</li>
-<li>Shuffling the data</li>
-<li>Load the data in parallel using multiprocessing workers.</li>
-</ul>
-<h2 id="DataLoader"><a href="#DataLoader" class="headerlink" title="DataLoader"></a>DataLoader</h2><p><code>torch.utils.data.DataLoader</code> 是一个能够实现上述进阶功能的迭代器. </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dataloader = DataLoader(transformed_dataset, batch_size=<span class="number">4</span>,</span><br><span class="line">                        shuffle=<span class="keyword">True</span>, num_workers=<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="Afterword-torchvision"><a href="#Afterword-torchvision" class="headerlink" title="Afterword: torchvision"></a>Afterword: torchvision</h2><p><code>torchvision</code> 包提供了一些常用的 <code>datasets</code>, <code>transforms</code>. </p>
-<p>它有一个更加通用的数据集 <code>ImageFolder</code>. 它假设图像已经被按如下的形式组织:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">root/ants/xxx.png</span><br><span class="line">root/ants/xxy.jpeg</span><br><span class="line">root/ants/xxz.png</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">root/bees/123.jpg</span><br><span class="line">root/bees/nsdf3.png</span><br><span class="line">root/bees/asd932_.png</span><br></pre></td></tr></table></figure>
-<p>其中的 <code>ants</code> 和 <code>bees</code> 等是类别标签. 相似地它也针对 <code>PIL.Image</code> 有些预定义的 <code>transforms</code>. 如: <code>RandomHorizontalFlip</code>, <code>Scale</code> 等. 我们可以使用 <code>torchvision</code> 的这些预定义特性编写一个 <code>dataloader</code> :</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torchvision <span class="keyword">import</span> transforms, datasets</span><br><span class="line"></span><br><span class="line">data_transform = transforms.Compose([</span><br><span class="line">        transforms.RandomSizedCrop(<span class="number">224</span>),</span><br><span class="line">        transforms.RandomHorizontalFlip(),</span><br><span class="line">        transforms.ToTensor(),</span><br><span class="line">        transforms.Normalize(mean=[<span class="number">0.485</span>, <span class="number">0.456</span>, <span class="number">0.406</span>],</span><br><span class="line">                             std=[<span class="number">0.229</span>, <span class="number">0.224</span>, <span class="number">0.225</span>])</span><br><span class="line">    ])</span><br><span class="line">hymenoptera_dataset = datasets.ImageFolder(root=<span class="string">'hymenoptera_data/train'</span>,</span><br><span class="line">                                           transform=data_transform)</span><br><span class="line">dataset_loader = torch.utils.data.DataLoader(hymenoptera_dataset,</span><br><span class="line">                                             batch_size=<span class="number">4</span>, shuffle=<span class="keyword">True</span>,</span><br><span class="line">                                             num_workers=<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
-<p>参考文献:</p>
-<p>[1]Pytorch - Docs</p>
-<p>[2]Pytorch - Tutorials: A 60 Minute Blitz</p>
+          Dataset classtorch.utils.data.Dataset 是一个表示数据集的抽象类. 自定义的数据集应该继承这一个类并修改其中的下列方法:
 
-          
+__len__ : so that len(dataset) returns the size of the dataset.
+__geti
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/08/14/pytorch_dataloading/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -550,59 +529,15 @@
       
         
           
-            <h2 id="Attention-Mechanisms"><a href="#Attention-Mechanisms" class="headerlink" title="Attention Mechanisms"></a>Attention Mechanisms</h2><p>In recent years, attention model has been broadly applied to natural language processing, image classification, speech recognition and other different kinds of deep learning tasks.</p>
-<h4 id="Human’s-attention"><a href="#Human’s-attention" class="headerlink" title="Human’s attention"></a>Human’s attention</h4><p>From the naming of attention model, it is obvious that it draws on the attention mechanism of human beings. The visual attention mechanism is a brain signal processing mechanism unique to human vision. By quickly scanning the global image, human vision obtains the target area that needs to be focused on, which is the focus of attention, and then invests more attention resources in this area to obtain more detailed information about the target. Other useless information are thus suppressed.</p>
-<p><img src="/img/Attention/human_attention.jpg" alt=""></p>
-<h4 id="Encoder-Decoder-Framework"><a href="#Encoder-Decoder-Framework" class="headerlink" title="Encoder-Decoder Framework"></a>Encoder-Decoder Framework</h4><script type="math/tex; mode=display">
-Source = <\textbf{x}_1,\textbf{x}_2,...,\textbf{x}_m>\\
-Target = <\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_n>\\</script><p><img src="/img/Attention/encoder-decoder.png" alt=""></p>
-<h5 id="Encoder"><a href="#Encoder" class="headerlink" title="Encoder:"></a>Encoder:</h5><script type="math/tex; mode=display">
-\textbf{C} = \textbf{F}(\textbf{x}_1,\textbf{x}_2,...,\textbf{x}_m)</script><h5 id="Decoder"><a href="#Decoder" class="headerlink" title="Decoder:"></a>Decoder:</h5><script type="math/tex; mode=display">
-\textbf{y}_i = \textbf{g}(\textbf{C},\textbf{y}_1,\textbf{y}_2,...,\textbf{y}_{i-1})</script><h4 id="Attention-Model"><a href="#Attention-Model" class="headerlink" title="Attention Model"></a>Attention Model</h4><p>Let’s take machine translation as an example to explain the basic principles of the most common Soft Attention model. After that we try to abstract the essence of the attention mechanism which is not necessarily restricted to the Encoder-Decoder framework. Finally, we give a brief introduction to the recently widely used Self Attention model.</p>
-<h5 id="Soft-Attention"><a href="#Soft-Attention" class="headerlink" title="Soft Attention:"></a>Soft Attention:</h5><p>When applying Encoder-Decoder framework to machine translation task without the attention model. It’s easy to discover that all words in the  target are generated from the same semantic representation $\textbf{C}$.</p>
-<script type="math/tex; mode=display">
-\begin{array}{l}{\mathbf{y}_{1}=\mathbf{f}\left(\mathbf{C}\right)} \\ {\mathbf{y}_{2}=\mathbf{f}\left(\mathbf{C}, \mathbf{y}_{1}\right)} \\ {\mathbf{y}_{3}=\mathbf{f}\left(\mathbf{C}, \mathbf{y}_{1}, \mathbf{y}_{2}\right)}\end{array}\\
-...</script><p>If the $Source$ sentence is quite long, all the semantic information are completely represented by an intermediate semantic vector $\textbf{C}$, the information of the word itself will be ignored to some extent.</p>
-<p>But if we introduce attention mechanism into the translation task, the original intermediate semantic representation $\textbf{C}$ will be replaced with $\textbf{C}_i$ when generating the word $\textbf{y}_i$.</p>
-<script type="math/tex; mode=display">
-\begin{array}{l}{\mathbf{y}_{1}=\mathbf{f}\left(\mathbf{C_1}\right)} \\ {\mathbf{y}_{2}=\mathbf{f}\left(\mathbf{C_2}, \mathbf{y}_{1}\right)} \\ {\mathbf{y}_{3}=\mathbf{f}\left(\mathbf{C_3}, \mathbf{y}_{1}, \mathbf{y}_{2}\right)}\end{array}\\
-...</script><p><img src="/img/Attention/E_D_attention.png" alt=""></p>
-<p>Different $\textbf{C}_i$ may have various attention distribution probability of the Source words:</p>
-<script type="math/tex; mode=display">
-\textbf{C}_{i}=\sum_{j=1}^{\mathbf{L}_{x}} \textbf{a}_{i j} \textbf{h}_{j}</script><p>Where $L_x$ represents the length of Source sentence, $a_{ij}$ represents the attention distribution probability of the word $\textbf{x}_j$ in Source sentence. And $h_j$ is the semantic representation of word $\textbf{x}_j$.</p>
-<p><img src="/img/Attention/attention_example.png" alt=""></p>
-<p>So, here comes the problem. How do we get the attention distribution probability of the Source sentence for every Target word?</p>
-<p>For convenience, we take RNN as an example of the Encoder-Decoder:</p>
-<p><img src="/img/Attention/RNN.png" alt=""></p>
-<p>Now we can compute the attention distribution probability as follows:</p>
-<p><img src="/img/Attention/compute_attention_prob_val.png" alt=""></p>
-<p>To generate word $\textbf{y}_i$, we can get the value of hidden node in Decoder at $i-1$, let’s denote as  $H_{i-1}$. Then we compare the value $H_{i-1}$ with each value of hidden node in Encoder, denote as $h_j$. We do this by calculating the value of the function $F(h_j,H_{i-1})$ which indicates alignment between targe $\textbf{y}_j$ and every Source word.</p>
-<h5 id="Attention-Essence"><a href="#Attention-Essence" class="headerlink" title="Attention Essence"></a>Attention Essence</h5><p>Assuming that Source consists of a series of $&lt;\text{Key}, \text{Value}&gt;​$ pair. Then given a Query from Target, our mission is to get the weight of each Value in $&lt;\text{Key}, \text{Value}&gt;​$ by calculating the similarity between Query and Key. Then we add up the Value by weight to get the final Attention.</p>
-<p><img src="/img/Attention/attention_calculate.png" alt=""></p>
-<p>In stage one, the most commonly used similarity metric are:</p>
-<ul>
-<li>Dot:</li>
-</ul>
-<script type="math/tex; mode=display">
-Similarity(Query,Key_i)=Query \cdot Key_i</script><ul>
-<li>Cosine:</li>
-</ul>
-<script type="math/tex; mode=display">
-Similarity(Query,Key_i)=\frac{Query \cdot Key_{i}}{\|Query\| \cdot\left\|Key_{i}\right\|}</script><ul>
-<li>MLP Network:</li>
-</ul>
-<script type="math/tex; mode=display">
-Similarity(Query,Key_i)=MLP(Query,Key_i)</script><p>In stage two, a Softmax function is applied to get normalized weight from the similarity. And in stage three, Values are added up by its weight.</p>
-<script type="math/tex; mode=display">
-Attention(Query, Source)=\sum_{i=1}^{L_x}a_i*Value_i</script><h5 id="Self-Attention"><a href="#Self-Attention" class="headerlink" title="Self Attention"></a>Self Attention</h5><p>For normal attention mechanism application in Encoder-Decoder framework, The Source and Target are different. For example, in machine translation task, Source and Target indicate the Chinese and English sentence respectively.</p>
-<p>But for self attention, as is like its name, whose attention mechanism happens inside the Source or the Target. Or you can just understand it as Source == Target.</p>
-<p>Now the question is: What did self attention learn or what features did self attention extract from “Self”?.</p>
-<p>Keep updating…</p>
-<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h4><p>[1] <a href="https://blog.csdn.net/tg229dvt5i93mxaq5a6u/article/details/78422216" target="_blank" rel="noopener">https://blog.csdn.net/tg229dvt5i93mxaq5a6u/article/details/78422216</a></p>
-<p>[2] <a href="https://blog.csdn.net/malefactor/article/details/50550211" target="_blank" rel="noopener">https://blog.csdn.net/malefactor/article/details/50550211</a></p>
-<p>[3] <a href="https://medium.com/syncedreview/a-brief-overview-of-attention-mechanism-13c578ba9129" target="_blank" rel="noopener">https://medium.com/syncedreview/a-brief-overview-of-attention-mechanism-13c578ba9129</a></p>
-
-          
+          Attention MechanismsIn recent years, attention model has been broadly applied to natural language processing, image classification, speech recognition
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/08/08/ml_attention/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -742,26 +677,16 @@ Attention(Query, Source)=\sum_{i=1}^{L_x}a_i*Value_i</script><h5 id="Self-Attent
       
         
           
-            <h2 id="Multiple-Object-Tracking"><a href="#Multiple-Object-Tracking" class="headerlink" title="Multiple Object Tracking"></a>Multiple Object Tracking</h2><p>An investigation of real time multiple object tracking. Mainly focused on Tracking-by-detection paradigm</p>
-<h4 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h4><p>Most recent approaches follow the popular “tracking-by-detection” paradigm. The overall steps are roughly as follows:</p>
-<ol>
-<li>Objects to be tracked are firstly detected with bounding boxes in each frame.</li>
-<li>When a new frame come with its detected bounding boxes, we calculate similarities between newly detected objects and existing tracklets before this frame.</li>
-<li>Associating the newly detected objects with existing tracklets based on the  similarities we calculated in step 2.</li>
-<li>Do some dirty details like tracklets deletion/creation etc.</li>
-</ol>
-<h4 id="Similarity-Metrics"><a href="#Similarity-Metrics" class="headerlink" title="Similarity Metrics"></a>Similarity Metrics</h4><p>A robust similarity score is key to the success of trackers. And a good similarity score is expected to reflect multiple cues. The commonly considered similarity metrics are as follows:</p>
-<ul>
-<li>Appearance</li>
-<li>Location/Motion</li>
-<li>Topological</li>
-</ul>
-<h4 id="Association-algorithm"><a href="#Association-algorithm" class="headerlink" title="Association algorithm"></a>Association algorithm</h4><p>The most commonly used data association algorithm in MOT problem is the Hungarian algorithm. A brief introduction can be found <a href="https://blog.maoyunyao.cn/2019/08/04/algorithm_hungarian/" target="_blank" rel="noopener">here</a>.</p>
-<p>Denote the $i^{th}$ tracklet before frame $t-1$  as $\textbf{T}_i^{t-1}=\{\textbf{b}_i^1,\textbf{b}_i^2,…,\textbf{b}_i^{t-1}\}$ and the detected objects at current frame $t$ as $\textbf{D}_t = \{\textbf{b}_j^t\}_{j=1}^{N_t}$. Each pair $(\textbf{T}_i^{t-1},\textbf{b}_j^t)$ is assigned a similarity score $s_{ij}^t$. Considering all existing tracklets before frame $t-1$, we can get a bipartite graph.</p>
-<p>Now the Hungarian algorithm can be  adopted on the bipartite graph to get the optimal assignments.</p>
-<h4 id="Related-paper"><a href="#Related-paper" class="headerlink" title="Related paper"></a>Related paper</h4><p>Keep Updating…..</p>
-
-          
+          Multiple Object TrackingAn investigation of real time multiple object tracking. Mainly focused on Tracking-by-detection paradigm
+IntroductionMost rece
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/08/06/paper_MOT_survey/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -901,204 +826,16 @@ Attention(Query, Source)=\sum_{i=1}^{L_x}a_i*Value_i</script><h5 id="Self-Attent
       
         
           
-            <h2 id="Hungarian-Algorithm"><a href="#Hungarian-Algorithm" class="headerlink" title="Hungarian Algorithm"></a>Hungarian Algorithm</h2><h4 id="Brief-introduction"><a href="#Brief-introduction" class="headerlink" title="Brief introduction:"></a>Brief introduction:</h4><p>A combinatorial optimization algorithm that solves the assignment problem in polynomial time.</p>
-<p>It was developed and published in 1955 by <a href="https://en.wikipedia.org/wiki/Harold_Kuhn" target="_blank" rel="noopener">Harold Kuhn</a>, who gave the name “Hungarian method” because the algorithm was largely based on the earlier works of two <a href="https://en.wikipedia.org/wiki/Hungary" target="_blank" rel="noopener">Hungarian</a> mathematicians: <a href="https://en.wikipedia.org/wiki/D%C3%A9nes_K%C5%91nig" target="_blank" rel="noopener">Dénes Kőnig</a> and <a href="https://en.wikipedia.org/wiki/Jen%C5%91_Egerv%C3%A1ry" target="_blank" rel="noopener">Jenő Egerváry</a>.</p>
-<p>There are two ways to formulate the problem: as a matrix or as a bipartite graph.</p>
-<h4 id="Matrix-Formulation"><a href="#Matrix-Formulation" class="headerlink" title="Matrix Formulation:"></a>Matrix Formulation:</h4><p>In the matrix formulation, we are given a nonnegative <em>n×n</em> matrix, where the element in the <em>i</em>-th row and <em>j</em>-th column represents the cost of assigning the <em>j</em>-th job to the <em>i</em>-th worker. We have to find an assignment of the jobs to the workers, such that each job is assigned to one worker and each worker is assigned one job, such that the total cost of assignment is minimum.</p>
-<h4 id="Bigraph-Formulation"><a href="#Bigraph-Formulation" class="headerlink" title="Bigraph Formulation:"></a>Bigraph Formulation:</h4><p>In the matrix formulation, we have a complete bipartite graph $G=(S,T;E)​$ with <em>n</em> worker vertices ($S​$) and <em>n</em> job vertices ($T​$), and each edge has a nonnegative cost $c(i,j)​$. We want to find a perfect matching with a minimum total cost.</p>
-<h4 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm:"></a>Algorithm:</h4><p>Here we describe the algorithm in terms of matrix graphs.</p>
-<p><strong>Theorem:</strong> If a number is added to or subtracted from all of the entries of any one row or column of a cost matrix, then on optimal assignment for the resulting cost matrix is also an optimal assignment for the original cost matrix.</p>
-<p>The following algorithm applies the above theorem to a given n × n cost matrix to find an optimal assignment:</p>
-<p><strong>Step 1.</strong> Subtract the smallest entry in each row from all the entries of its row.</p>
-<p><strong>Step 2.</strong> Subtract the smallest entry in each column from all the entries of its column.</p>
-<p><strong>Step 3.</strong> Draw lines through appropriate rows and columns so that all the zero entries of the cost matrix are covered and the minimum number of such lines is used.</p>
-<p><strong>Step 4.</strong> Test for Optimality:</p>
-<ul>
-<li>If the minimum number of covering lines is n, an optimal assignment of zeros is possible and we are finished.</li>
-<li>If the minimum number of covering lines is less than n, an optimal assignment of zeros is not yet possible. In that case, proceed to <strong>Step 5.</strong></li>
-</ul>
-<p><strong>Step 5.</strong> Determine the smallest entry not covered by any line. Subtract this entry from each uncovered row, and then add it to each covered column. Return to <strong>Step 3.</strong></p>
-<h4 id="An-example"><a href="#An-example" class="headerlink" title="An example:"></a>An example:</h4><p><strong>Problem:</strong></p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-   90 & 75 & 75 & 80\\
-   35 & 85 & 55 & 65 \\
-   125 & 95 & 90 & 105 \\
-   45 & 110 & 95 & 115
-  \end{matrix}
-  \right]</script><p><strong>Step 1:</strong> Subtract 75 from Row 1, 35 from Row 2, 90 from Row 3, and 45 from Row 4.</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-   90 & 75 & 75 & 80\\
-   35 & 85 & 55 & 65 \\
-   125 & 95 & 90 & 105 \\
-   45 & 110 & 95 & 115
-  \end{matrix}
-  \right]
-  \to
-\left[
- \begin{matrix}
-    15 & 0 & 0 & 5 \\
-    0 & 50 & 20 & 30 \\
-    35 & 5 & 0 & 15 \\
-    0 & 65 & 50 & 70 \\
-  \end{matrix}
-  \right]</script><p><strong>Step 2:</strong> Subtract 0 from Column 1, 0 from Column 2, 0 from Column 3, and 5 from Column 4.</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-    15 & 0 & 0 & 5 \\
-    0 & 50 & 20 & 30 \\
-    35 & 5 & 0 & 15 \\
-    0 & 65 & 50 & 70 \\
-  \end{matrix}
-  \right]
-  \to
-  \left[
- \begin{matrix}
-    15 & 0 & 0 & 0 \\
-    0 & 50 & 20 & 25 \\
-    35 & 5 & 0 & 10 \\
-    0 & 65 & 50 & 65 \\
-  \end{matrix}
-  \right]</script><p><strong>Step 3:</strong> Cover all the zeros of the matrix with the minimum number of horizontal or vertical lines.</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-    15 & 0 & 0 & 0 \\
-    0 & 50 & 20 & 25 \\
-    35 & 5 & 0 & 10 \\
-    0 & 65 & 50 & 65 \\
-  \end{matrix}
-  \right]
-  \to
-  \left[
- \begin{matrix}
-    \color{red}{15} & \color{red}0 & \color{red}0 & \color{red}0 \\
-    \color{red}0 & 50 & \color{red}{20} & 25 \\
-    \color{red}{35} & 5 & \color{red}0 & 10 \\
-    \color{red}0 & 65 & \color{red}{50} & 65 \\
-  \end{matrix}
-  \right]</script><p><strong>Step 4:</strong> Since the minimal number of lines is less than 4, we have to proceed to Step 5.</p>
-<p><strong>Step 5:</strong> Note that 5 is the smallest entry not covered by any line. Subtract 5 from each uncovered row.</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-    15 & 0 & 0 & 0 \\
-    0 & 50 & 20 & 25 \\
-    35 & 5 & 0 & 10 \\
-    0 & 65 & 50 & 65 \\
-  \end{matrix}
-  \right]
-  \to
-\left[
- \begin{matrix}
-    15 & 0 & 0 & 0 \\
-    -5 & 45 & 15 & 20 \\
-    30 & 0 & -5 & 5 \\
-    -5 & 60 & 45 & 60 \\
-  \end{matrix}
-  \right]</script><p>Now add 5 to each covered column:</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-    15 & 0 & 0 & 0 \\
-    -5 & 45 & 15 & 20 \\
-    30 & 0 & -5 & 5 \\
-    -5 & 60 & 45 & 60 \\
-  \end{matrix}
-  \right]
-  \to
-\left[
- \begin{matrix}
-    20 & 0 & 5 & 0 \\
-    0 & 45 & 20 & 20 \\
-    35 & 0 & 0 & 5 \\
-    0 & 60 & 50 & 60 \\
-  \end{matrix}
-  \right]</script><p>Now return to Step 3.</p>
-<p><strong>Step 3:</strong> Cover all the zeros of the matrix with the minimum number of horizontal or vertical lines.</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-    20 & 0 & 5 & 0 \\
-    0 & 45 & 20 & 20 \\
-    35 & 0 & 0 & 5 \\
-    0 & 60 & 50 & 60 \\
-  \end{matrix}
-  \right]
-  \to
-  \left[
- \begin{matrix}
-    \color{red}{20} & \color{red}0 & \color{red}5 & \color{red}0 \\
-    \color{red}0 & 45 & 20 & 20 \\
-    \color{red}{35} & \color{red}0 & \color{red}0 & \color{red}5 \\
-    \color{red}0 & 60 & 50 & 60 \\
-  \end{matrix}
-  \right]</script><p><strong>Step 4:</strong> Since the minimal number of lines is still less than 4, we have to return to Step 5.</p>
-<p><strong>Step 5:</strong> Note that 20 is the smallest entry not covered by a line. Subtract 20 from each uncovered row.</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-    20 & 0 & 5 & 0 \\
-    0 & 45 & 20 & 20 \\
-    35 & 0 & 0 & 5 \\
-    0 & 60 & 50 & 60 \\
-  \end{matrix}
-  \right]
-  \to
-  \left[
- \begin{matrix}
-    20 & 0 & 5 & 0 \\
-    -20 & 25 & 0 & 0 \\
-    35 & 0 & 0 & 5 \\
-    -20 & 40 & 30 & 40 \\
-  \end{matrix}
-  \right]</script><p>Then add 20 to each covered column.</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-    20 & 0 & 5 & 0 \\
-    -20 & 25 & 0 & 0 \\
-    35 & 0 & 0 & 5 \\
-    -20 & 40 & 30 & 40 \\
-  \end{matrix}
-  \right]
-  \to
-    \left[
- \begin{matrix}
-    40 & 0 & 5 & 0 \\
-    0 & 25 & 0 & 0 \\
-    55 & 0 & 0 & 5 \\
-    0 & 40 & 30 & 40 \\
-  \end{matrix}
-  \right]</script><p>Now return to Step 3.</p>
-<p><strong>Step 3:</strong> Cover all the zeros of the matrix with the minimum number of horizontal or vertical lines.</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-    \color{red}{40} & \color{red}0 & \color{red}5 & \color{red}0 \\
-    \color{red}0 & \color{red}{25} & \color{red}0 & \color{red}0 \\
-    \color{red}{55} & \color{red}0 & \color{red}0 & \color{red}5 \\
-    \color{red}0 & \color{red}{40} & \color{red}{30} & \color{red}{40} \\
-  \end{matrix}
-  \right]</script><p><strong>Step 4:</strong> Since the minimal number of lines is 4, an optimal assignment of zeros is possible and we are finished.</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-    40 & 0 & 5 & \boxed0 \\
-    0 & 25 & \boxed0 & 0 \\
-    55 & \boxed0 & 0 & 5 \\
-    \boxed0 & 40 & 30 & 40 \\
-  \end{matrix}
-  \right]</script><p>Since the total cost for this assignment is 0, it must be an optimal assignment.</p>
-<p>Here is the same assignment made to the original cost matrix.</p>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] Hungarian algorithm, Wikipedia</p>
-<p>[2] The Assignment Problem and the Hungarian Method, Bruff, Derek,</p>
-
-          
+          Hungarian AlgorithmBrief introduction:A combinatorial optimization algorithm that solves the assignment problem in polynomial time.
+It was developed a
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/08/04/algorithm_hungarian/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1238,17 +975,15 @@ Attention(Query, Source)=\sum_{i=1}^{L_x}a_i*Value_i</script><h5 id="Self-Attent
       
         
           
-            <h2 id="Random-sample-consensus"><a href="#Random-sample-consensus" class="headerlink" title="Random sample consensus"></a>Random sample consensus</h2><h4 id="Brief-introduction"><a href="#Brief-introduction" class="headerlink" title="Brief introduction:"></a>Brief introduction:</h4><p>An iterative method to estimate parameters of a mathematical model from a set of observed data that contains outliers, when outliers are to be accorded no influence on the values of the estimates.</p>
-<p>The algorithm was first published by Fischler and Bolles at SRI International in 1981. They used RANSAC to solve the Location Determination Problem (LDP), where the goal is to determine the points in the space that project onto an image into a set of landmarks with known locations.</p>
-<h4 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm:"></a>Algorithm:</h4><p>The RANSAC algorithm is essentially composed of two steps that are iteratively repeated:</p>
-<ol>
-<li>In the first step, a sample subset containing minimal data items is randomly selected from the input dataset. A fitting model and the corresponding model parameters are computed using only the elements of this sample subset. <strong>The cardinality of the sample subset is the smallest sufficient to determine the model parameters</strong>.</li>
-<li>In the second step, the algorithm checks which elements of the entire dataset are consistent with the model instantiated by the estimated model parameters obtained from the first step. A data element will be considered as an outlier if it does not fit the fitting model instantiated by the set of estimated model parameters within some error threshold that defines the maximum deviation attributable to the effect of noise.</li>
-</ol>
-<p>The set of inliers obtained for the fitting model is called consensus set. The RANSAC algorithm will iteratively repeat the above two steps until the obtained consensus set in certain iteration has enough inliers.</p>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] RANSAC, Wikipedia</p>
-
-          
+          Random sample consensusBrief introduction:An iterative method to estimate parameters of a mathematical model from a set of observed data that contains
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/03/algorithm_ransac/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1388,368 +1123,15 @@ Attention(Query, Source)=\sum_{i=1}^{L_x}a_i*Value_i</script><h5 id="Self-Attent
       
         
           
-            <h2 id="Pinhole-Camera-Model"><a href="#Pinhole-Camera-Model" class="headerlink" title="Pinhole Camera Model"></a>Pinhole Camera Model</h2><p>The <strong>pinhole camera model</strong> describes the mathematical relationship between the coordinates of a point in three-dimensional space and its projection onto the image plane of an ideal pinhole camera, where the camera aperture is described as a point and no lenses are used to focus light. </p>
-<h4 id="Model-analysis"><a href="#Model-analysis" class="headerlink" title="Model analysis"></a>Model analysis</h4><p><img src="/img/PinholeCameraModel/PinholeCameraModel.png" alt=""></p>
-<script type="math/tex; mode=display">
-\frac{-y_1}{f}=\frac{x_1}{x_3}\\
-\frac{-y_2}{f}=\frac{x_2}{x_3}\\</script><p>This can be summarized as:</p>
-<script type="math/tex; mode=display">
-\left[ \begin{array}{ccc}
-y_1\\
-y_2
-\end{array} 
-\right]
-= -\frac{f}{x_3}
-\left[ \begin{array}{ccc}
-x_1\\
-x_2
-\end{array} 
-\right]</script><p>Which is an expression that describes the relation between the 3D coordinates $(x_1,x_2,x_3)$ of point <strong>P</strong> and its image coordinates $(y_1,y_2)$ given by point <strong>Q</strong> in the image plane. </p>
-<p>Rotate the coordinate system in the image plane 180°, so the negation is removed:</p>
-<script type="math/tex; mode=display">
-\left[ \begin{array}{ccc}
-y_1\\
-y_2
-\end{array} 
-\right]
-= \frac{f}{x_3}
-\left[ \begin{array}{ccc}
-x_1\\
-x_2
-\end{array} 
-\right]</script><h4 id="Camera-matrix"><a href="#Camera-matrix" class="headerlink" title="Camera matrix"></a>Camera matrix</h4><ul>
-<li><strong>Homogeneous coordinates for equation above:</strong><script type="math/tex; mode=display">
-\left[ \begin{array}{ccc}
-y_1\\
-y_2\\
-1
-\end{array} 
-\right]
-= \frac{f}{x_3}
-\left[ \begin{array}{ccc}
-x_1\\
-x_2\\
-\frac{x_3}{f}
-\end{array} 
-\right]
-= \frac{1}{x_3}
-\left[ \begin{array}{ccc}
-f & 0 & 0 & 0\\
-0 & f & 0 & 0\\
-0 & 0 & 1 & 0\\
-\end{array} 
-\right]
-\left[ \begin{array}{ccc}
-x_1\\
-x_2\\
-x_3\\
-1
-\end{array} 
-\right]</script>Matrix $C$ is the camera matrix<script type="math/tex; mode=display">
-C
-= 
-\left[ \begin{array}{ccc}
-f & 0 & 0 & 0\\
-0 & f & 0 & 0\\
-0 & 0 & 1 & 0
-\end{array} 
-\right]</script></li>
-</ul>
-<h4 id="Intrinsic-matrix"><a href="#Intrinsic-matrix" class="headerlink" title="Intrinsic matrix"></a>Intrinsic matrix</h4><ul>
-<li><p><strong>Image coordinates to pixel coordinates:</strong></p>
-<script type="math/tex; mode=display">
-u = \frac{x}{dx} + u_0\\
-v = \frac{y}{dy} + v_0</script><p>That is:</p>
-<script type="math/tex; mode=display">
-\left[ \begin{array}{ccc}
-u\\
-v\\
-1
-\end{array} 
-\right]
-=
-\left[ \begin{array}{ccc}
-\frac{1}{dx} & 0 & u_0\\
-0 & \frac{1}{dy} & v_0\\
-0 & 0 & 1
-\end{array} 
-\right]
-\left[ \begin{array}{ccc}
-x\\
-y\\
-1
-\end{array} 
-\right]</script><p>Where dx and dy means the width of the pixel.(1 mm per pixel for example)</p>
-</li>
-<li><p><strong>Camera 3D coordinates to pixel coordinates:</strong></p>
-<script type="math/tex; mode=display">
-\left[ \begin{array}{ccc}
-y_1\\
-y_2\\
-1
-\end{array} 
-\right]
-= \frac{1}{x_3}
-\left[ \begin{array}{ccc}
-\frac{1}{dx} & 0 & u_0\\
-0 &\frac{1}{dy} & v_0\\
-0 & 0 & 1
-\end{array} 
-\right]
-\left[ \begin{array}{ccc}
-f & 0 & 0 & 0\\
-0 & f & 0 & 0\\
-0 & 0 & 1 & 0\\
-\end{array} 
-\right]
-\left[ \begin{array}{ccc}
-x_1\\
-x_2\\
-x_3\\
-1
-\end{array} 
-\right]</script></li>
-<li><p><strong>Combination of the two matrix:</strong></p>
-<script type="math/tex; mode=display">
-\left[ \begin{array}{ccc}
-y_1\\
-y_2\\
-1
-\end{array} 
-\right]
-= \frac{1}{x_3}
-\left[ \begin{array}{ccc}
-\frac{f}{dx} & 0 & u_0 & 0\\
-0 & \frac{f}{dy} & v_0 & 0\\
-0 & 0 & 1 & 0\\
-\end{array} 
-\right]
-\left[ \begin{array}{ccc}
-x_1\\
-x_2\\
-x_3\\
-1
-\end{array} 
-\right]</script><p>Matrix $I$ is the intrinsic matrix</p>
-<script type="math/tex; mode=display">
-I =
-\left[ \begin{array}{ccc}
-\frac{f}{dx} & 0 & u_0 & 0\\
-0 & \frac{f}{dy} & v_0 & 0\\
-0 & 0 & 1 & 0\\
-\end{array} 
-\right]</script></li>
-</ul>
-<h4 id="Extrinsic-matrix"><a href="#Extrinsic-matrix" class="headerlink" title="Extrinsic matrix"></a>Extrinsic matrix</h4><p>Which denote the coordinate system <strong>transformations from 3D world coordinates to 3D camera coordinates</strong>.</p>
-<p><img src="/img/PinholeCameraModel/world2camera.png" alt=""></p>
-<ul>
-<li><p><strong>Transformation:</strong></p>
-<script type="math/tex; mode=display">
-\left[ \begin{array}{ccc}
-x_c\\
-y_c\\
-z_c\\
-1
-\end{array} 
-\right]
-=
-\left[ \begin{array}{ccc}
-\textbf{R} & \textbf{T}\\
-\textbf{0}^T & 1\\
-\end{array} 
-\right]
-
-\left[ \begin{array}{ccc}
-x_w\\
-y_w\\
-z_w\\
-1
-\end{array} 
-\right]</script></li>
-<li><p><strong>R matrix:</strong></p>
-<p>For a point $p$ in world coordinates, we can represent it as:</p>
-<script type="math/tex; mode=display">
-p = x_w \cdot \vec{x} +y_w \cdot \vec{y} +z_w \cdot \vec{z}</script><p>Where $\vec{x},\vec{y}$ and $\vec{z}$ are the unit vector of world coordinates. Now we only consider the rotation transformation between the two coordinates. For unit vectors in camera coordinates, we can represent them in world coordinates as:</p>
-<script type="math/tex; mode=display">
-\vec{u} = r_{11} \cdot \vec{x} + r_{12} \cdot \vec{y} + r_{13} \cdot \vec{z}\\
-\vec{v} = r_{21} \cdot \vec{x} + r_{22} \cdot \vec{y} + r_{23} \cdot \vec{z}\\
-\vec{w} = r_{31} \cdot \vec{x} + r_{32} \cdot \vec{y} + r_{33} \cdot \vec{z}</script><p>Where $\vec{u},\vec{v}$ and $\vec{w}$ are the unit vector of camera coordinates. And also we can rewrite the equation in matrix:</p>
-<script type="math/tex; mode=display">
-\left[ \begin{array}{ccc}
-\vec{u}\\
-\vec{v}\\
-\vec{w}
-\end{array} 
-\right]
-=
-\left[ \begin{array}{ccc}
-r_{11} & r_{12} & r_{13}\\
-r_{21} & r_{22} & r_{23}\\
-r_{31} & r_{32} & r_{23}\\
-\end{array} 
-\right]
-\left[ \begin{array}{ccc}
-\vec{x}\\
-\vec{y}\\
-\vec{z}
-\end{array} 
-\right]</script><p>So the point $p$ can be represented in camera coordinates as:</p>
-<script type="math/tex; mode=display">
-p = x_w \cdot \vec{x} +y_w \cdot \vec{y} +z_w \cdot \vec{z}\\
-= 
-\left[ \begin{array}{ccc}
-x_w & y_w & z_w
-\end{array} 
-\right]
-\left[ \begin{array}{ccc}
-\vec{x}\\
-\vec{y}\\
-\vec{z}
-\end{array} 
-\right]
-=
-\left[ \begin{array}{ccc}
-x_w & y_w & z_w
-\end{array} 
-\right]
-\left[ \begin{array}{ccc}
-r_{11} & r_{12} & r_{13}\\
-r_{21} & r_{22} & r_{23}\\
-r_{31} & r_{32} & r_{23}\\
-\end{array} 
-\right]^{-1}
-\left[ \begin{array}{ccc}
-\vec{u}\\
-\vec{v}\\
-\vec{w}
-\end{array} 
-\right]</script><p>And thus the relationship between $x_c, \, y_c, \, z_c$ and $x_w, \, y_w, \, z_w$ is:</p>
-<script type="math/tex; mode=display">
-p
-= 
-\left[ \begin{array}{ccc}
-x_c & y_c & z_c
-\end{array} 
-\right]
-\left[ \begin{array}{ccc}
-\vec{u}\\
-\vec{v}\\
-\vec{w}
-\end{array} 
-\right]
-=
-\left[ \begin{array}{ccc}
-x_w & y_w & z_w
-\end{array} 
-\right]
-\left[ \begin{array}{ccc}
-r_{11} & r_{12} & r_{13}\\
-r_{21} & r_{22} & r_{23}\\
-r_{31} & r_{32} & r_{23}\\
-\end{array} 
-\right]^{-1}
-\left[ \begin{array}{ccc}
-\vec{u}\\
-\vec{v}\\
-\vec{w}
-\end{array} 
-\right]</script><p>We can get the equation as follows:</p>
-<script type="math/tex; mode=display">
-\left[ \begin{array}{ccc}
-x_c\\
-y_c\\
-z_c
-\end{array} 
-\right]
-
-=
-\Bigg(
-\left[ \begin{array}{ccc}
-r_{11} & r_{12} & r_{13}\\
-r_{21} & r_{22} & r_{23}\\
-r_{31} & r_{32} & r_{33}
-\end{array} 
-\right]^{-1}
-\Bigg)^T
-\left[ \begin{array}{ccc}
-x_w\\
-y_w\\
-z_w
-\end{array} 
-\right]</script><p>Here the R matrix is just what we want:</p>
-<script type="math/tex; mode=display">
-R
-=
-\Bigg(
-\left[ \begin{array}{ccc}
-r_{11} & r_{12} & r_{13}\\
-r_{21} & r_{22} & r_{23}\\
-r_{31} & r_{32} & r_{33}
-\end{array} 
-\right]^{-1}
-\Bigg)^T</script></li>
-<li><p><strong>T matrix:</strong></p>
-<p>Then we can consider the translation. Of course it’s quite simple compared with the rotation situation.</p>
-<p>Assume that the position of the camera hole in the world coordinates is $(t_1, t_2, t_3)$, we have:</p>
-<script type="math/tex; mode=display">
-\left[ \begin{array}{ccc}
-x_c\\
-y_c\\
-z_c
-\end{array} 
-\right]
-
-=
-\left[ \begin{array}{ccc}
-x_w\\
-y_w\\
-z_w
-\end{array} 
-\right]
--
-\left[ \begin{array}{ccc}
-t_1\\
-t_2\\
-t_3
-\end{array} 
-\right]</script><p>Here the T matrix is just what we want:</p>
-<script type="math/tex; mode=display">
-T =
-\left[ \begin{array}{ccc}
--t_1\\
--t_2\\
--t_3
-\end{array} 
-\right]</script></li>
-<li><p><strong>Combination of rotation and translation:</strong></p>
-<p>In homogeneous coordinates presentation, we can combine these two transformation together as:</p>
-<script type="math/tex; mode=display">
-\left[ \begin{array}{ccc}
-x_c\\
-y_c\\
-z_c\\
-1
-\end{array} 
-\right]
-=
-\left[ \begin{array}{ccc}
-\textbf{R} & \textbf{T}\\
-\textbf{0}^T & 1\\
-\end{array} 
-\right]
-
-\left[ \begin{array}{ccc}
-x_w\\
-y_w\\
-z_w\\
-1
-\end{array} 
-\right]</script></li>
-</ul>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] Pinhole camera model, Wikipedia</p>
-<p>[2] Camera resectioning, Wikipedia</p>
-
-          
+          Pinhole Camera ModelThe pinhole camera model describes the mathematical relationship between the coordinates of a point in three-dimensional space and
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/01/3DV_PineholeCameraModel/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1889,99 +1271,16 @@ z_w\\
       
         
           
-            <h2 id="The-object-detection-problem"><a href="#The-object-detection-problem" class="headerlink" title="The object detection problem"></a>The object detection problem</h2><p>Given an image, find the objects in it, <strong>locate their position</strong> and <strong>classify</strong> them.</p>
-<p>Trained on a <strong>fixed set of classes</strong>, so the model would locate and classify only those classes in the image.</p>
-<p>The location of the object is generally in the form of <strong>a bounding rectangle</strong>.</p>
-<h4 id="Dataset-example"><a href="#Dataset-example" class="headerlink" title="Dataset example:"></a>Dataset example:</h4><ul>
-<li>Actual image</li>
-</ul>
-<p><img src="/img/mAP/example.png" alt=""></p>
-<ul>
-<li>Notation</li>
-</ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">Class</th>
-<th style="text-align:center">X coordinate</th>
-<th style="text-align:center">Y coordinate</th>
-<th style="text-align:center">Box Width</th>
-<th style="text-align:center">Box Height</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">Dog</td>
-<td style="text-align:center">100</td>
-<td style="text-align:center">600</td>
-<td style="text-align:center">150</td>
-<td style="text-align:center">100</td>
-</tr>
-<tr>
-<td style="text-align:center">Horse</td>
-<td style="text-align:center">700</td>
-<td style="text-align:center">300</td>
-<td style="text-align:center">200</td>
-<td style="text-align:center">250</td>
-</tr>
-<tr>
-<td style="text-align:center">Person</td>
-<td style="text-align:center">400</td>
-<td style="text-align:center">400</td>
-<td style="text-align:center">100</td>
-<td style="text-align:center">500</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ul>
-<li>Bounding box with class(only for visualization)</li>
-</ul>
-<p><img src="/img/mAP/example_visual.png" alt=""></p>
-<h2 id="The-Mean-Average-Precision-aka-the-mAP"><a href="#The-Mean-Average-Precision-aka-the-mAP" class="headerlink" title="The Mean Average Precision aka, the mAP"></a>The Mean Average Precision aka, the mAP</h2><p>Every image in an object detection problem could have <strong>different objects of different classes</strong>. So both the classification and localization of a model need to be evaluated. </p>
-<h4 id="IoU"><a href="#IoU" class="headerlink" title="IoU"></a>IoU</h4><p>We first need to know how to judge the correctness of each of those detections. The metric that tells us the correctness of a given bounding box is the <strong>IoU</strong> - <strong>Intersection over Union</strong>. It is a very simple visual quantity.</p>
-<p><img src="/img/mAP/iou.png" alt=""></p>
-<p>The intersection includes the overlap area(the area colored in Cyan), and the union includes the Orange and Cyan regions both.</p>
-<p>The IoU will then be calculated like this</p>
-<p><img src="/img/mAP/cal_iou.png" alt=""></p>
-<h4 id="Identifying-correct-detections-and-calculating-precision-and-recall"><a href="#Identifying-correct-detections-and-calculating-precision-and-recall" class="headerlink" title="Identifying correct detections and calculating precision and recall"></a>Identifying correct detections and calculating <strong>precision</strong> and <strong>recall</strong></h4><p>For calculating <a href="https://tarangshah.com/blog/2018-01-27/what-is-map-understanding-the-statistic-of-choice-for-comparing-object-detection-models/" target="_blank" rel="noopener">Precision and Recall</a>, as with all machine learning problems, we have to identify <strong>True Positives(TP)</strong>, <strong>False Positives(FP)</strong>, <strong>True Negatives(TN)</strong> and <strong>False Negatives(FN)</strong>.</p>
-<p><strong>TP</strong> and <strong>FP</strong> are indentified with IoU and a threshold <strong>in a specific class</strong>.</p>
-<p>If IoU &gt; threshold: True Positive(TP).</p>
-<p>If IoU &lt; threshold: False positive(FP).</p>
-<p>For calculating Recall, we need the count of Negatives. Since every part of the image where we didn’t predict an object is considered a negative, measuring “True” negatives is a bit futile. So we only measure False Negatives(FN) - ie. the objects that our model has missed out.</p>
-<script type="math/tex; mode=display">
-Precision = \frac{TP}{(TP+FP)}\\
-Recall = \frac{TP}{(TP+FN)}</script><h4 id="Calculating-the-Mean-Average-Precision"><a href="#Calculating-the-Mean-Average-Precision" class="headerlink" title="Calculating the Mean Average Precision"></a>Calculating the Mean Average Precision</h4><p>Using the Pascal VOC challenge evaluation metric</p>
-<p>The Mean Average Precision is a term which has different definitions. This metric is commonly used in the domains of Information Retrieval and Object Detection. Both these domains have different ways of calculating mAP. We will talk about the Object Detection relevant mAP today.</p>
-<p>The Object Detection definition of mAP was first formalized in the PASCAL Visual Objects Classes(VOC) challenge, which included various image processing tasks. For the exact paper refer to <a href="http://homepages.inf.ed.ac.uk/ckiw/postscript/ijcv_voc09.pdf" target="_blank" rel="noopener">this.</a> (<a href="https://tarangshah.com/blog/assets/ijcv_voc09.pdf" target="_blank" rel="noopener">backup</a>)</p>
-<p>We use the same approaches for calculation of Precision and Recall as mentioned in the previous section. But, as mentioned, we have at least two other variables which determine the values of Precision and Recall, they are the IOU and the Confidence thresholds.</p>
-<p>The IOU is a simple geometric metric, which we can easily standardize, for example the PASCAL VOC challenge evaluates mAP based on 50% IOU, whereas the COCO Challenge goes a step further and evaluates mAP at various threshold ranging from 5% to 95%. The confidence factor on the other hand varies across models, 50% confidence in my model design might probably be equivalent to an 80% confidence in someone else’s model design, which would vary the precision recall curve shape. Hence the PASCAL VOC organizers came up with a way to account for this variation.</p>
-<p>We now need a metric to evaluate the models in a model agnostic way.</p>
-<p>The paper recommends that we calculate a measure called AP - ie. the Average Precision</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt; For a given task and class, the precision/recall curve is</span><br><span class="line">&gt; computed from a method’s ranked output. Recall is defined</span><br><span class="line">&gt; as the proportion of all positive examples ranked above a</span><br><span class="line">&gt; given rank. Precision is the proportion of all examples above</span><br><span class="line">&gt; that rank which are from the positive class. The AP summarises</span><br><span class="line">&gt; the shape of the precision/recall curve, and is de-</span><br><span class="line">&gt; fined as the mean precision at a set of eleven equally spaced</span><br><span class="line">&gt; recall levels [0,0.1,...,1]:</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<script type="math/tex; mode=display">
-AP = \frac{1}{11} \sum \limits_{r \in\{0, 0.1, 0.2, ... , 1\}}p_{interp}(r)</script><p>This means that we chose 11 different confidence thresholds(which determine the “rank”). The thresholds should be such that the <strong>Recall at those confidence thresholds is 0, 0.1, 0.2, 0.3, … , 0.9 and 1.0</strong>. The AP is now defined as the <strong>mean of the Precision</strong> values at these chosen 11 Recall values. This results in the mAP being an overall view of the whole precision recall curve.</p>
-<p>The paper further gets into detail of calculating the Precision used in the above calculation.</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; The precision at each recall level r is interpolated by taking</span><br><span class="line">&gt; the maximum precision measured for a method for which</span><br><span class="line">&gt; the corresponding recall exceeds r:</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<script type="math/tex; mode=display">
-p_{interp}(r)= \max \limits_{\tilde r:\tilde r \ge r}p(\tilde r)\\
-where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script><p>Basically we use the maximum precision for a given recall value.</p>
-<p><strong>The mAP hence is the Mean of all the Average Precision values across all your classes as measured above</strong>.</p>
-<p>This is in essence how the Mean Average Precision is calculated for Object Detection evaluation. There might be some variation at times, for example the COCO evaluation is more strict, enforcing various metrics with various IOUs and object sizes(<a href="http://cocodataset.org/#detection-eval" target="_blank" rel="noopener">more details here</a>). If any of you want me to go into details of that, do let me know in the comments.</p>
-<p>Some important points to remember when we compare mAP values</p>
-<ol>
-<li>mAP is always calculated over a dataset.</li>
-<li>Although it is not easy to interpret the absolute quantification of the model output, mAP helps us by being a pretty good relative metric. When we calculate this metric over popular public datasets, the metric can be easily used to compare old and new approaches to object detection.</li>
-<li>Depending on how the classes are distributed in the training data, the Average Precision values might vary from very high for some classes(which had good training data) to very low(for classes with less/bad data). So your mAP may be moderate, but your model might be really good for certain classes and really bad for certain classes. Hence it is advisable to have a look at individual class Average Precisions while analysing your model results. These values might also serve as an indicator to add more training samples.</li>
-</ol>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a href="https://tarangshah.com/blog/2018-01-27/what-is-map-understanding-the-statistic-of-choice-for-comparing-object-detection-models/" target="_blank" rel="noopener">Measuring Object Detection models - mAP - What is Mean Average Precision?</a></p>
-
-          
+          The object detection problemGiven an image, find the objects in it, locate their position and classify them.
+Trained on a fixed set of classes, so the
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/06/04/measure_mAP/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2121,25 +1420,16 @@ where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script>
       
         
           
-            <h4 id="生成对抗网络"><a href="#生成对抗网络" class="headerlink" title="生成对抗网络"></a>生成对抗网络</h4><p>同时训练两个网络, 分别是生成网络 $G​$ 和判别网络 $D​$. 其中 $G​$ 网络用于学习真实数据的分布, 而 $D​$ 网络用于判别输入的样本是来自真实数据还是来自 $G​$ 生成的伪数据.</p>
-<h5 id="研究背景"><a href="#研究背景" class="headerlink" title="研究背景:"></a>研究背景:</h5><p>截至作者提出生成对抗网络之前, 深度学习的主要成就集中在判别网络的应用中. 这主要归功于反向传播和 $Dropout$ 算法的成功应用. 但是对于生成网络, 其损失函数的设计成了一个难题. 类似于极大似然估计这种损失函数难以很好地被应用在学习的过程当中.</p>
-<h5 id="生成网络"><a href="#生成网络" class="headerlink" title="生成网络:"></a>生成网络:</h5><p>生成网络的任务就是学习一个数据分布 $p_g(\textbf{x})$ 来拟合真实数据的分布 $p_{data}(\textbf{x})$. 生成网络 $G$ 接受分布为 $p_{\textbf{z}}(\textbf{z})$ 的随机噪声 $\textbf{z}$ 作为输入, 则 $G$ 可视为从到噪声空间到数据空间的一个映射 ​$G(\textbf{z};\theta_g): \textbf{z} \to \textbf{x}$. 而函数 ​$G$ 是由多层感知机构成的, 以 ​$\theta_g$ 为参数的可导函数.</p>
-<h5 id="判别网络"><a href="#判别网络" class="headerlink" title="判别网络:"></a>判别网络:</h5><p>判别网络与常见的判别式网络类似, 它完成一个二分类任务. 以数据样本作为输入, 然后输出一个标量用于表示输入的样本是来自真实数据的概率. 其形式化为 $D(\textbf{x};\theta_d)$.</p>
-<h5 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数:"></a>损失函数:</h5><p>生成对抗网络理论上的损失函数如下:</p>
-<script type="math/tex; mode=display">
-\min \limits_G \space \max \limits_D \space V(D,G) = E_{\textbf{x} \sim p_{data}(\textbf{x})}[logD(\textbf{x})] + E_{\textbf{z} \sim p_{\textbf{z}}(\textbf{z})}[log(1-D(G(\textbf{z})))]</script><p>其直观解释是在最大化 $D​$ 对数据样本的判别能力的条件下，最小化 $D​$ 对 $G​$ 所生成样本的判别能力. 两个网络就像在进行一场博弈, 逐步提升各自的能力, 直到最后 $G​$ 学到的分布完全拟合真实数据分布, 从而达到一个最优的状态. 这时, $D​$ 的输出始终为 $1/2​$, 即无法对输入样本进行有效的判断. </p>
-<h5 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程:"></a>训练过程:</h5><p>GAN 的训练过程是一个生成网络 $G​$ 和判别网络 $D​$ 交替迭代训练的过程, 即在训练 $D​$ 时固定 $G​$ 的参数, 而训练 $G​$ 时固定 $D​$ 的参数, 由此循环往复直到训练结束. 结合损失函数我们可以发现, 在训练 $G​$ 时,由于 $D​$ 被固定, $logD(\textbf{x})​$ 就成为了一个常数, 此时训练的目标就是最小化 $log(1-D(G(\textbf{z})))​$.</p>
-<p><img src="/img/GAN/algorithm_of_gan.png" alt=""></p>
-<center><i>图1:生成对抗网络的训练算法</i></center>
-
-<p>如上图所示的训练算法, 由训练样本的独立同分布采样假设, 理论损失函数中期望的计算可以简单地用样本的平均值来代替. 此外, 对于训练 $G$ 时所采用的 $log(1-D(G(\textbf{z})))$ 损失函数, 在早期会有梯度不足的问题. 因为早期的生成器 $G$ 的能力很弱, 生成的数据很容易被判别器 $D$ 分辨, 从而可能存在绝大多数的生成数据都被分辨出来而导致损失函数值接近 $0$ 的情况. 这时整个训练就进行地十分缓慢, 因为 $log$ 函数在函数值 $0$ 周围梯度比较小. 故而实际训练可以用最大化 $logD(G(\textbf{z}))$ 来代替原来的最小化 $log(1-D(G(\textbf{z})))​$ 的策略, 或者标签反转也是不错的选择.</p>
-<p><img src="/img/GAN/example.png" alt=""></p>
-<center><i>图2:一个简单的例子</i></center>
-
-
-
-<h5 id="理论阐述"><a href="#理论阐述" class="headerlink" title="理论阐述:"></a>理论阐述:</h5>
-          
+          生成对抗网络同时训练两个网络, 分别是生成网络 $G​$ 和判别网络 $D​$. 其中 $G​$ 网络用于学习真实数据的分布, 而 $D​$ 网络用于判别输入的样本是来自真实数据还是来自 $G​$ 生成的伪数据.
+研究背景:截至作者提出生成对抗网络之前, 深度学习的主要成就集中在判别网络的应用中. 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/05/29/paper_GAN/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2279,69 +1569,16 @@ where\ p(\tilde r)\ is\ the\ measured\ precision\ at\ recall\ \tilde r.</script>
       
         
           
-            <h4 id="利用孪生网络进行相似性学习"><a href="#利用孪生网络进行相似性学习" class="headerlink" title="利用孪生网络进行相似性学习"></a>利用孪生网络进行相似性学习</h4><p>训练一个 Siamese 网络, 利用相似性计算来实现在 <strong>search image</strong> 上定位 <strong>exemplar image</strong>.</p>
-<h5 id="训练图片"><a href="#训练图片" class="headerlink" title="训练图片:"></a>训练图片:</h5><p>从被标注的视频(<em>每帧中的目标都被 bounding box 框出</em>)中获取用于训练的图片对,  两张图片的帧间隔小于T. 其中 <strong>search image</strong> 是以目标为中心的大小为 $255 \times 255$ 的图片, 超出原图的区域用合理的RGB值填充, 不对原图进行缩放. 而 <strong>exemplar image</strong> 是以目标为中心的大小为 $127 \times 127$ 的图片. 具体地, 若 bounding box(红色框) 的大小为 (w, h), padding 的大小为 p, 则调整因子 s 由以下约束决定, 个人理解下面的两个 s 是不同的调整因子, 最终得到的是一个正方形框图, 即对 $(w+2p) \times (h+2p)$ 以外而 $127 \times 127$ 以内的部分进行合理颜色填充.</p>
-<script type="math/tex; mode=display">
-s(w + 2p) * s(h + 2p) = A\\
-A = 127^2\\
-p = (w + h) / 4\\</script><p><img src="/img/siamFCN/exemplar.png" alt=""></p>
-<center><i>图1:训练数据的获取</i></center>
-
-
-
-<h5 id="训练标注"><a href="#训练标注" class="headerlink" title="训练标注:"></a>训练标注:</h5><p>由于训练帧的目标都在图片中心, 故而训练帧对应的 <strong>score map</strong>, 具体意义参见网络结构)的值由如下规则给出: 距离 <strong>score map</strong> 中心 R 以内的点为正例, 其他点为反例.(需考虑 stride 值, 其中 stride 值为 <strong>search image</strong> 中选出 <strong>candidate image</strong> 时的步长, 由 φ 网络中的池化层决定). 其中 u 为 <strong>score map</strong> D中的点, c 为 <strong>score map</strong> 的中心点, k为 stride 值.</p>
-<script type="math/tex; mode=display">
-\textbf{y}[u]=\left\{
-\begin{aligned}
-+1 & & if \space k||u - c|| \leq R \\
--1 & & otherwise \\
-\end{aligned}
-\right.\\</script><h5 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数:"></a>损失函数:</h5><p>单分数的损失函数和 <strong>score map</strong> 的平均损失函数定义如下, 其中 <strong>v</strong> 为前向传播得到的分数矩阵 <strong>score map</strong>, <strong>y</strong> 为真实标注的 <strong>score map</strong>.</p>
-<script type="math/tex; mode=display">
-l(y,v) = log(1 + exp(-yv))\\
-L(\textbf y,\textbf v) = \frac{1}{|D|} \sum_{u\in D} l(\textbf y[u],\textbf v[u])\\</script><h5 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构:"></a>网络结构:</h5><ul>
-<li>φ 网络为全卷积网络,用于 <strong>exemplar image</strong> 和 <strong>candidate image</strong> 的特征提取, 图中的两个 φ 网络共享所有参数.</li>
-<li><strong>exemplar image</strong> 经过 φ 网络得到其对应的大小为 $6\times 6\times 128$ 的特征映射.</li>
-<li>由于 <strong>search image</strong> 的尺寸大于 <strong>exemplar image</strong> , 为了定位目标在 <strong>search image</strong> 中的位置,理论上需要需要穷举 <strong>search image</strong> 上所有可能的与 <strong>exemplar image</strong> 尺寸相同的候选子图.   而全卷积网络的<strong>计算共享</strong>的特性使得这样的穷举在一次前向传播中就能够实现.</li>
-<li>全卷积网络作用在 <strong>search image</strong> 上的结果是得到一个大小为 $22\times 22\times 128$ 的特征映射,在这个特征映射中可以截取得到所有可能的 <strong>candidate iname</strong> 的特征映射.</li>
-<li>将两张图片上得到的特征映射作互相关(内积)并作一定处理后得到 <strong>exemplar image</strong> 与 <strong>search image</strong> 上的各候选子图的相似度分数, 以 <strong>score map</strong> 的形式展现, 其中 <strong>score map</strong> 中的各个点的分数在几何上与 <strong>search image</strong> 中相应位置的 <strong>candidate image</strong> 一一对应.</li>
-</ul>
-<p><img src="/img/siamFCN/pipeline.png" alt=""></p>
-<center><i>图2: 孪生网络结构图</i></center>
-
-<p><img src="/img/siamFCN/parameter.png" alt=""></p>
-<center><i>图3: 子网络φ超参数 </i></center>
-
-
-
-<h5 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程:"></a>训练过程:</h5><p>以一对训练图片为例, 将 <strong>exemplar image</strong> 喂给上图中的 <strong>z</strong>, 将 <strong>search image</strong> 喂给上图中的 <strong>x</strong> , 之后进行前向传播得到 <strong>score map</strong>, 根据训练标注中所定义的作为 ground truth 的分数矩阵计算 <strong>loss</strong> 执行反向传播算法更新全卷积网络 φ 中的参数.</p>
-<h5 id="跟踪测试"><a href="#跟踪测试" class="headerlink" title="跟踪测试:"></a>跟踪测试:</h5><ul>
-<li><p>利用第一帧中 bounding box 框出的待检测目标,通过与之前在训练集中使用的相同的裁剪填充操作得到<strong>exemplar image</strong>.</p>
-</li>
-<li><p>以前一帧检测到的目标位置作为中心,通过与之前在训练集中使用的相同的裁剪填充操作得到当前帧的 <strong>search image</strong> 并结合 <strong>exemplar image</strong> 执行前向传播算法得到对应 <strong>score map</strong>.</p>
-</li>
-<li><p>利用 <strong>score map</strong> 的最大值点相对于 <strong>score map</strong> 中心点的偏移乘以 stride 得到当前帧中目标相对于上一帧中目标的偏移量.</p>
-</li>
-<li><p>目标尺寸空间的跟踪通过对 <strong>search image</strong> 的不同缩放版本来实现. </p>
-</li>
-<li><p>考虑到目标移动的连续性, 引入 <strong>cosine window</strong> 来实现对大幅度偏移的惩罚, 目标尺寸的大幅度变化也会受到惩罚.</p>
-</li>
-</ul>
-<h4 id="全卷积网络的特性"><a href="#全卷积网络的特性" class="headerlink" title="全卷积网络的特性:"></a>全卷积网络的特性:</h4><ul>
-<li><p>输入大小可变</p>
-</li>
-<li><p>计算共享</p>
-<ul>
-<li>如图 4 中, 当输入的大小大于 $16\times 16$ 时, 输出的大小相应变为 $2 \times 2$. 其中输出结果中的蓝色点对应了输入图片中蓝色部分的结果.</li>
-<li>还可以看到, 由于网络中池化层的存在, 当 $14 \times 14$ 的 “滑动窗口” 移动 2 个像素时才会产生一个输出点. 这个移动距离就是文中提到的 stride 值, 论文 Overfeat 中将其比喻成 “滑动窗口的” 分辨率.</li>
-<li>当然严格的计算共享需要保证网络中没有 padding 的存在.</li>
-</ul>
-</li>
-</ul>
-<p><img src="/img/siamFCN/fcn.png" alt=""></p>
-<center><i>图4: Overfeat中关于全卷积网络特性的解释</i></center>
-
-          
+          利用孪生网络进行相似性学习训练一个 Siamese 网络, 利用相似性计算来实现在 search image 上定位 exemplar image.
+训练图片:从被标注的视频(每帧中的目标都被 bounding box 框出)中获取用于训练的图片对,  两张图片的帧间隔小于T. 其中 search 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/05/28/paper_Siam_FCN/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2481,28 +1718,21 @@ L(\textbf y,\textbf v) = \frac{1}{|D|} \sum_{u\in D} l(\textbf y[u],\textbf v[u]
       
         
           
-            <h2 id="SAVING-AND-LOADING-MODELS"><a href="#SAVING-AND-LOADING-MODELS" class="headerlink" title="SAVING AND LOADING MODELS"></a>SAVING AND LOADING MODELS</h2><p>与众多的深度学习框架一样, Pytorch可以对训练好的模型进行存储, 将来需要时可以随时取用而不必花大量时间重新训练网络.</p>
-<h4 id="三个核心函数"><a href="#三个核心函数" class="headerlink" title="三个核心函数"></a>三个核心函数</h4><ul>
-<li>torch.save</li>
-<li>torch.load</li>
-<li>torch.nn.Model.load_state_dict</li>
-</ul>
-<h4 id="state-dict"><a href="#state-dict" class="headerlink" title="state_dict"></a>state_dict</h4><p>在 Pytorch 中, <code>torch.nn.Module</code> 的可学习参数可以由 <code>model.parameters()</code> 访问. <code>state_dict</code> 是一个 Python 的字典对象, 它将模型的层映射到各自的参数 Tensor. </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"></span><br><span class="line"><span class="comment"># Define model</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TheModelClass</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super(TheModelClass, self).__init__()</span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">3</span>, <span class="number">6</span>, <span class="number">5</span>)</span><br><span class="line">        self.pool = nn.MaxPool2d(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">        self.conv2 = nn.Conv2d(<span class="number">6</span>, <span class="number">16</span>, <span class="number">5</span>)</span><br><span class="line">        self.fc1 = nn.Linear(<span class="number">16</span> * <span class="number">5</span> * <span class="number">5</span>, <span class="number">120</span>)</span><br><span class="line">        self.fc2 = nn.Linear(<span class="number">120</span>, <span class="number">84</span>)</span><br><span class="line">        self.fc3 = nn.Linear(<span class="number">84</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        x = self.pool(F.relu(self.conv1(x)))</span><br><span class="line">        x = self.pool(F.relu(self.conv2(x)))</span><br><span class="line">        x = x.view(<span class="number">-1</span>, <span class="number">16</span> * <span class="number">5</span> * <span class="number">5</span>)</span><br><span class="line">        x = F.relu(self.fc1(x))</span><br><span class="line">        x = F.relu(self.fc2(x))</span><br><span class="line">        x = self.fc3(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"><span class="comment"># Initialize model</span></span><br><span class="line">model = TheModelClass()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Initialize optimizer</span></span><br><span class="line">optimizer = optim.SGD(model.parameters(), lr=<span class="number">0.001</span>, momentum=<span class="number">0.9</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Print model's state_dict</span></span><br><span class="line">print(<span class="string">"Model's state_dict:"</span>)</span><br><span class="line"><span class="keyword">for</span> param_tensor <span class="keyword">in</span> model.state_dict():</span><br><span class="line">    print(param_tensor, <span class="string">"\t"</span>, model.state_dict()[param_tensor].size())</span><br><span class="line"></span><br><span class="line"><span class="comment"># Print optimizer's state_dict</span></span><br><span class="line">print(<span class="string">"Optimizer's state_dict:"</span>)</span><br><span class="line"><span class="keyword">for</span> var_name <span class="keyword">in</span> optimizer.state_dict():</span><br><span class="line">    print(var_name, <span class="string">"\t"</span>, optimizer.state_dict()[var_name])</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Model&apos;s state_dict:</span><br><span class="line">conv1.weight	torch.Size([6, 3, 5, 5])</span><br><span class="line">conv1.bias		torch.Size([6])</span><br><span class="line">conv2.weight	torch.Size([16, 6, 5, 5])</span><br><span class="line">conv2.bias		torch.Size([16])</span><br><span class="line">fc1.weight		torch.Size([120, 400])</span><br><span class="line">fc1.bias		torch.Size([120])</span><br><span class="line">fc2.weight		torch.Size([84, 120])</span><br><span class="line">fc2.bias		torch.Size([84])</span><br><span class="line">fc3.weight		torch.Size([10, 84])</span><br><span class="line">fc3.bias		torch.Size([10])</span><br><span class="line">Optimizer&apos;s state_dict:</span><br><span class="line">state 	 &#123;&#125;</span><br><span class="line">param_groups 	 [&#123;&apos;lr&apos;: 0.001, &apos;momentum&apos;: 0.9, &apos;dampening&apos;: 0, &apos;weight_decay&apos;: 0, &apos;nesterov&apos;: False, &apos;params&apos;: [140040066551024, 140041977181024, 140041977181096, 140040066553608, 140040066552384, 140040066319272, 140040066319344, 140040066319416, 140040066319488, 140040066319560]&#125;]</span><br></pre></td></tr></table></figure>
-<h4 id="state-dict的保存与加载"><a href="#state-dict的保存与加载" class="headerlink" title="state_dict的保存与加载"></a>state_dict的保存与加载</h4><p>注意必须在加载 <code>state_dict</code> 之后调用 <code>model.eval()</code> 来设置模型的 <code>dropout</code> 和 <code>batch normalization</code> 层. 否则会报错.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 保存</span></span><br><span class="line">torch.save(model.state_dict(), PATH)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载</span></span><br><span class="line">model = TheModelClass(*args, **kwargs)</span><br><span class="line">model.load_state_dict(torch.load(PATH))</span><br><span class="line">model.eval()</span><br></pre></td></tr></table></figure>
-<h4 id="整个模型的保存与加载"><a href="#整个模型的保存与加载" class="headerlink" title="整个模型的保存与加载"></a>整个模型的保存与加载</h4><p>缺点是只能保存给定的类和路径的模型, 因为这种保存方法不保存模型的类本身, 相反它保存一个包含模型的类的定义的文件路径, 故而在加载模型之前, 该模型的类必须事先存在定义, 且路径必须与保存时相同.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 保存</span></span><br><span class="line">torch.save(model, PATH)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载</span></span><br><span class="line"><span class="comment"># Model class must be defined somewhere</span></span><br><span class="line">model = torch.load(PATH)</span><br><span class="line">model.eval()</span><br></pre></td></tr></table></figure>
-<p>如果没有在与保存模型时相同的相对路径下, 加载模型时会出现如下的错误</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>model = torch.load(<span class="string">'/home/myy/Desktop/haha.pth'</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">  File <span class="string">"/home/myy/.conda/envs/pytorch/lib/python3.7/site-packages/torch/serialization.py"</span>, line <span class="number">387</span>, <span class="keyword">in</span> load</span><br><span class="line">    <span class="keyword">return</span> _load(f, map_location, pickle_module, **pickle_load_args)</span><br><span class="line">  File <span class="string">"/home/myy/.conda/envs/pytorch/lib/python3.7/site-packages/torch/serialization.py"</span>, line <span class="number">574</span>, <span class="keyword">in</span> _load</span><br><span class="line">    result = unpickler.load()</span><br><span class="line">AttributeError: Can<span class="string">'t get attribute '</span>TheModelClass<span class="string">' on &lt;module '</span>__main__<span class="string">' (built-in)&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="断点的保存与加载"><a href="#断点的保存与加载" class="headerlink" title="断点的保存与加载"></a>断点的保存与加载</h4><p>保存断点以便继续训练或者什么的</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 保存</span></span><br><span class="line">torch.save(&#123;</span><br><span class="line">            <span class="string">'epoch'</span>: epoch,</span><br><span class="line">            <span class="string">'model_state_dict'</span>: model.state_dict(),</span><br><span class="line">            <span class="string">'optimizer_state_dict'</span>: optimizer.state_dict(),</span><br><span class="line">            <span class="string">'loss'</span>: loss,</span><br><span class="line">            ...</span><br><span class="line">            &#125;, PATH)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载            </span></span><br><span class="line">model = TheModelClass(*args, **kwargs)</span><br><span class="line">optimizer = TheOptimizerClass(*args, **kwargs)</span><br><span class="line"></span><br><span class="line">checkpoint = torch.load(PATH)</span><br><span class="line">model.load_state_dict(checkpoint[<span class="string">'model_state_dict'</span>])</span><br><span class="line">optimizer.load_state_dict(checkpoint[<span class="string">'optimizer_state_dict'</span>])</span><br><span class="line">epoch = checkpoint[<span class="string">'epoch'</span>]</span><br><span class="line">loss = checkpoint[<span class="string">'loss'</span>]</span><br><span class="line"></span><br><span class="line">model.eval()</span><br><span class="line"><span class="comment"># - or -</span></span><br><span class="line">model.train()</span><br></pre></td></tr></table></figure>
-<p>参考文献:</p>
-<p>[1]Pytorch - Docs</p>
-<p>[2]Pytorch - Tutorials: saving and loading modules</p>
+          SAVING AND LOADING MODELS与众多的深度学习框架一样, Pytorch可以对训练好的模型进行存储, 将来需要时可以随时取用而不必花大量时间重新训练网络.
+三个核心函数
+torch.save
+torch.load
+torch.nn.Model.load_state_dict
 
-          
+s
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/05/19/pytorch_save_load_model/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
